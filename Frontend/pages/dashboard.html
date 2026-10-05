@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Inventory Management System Dashboard"
+    >
+
+    <title>Dashboard | Inventory Management System</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+
+<body>
+
+<div class="dashboard-app">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">📦</div>
+
+            <div class="logo-text">
+                <strong>Inventory</strong>
+                <span>Management System</span>
+            </div>
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-section">
+                <span class="nav-section-title">MAIN</span>
+
+                <a href="dashboard.html" class="nav-link active">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+
+
+            <div class="nav-section">
+                <span class="nav-section-title">INVENTORY</span>
+
+                <a href="products.html" class="nav-link">
+                    <span class="nav-icon">📦</span>
+                    <span>Products</span>
+                </a>
+
+                <a href="categories.html" class="nav-link">
+                    <span class="nav-icon">🗂️</span>
+                    <span>Categories</span>
+                </a>
+
+                <a href="inventory.html" class="nav-link">
+                    <span class="nav-icon">📋</span>
+                    <span>Inventory</span>
+                </a>
+            </div>
+
+
+            <div class="nav-section">
+                <span class="nav-section-title">TRANSACTIONS</span>
+
+                <a href="purchases.html" class="nav-link">
+                    <span class="nav-icon">🛒</span>
+                    <span>Purchases</span>
+                </a>
+
+                <a href="sales.html" class="nav-link">
+                    <span class="nav-icon">💰</span>
+                    <span>Sales</span>
+                </a>
+            </div>
+
+
+            <div class="nav-section">
+                <span class="nav-section-title">CONTACTS</span>
+
+                <a href="suppliers.html" class="nav-link">
+                    <span class="nav-icon">🚚</span>
+                    <span>Suppliers</span>
+                </a>
+
+                <a href="customers.html" class="nav-link">
+                    <span class="nav-icon">👥</span>
+                    <span>Customers</span>
+                </a>
+            </div>
+
+
+            <div class="nav-section">
+                <span class="nav-section-title">MANAGEMENT</span>
+
+                <a href="reports.html" class="nav-link">
+                    <span class="nav-icon">📈</span>
+                    <span>Reports</span>
+                </a>
+
+                <a href="users.html" class="nav-link">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Users</span>
+                </a>
+            </div>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-help">
+                <span class="help-icon">?</span>
+
+                <div>
+                    <strong>Need Help?</strong>
+                    <small>Contact administrator</small>
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="logout-button"
+                id="logoutButton"
+            >
+                <span>🚪</span>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN APPLICATION
+    ====================================================== -->
+    <div class="dashboard-main">
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+        <header class="dashboard-header">
+
+            <div class="header-left">
+
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                >
+                    ☰
+                </button>
+
+                <div class="page-title">
+                    <h1>Dashboard</h1>
+
+                    <p>
+                        Overview of your inventory and business activity.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <div class="header-search">
+
+                    <span>🔍</span>
+
+                    <input
+                        type="search"
+                        id="globalSearch"
+                        placeholder="Search..."
+                        aria-label="Search"
+                    >
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="header-icon-button"
+                    id="notificationButton"
+                    aria-label="Notifications"
+                >
+                    🔔
+                    <span
+                        class="notification-dot hidden"
+                        id="notificationDot"
+                    ></span>
+                </button>
+
+
+                <div class="user-profile">
+
+                    <div
+                        class="user-avatar"
+                        id="userAvatar"
+                    >
+                        —
+                    </div>
+
+                    <div class="user-info">
+
+                        <strong id="userName">
+                            Loading...
+                        </strong>
+
+                        <span id="userRole">
+                            —
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="user-menu-button"
+                        id="userMenuButton"
+                        aria-label="User menu"
+                    >
+                        ▾
+                    </button>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+        <main class="dashboard-content">
+
+            <!-- Page heading -->
+            <div class="content-header">
+
+                <div>
+                    <h2>Overview</h2>
+
+                    <p>
+                        Monitor inventory, sales, purchases, and stock levels.
+                    </p>
+                </div>
+
+                <div class="content-actions">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="refreshButton"
+                    >
+                        ↻ Refresh
+                    </button>
+
+                    <a
+                        href="sales.html"
+                        class="btn btn-primary"
+                    >
+                        + New Sale
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 DASHBOARD STATISTICS
+            ================================================== -->
+            <section
+                class="stats-grid"
+                aria-label="Inventory statistics"
+            >
+
+                <article class="dashboard-stat-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-card-icon blue">
+                            📦
+                        </div>
+
+                        <span
+                            class="stat-change"
+                            id="productsChange"
+                        >
+                            —
+                        </span>
+
+                    </div>
+
+                    <div class="stat-card-body">
+
+                        <span class="stat-label">
+                            Total Products
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="totalProducts"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+                    <span
+                        class="stat-description"
+                        id="productsDescription"
+                    >
+                        Waiting for inventory data
+                    </span>
+
+                </article>
+
+
+                <article class="dashboard-stat-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-card-icon green">
+                            📋
+                        </div>
+
+                        <span
+                            class="stat-change"
+                            id="stockChange"
+                        >
+                            —
+                        </span>
+
+                    </div>
+
+                    <div class="stat-card-body">
+
+                        <span class="stat-label">
+                            Items in Stock
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="totalStock"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+                    <span
+                        class="stat-description"
+                        id="stockDescription"
+                    >
+                        Waiting for inventory data
+                    </span>
+
+                </article>
+
+
+                <article class="dashboard-stat-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-card-icon orange">
+                            ⚠️
+                        </div>
+
+                        <span
+                            class="stat-change"
+                            id="lowStockChange"
+                        >
+                            —
+                        </span>
+
+                    </div>
+
+                    <div class="stat-card-body">
+
+                        <span class="stat-label">
+                            Low Stock Items
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="lowStock"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+                    <span
+                        class="stat-description"
+                        id="lowStockDescription"
+                    >
+                        Waiting for inventory data
+                    </span>
+
+                </article>
+
+
+                <article class="dashboard-stat-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-card-icon purple">
+                            💰
+                        </div>
+
+                        <span
+                            class="stat-change"
+                            id="salesChange"
+                        >
+                            —
+                        </span>
+
+                    </div>
+
+                    <div class="stat-card-body">
+
+                        <span class="stat-label">
+                            Today's Sales
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="todaySales"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+                    <span
+                        class="stat-description"
+                        id="salesDescription"
+                    >
+                        Waiting for sales data
+                    </span>
+
+                </article>
+
+            </section>
+
+
+            <!-- =================================================
+                 CHARTS
+            ================================================== -->
+            <section class="dashboard-grid">
+
+                <!-- Sales Overview -->
+                <article class="dashboard-card sales-chart-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Sales Overview</h3>
+
+                            <p>
+                                Sales performance for the selected period.
+                            </p>
+                        </div>
+
+                        <select
+                            id="salesPeriod"
+                            class="form-select chart-select"
+                            aria-label="Sales period"
+                        >
+                            <option value="7">
+                                Last 7 Days
+                            </option>
+
+                            <option value="30">
+                                Last 30 Days
+                            </option>
+
+                            <option value="90">
+                                Last 3 Months
+                            </option>
+
+                            <option value="365">
+                                This Year
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        class="dashboard-empty-state"
+                        id="salesChartState"
+                    >
+                        <div class="empty-state-icon">
+                            📊
+                        </div>
+
+                        <h4>No sales data available</h4>
+
+                        <p>
+                            Sales information will appear here when
+                            transactions are recorded.
+                        </p>
+                    </div>
+
+
+                    <!--
+                        The chart container starts empty.
+
+                        dashboard.js can populate it from the
+                        PHP API when real sales data is available.
+                    -->
+                    <div
+                        class="chart-container hidden"
+                        id="salesChartContainer"
+                    >
+                        <div
+                            class="chart-y-axis"
+                            id="salesChartYAxis"
+                        ></div>
+
+                        <div class="sales-chart">
+
+                            <div
+                                class="chart-grid-lines"
+                                id="salesChartGrid"
+                            ></div>
+
+                            <div
+                                class="chart-bars"
+                                id="salesChartBars"
+                            ></div>
+
+                            <div
+                                class="chart-x-axis"
+                                id="salesChartXAxis"
+                            ></div>
+
+                        </div>
+                    </div>
+
+                </article>
+
+
+                <!-- Inventory Status -->
+                <article class="dashboard-card inventory-status-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Inventory Status</h3>
+
+                            <p>
+                                Current stock distribution.
+                            </p>
+                        </div>
+
+                        <a
+                            href="inventory.html"
+                            class="view-link"
+                        >
+                            View All
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="dashboard-empty-state"
+                        id="inventoryChartState"
+                    >
+                        <div class="empty-state-icon">
+                            📦
+                        </div>
+
+                        <h4>No inventory data available</h4>
+
+                        <p>
+                            Stock distribution will appear here
+                            after inventory data is loaded.
+                        </p>
+                    </div>
+
+
+                    <div
+                        class="inventory-status hidden"
+                        id="inventoryStatusContainer"
+                    >
+
+                        <div class="inventory-donut">
+
+                            <div
+                                class="donut"
+                                id="inventoryDonut"
+                            >
+                                <div class="donut-center">
+
+                                    <strong
+                                        id="inventoryTotal"
+                                    >
+                                        —
+                                    </strong>
+
+                                    <span>Total</span>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="inventory-legend"
+                            id="inventoryLegend"
+                        ></div>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- =================================================
+                 RECENT TRANSACTIONS + LOW STOCK
+            ================================================== -->
+            <section class="dashboard-grid bottom-grid">
+
+                <!-- Recent Transactions -->
+                <article class="dashboard-card transactions-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Recent Transactions</h3>
+
+                            <p>
+                                Latest sales and purchase activity.
+                            </p>
+                        </div>
+
+                        <a
+                            href="sales.html"
+                            class="view-link"
+                        >
+                            View All
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="table-container"
+                        id="transactionsContainer"
+                    >
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Transaction</th>
+                                    <th>Type</th>
+                                    <th>Customer / Supplier</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="transactionsTableBody">
+
+                                <tr>
+                                    <td
+                                        colspan="6"
+                                        class="table-empty-state"
+                                    >
+                                        No transactions available.
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Low Stock -->
+                <article class="dashboard-card low-stock-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Low Stock Products</h3>
+
+                            <p>
+                                Products that need attention.
+                            </p>
+                        </div>
+
+                        <a
+                            href="inventory.html"
+                            class="view-link"
+                        >
+                            View All
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="low-stock-list"
+                        id="lowStockList"
+                    >
+
+                        <div class="dashboard-empty-state compact">
+
+                            <div class="empty-state-icon">
+                                ✓
+                            </div>
+
+                            <h4>No low-stock data</h4>
+
+                            <p>
+                                Inventory information will appear here
+                                when available.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+            ================================================== -->
+            <section class="dashboard-card quick-actions-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Quick Actions</h3>
+
+                        <p>
+                            Frequently used inventory operations.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+                    <a
+                        href="products.html"
+                        class="quick-action"
+                    >
+                        <span class="quick-action-icon blue">
+                            📦
+                        </span>
+
+                        <span>
+                            <strong>Add Product</strong>
+                            <small>
+                                Create a new product
+                            </small>
+                        </span>
+
+                        <b>→</b>
+                    </a>
+
+
+                    <a
+                        href="purchases.html"
+                        class="quick-action"
+                    >
+                        <span class="quick-action-icon green">
+                            🛒
+                        </span>
+
+                        <span>
+                            <strong>New Purchase</strong>
+                            <small>
+                                Record incoming stock
+                            </small>
+                        </span>
+
+                        <b>→</b>
+                    </a>
+
+
+                    <a
+                        href="sales.html"
+                        class="quick-action"
+                    >
+                        <span class="quick-action-icon purple">
+                            💰
+                        </span>
+
+                        <span>
+                            <strong>New Sale</strong>
+                            <small>
+                                Create a sales transaction
+                            </small>
+                        </span>
+
+                        <b>→</b>
+                    </a>
+
+
+                    <a
+                        href="reports.html"
+                        class="quick-action"
+                    >
+                        <span class="quick-action-icon orange">
+                            📊
+                        </span>
+
+                        <span>
+                            <strong>View Reports</strong>
+                            <small>
+                                Analyze business data
+                            </small>
+                        </span>
+
+                        <b>→</b>
+                    </a>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+        <footer class="dashboard-footer">
+
+            <span>
+                &copy;
+                <span id="currentYear"></span>
+                Inventory Management System
+            </span>
+
+            <span>
+                Version 1.0.0
+            </span>
+
+        </footer>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     SIDEBAR MOBILE OVERLAY
+========================================================== -->
+<div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+></div>
+
+
+<!-- =========================================================
+     DASHBOARD JAVASCRIPT
+========================================================== -->
+<script src="../js/dashboard.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /*
+     * Current year
+     */
+    const currentYear =
+        document.getElementById("currentYear");
+
+    if (currentYear) {
+        currentYear.textContent =
+            new Date().getFullYear();
+    }
+
+
+    /*
+     * Mobile sidebar
+     */
+    const menuToggle =
+        document.getElementById("menuToggle");
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const sidebarOverlay =
+        document.getElementById("sidebarOverlay");
+
+
+    function closeSidebar() {
+
+        if (sidebar) {
+            sidebar.classList.remove("open");
+        }
+
+        if (sidebarOverlay) {
+            sidebarOverlay.classList.remove("active");
+        }
+    }
+
+
+    if (menuToggle) {
+
+        menuToggle.addEventListener(
+            "click",
+            function () {
+
+                if (sidebar) {
+                    sidebar.classList.toggle("open");
+                }
+
+                if (sidebarOverlay) {
+                    sidebarOverlay.classList.toggle("active");
+                }
+
+            }
+        );
+
+    }
+
+
+    if (sidebarOverlay) {
+
+        sidebarOverlay.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+    }
+
+
+    /*
+     * Close mobile navigation after selecting a page.
+     */
+    document
+        .querySelectorAll(".sidebar .nav-link")
+        .forEach(function (link) {
+
+            link.addEventListener(
+                "click",
+                closeSidebar
+            );
+
+        });
+
+
+    /*
+     * Refresh dashboard.
+     *
+     * dashboard.js can expose loadDashboard()
+     * when the API integration is implemented.
+     */
+    const refreshButton =
+        document.getElementById("refreshButton");
+
+
+    if (refreshButton) {
+
+        refreshButton.addEventListener(
+            "click",
+            async function () {
+
+                refreshButton.disabled = true;
+
+                const originalText =
+                    refreshButton.innerHTML;
+
+                refreshButton.innerHTML =
+                    "↻ Refreshing...";
+
+
+                try {
+
+                    if (
+                        typeof window.loadDashboard ===
+                        "function"
+                    ) {
+                        await window.loadDashboard();
+                    }
+
+                } finally {
+
+                    refreshButton.disabled = false;
+
+                    refreshButton.innerHTML =
+                        originalText;
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+     * Sales period selector.
+     */
+    const salesPeriod =
+        document.getElementById("salesPeriod");
+
+
+    if (salesPeriod) {
+
+        salesPeriod.addEventListener(
+            "change",
+            async function () {
+
+                if (
+                    typeof window.loadSalesChart ===
+                    "function"
+                ) {
+                    await window.loadSalesChart(
+                        this.value
+                    );
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+     * Global search.
+     *
+     * Search implementation belongs in app.js
+     * or the appropriate page-specific JS.
+     */
+    const globalSearch =
+        document.getElementById("globalSearch");
+
+
+    if (globalSearch) {
+
+        globalSearch.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key !== "Enter") {
+                    return;
+                }
+
+                const query =
+                    this.value.trim();
+
+                if (!query) {
+                    return;
+                }
+
+                /*
+                 * Future implementation:
+                 *
+                 * window.location.href =
+                 *     "products.html?search=" +
+                 *     encodeURIComponent(query);
+                 */
+
+                console.info(
+                    "Search requested:",
+                    query
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+     * Logout.
+     *
+     * Authentication/logout should be handled
+     * through auth.js and the PHP backend.
+     */
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+
+    if (logoutButton) {
+
+        logoutButton.addEventListener(
+            "click",
+            async function () {
+
+                const confirmed =
+                    window.confirm(
+                        "Are you sure you want to logout?"
+                    );
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                /*
+                 * If auth.js provides logoutUser(),
+                 * use it here.
+                 */
+                if (
+                    typeof window.logoutUser ===
+                    "function"
+                ) {
+
+                    await window.logoutUser();
+
+                    return;
+                }
+
+
+                /*
+                 * Temporary navigation only.
+                 * Replace with the real authentication
+                 * endpoint when auth.js is implemented.
+                 */
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+    }
+
+
+    /*
+     * Notification button.
+     */
+    const notificationButton =
+        document.getElementById(
+            "notificationButton"
+        );
+
+
+    if (notificationButton) {
+
+        notificationButton.addEventListener(
+            "click",
+            function () {
+
+                /*
+                 * Notification functionality can
+                 * later be connected to the backend.
+                 */
+                console.info(
+                    "Notification panel requested."
+                );
+
+            }
+        );
+
+    }
+
+});
+</script>
+
+</body>
+</html>
