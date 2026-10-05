@@ -1,0 +1,1995 @@
+/* =========================================================
+   INVENTORY MANAGEMENT SYSTEM
+   DASHBOARD STYLES
+   File: frontend/css/dashboard.css
+   ========================================================= */
+
+
+/* =========================================================
+   1. DASHBOARD LAYOUT
+========================================================= */
+
+.dashboard-app {
+    min-height: 100vh;
+
+    display: flex;
+
+    background: var(--gray-50);
+}
+
+
+.dashboard-main {
+    min-width: 0;
+    min-height: 100vh;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    margin-left: 260px;
+}
+
+
+/* =========================================================
+   2. SIDEBAR
+========================================================= */
+
+.sidebar {
+    width: 260px;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 1100;
+
+    color: var(--gray-300);
+    background: var(--secondary);
+
+    border-right: 1px solid
+        rgba(255, 255, 255, 0.05);
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+}
+
+
+.sidebar-logo {
+    min-height: 76px;
+
+    padding: 0 1.25rem;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.75rem;
+
+    border-bottom: 1px solid
+        rgba(255, 255, 255, 0.06);
+}
+
+
+.sidebar-logo .logo-icon {
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--white);
+    background: var(--primary);
+
+    border-radius: var(--radius-lg);
+
+    font-size: 1.15rem;
+}
+
+
+.sidebar-logo .logo-text {
+    min-width: 0;
+}
+
+
+.sidebar-logo .logo-text strong {
+    display: block;
+
+    color: var(--white);
+
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+
+.sidebar-logo .logo-text span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--gray-400);
+
+    font-size: 0.65rem;
+}
+
+
+/* =========================================================
+   3. SIDEBAR NAVIGATION
+========================================================= */
+
+.sidebar-nav {
+    flex: 1;
+
+    padding: 1.25rem 0.75rem;
+}
+
+
+.nav-section {
+    margin-bottom: 1.5rem;
+}
+
+
+.nav-section-title {
+    display: block;
+
+    padding:
+        0 0.75rem
+        0.55rem;
+
+    color: var(--gray-500);
+
+    font-size: 0.65rem;
+    font-weight: 700;
+
+    letter-spacing: 0.1em;
+}
+
+
+.nav-link {
+    min-height: 44px;
+
+    margin-bottom: 0.2rem;
+
+    padding: 0.65rem 0.75rem;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.75rem;
+
+    color: var(--gray-400);
+
+    border-radius: var(--radius-md);
+
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    transition:
+        color var(--transition),
+        background var(--transition),
+        transform var(--transition);
+}
+
+
+.nav-link:hover {
+    color: var(--white);
+
+    background:
+        rgba(255, 255, 255, 0.06);
+}
+
+
+.nav-link.active {
+    color: var(--white);
+
+    background: var(--primary);
+
+    box-shadow:
+        0 5px 15px
+        rgba(37, 99, 235, 0.2);
+}
+
+
+.nav-icon {
+    width: 24px;
+
+    display: flex;
+    justify-content: center;
+
+    font-size: 1rem;
+}
+
+
+.nav-link.active .nav-icon {
+    filter: brightness(1.1);
+}
+
+
+/* =========================================================
+   4. SIDEBAR BOTTOM
+========================================================= */
+
+.sidebar-bottom {
+    padding: 1rem;
+
+    border-top: 1px solid
+        rgba(255, 255, 255, 0.06);
+}
+
+
+.sidebar-help {
+    margin-bottom: 0.9rem;
+
+    padding: 0.8rem;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.7rem;
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    border-radius: var(--radius-md);
+}
+
+
+.help-icon {
+    width: 30px;
+    height: 30px;
+
+    flex: 0 0 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--white);
+    background: var(--primary);
+
+    border-radius: 50%;
+
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+
+.sidebar-help strong {
+    display: block;
+
+    color: var(--gray-200);
+
+    font-size: 0.75rem;
+}
+
+
+.sidebar-help small {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--gray-500);
+
+    font-size: 0.65rem;
+}
+
+
+.logout-button {
+    width: 100%;
+    min-height: 42px;
+
+    padding: 0.6rem 0.75rem;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.7rem;
+
+    color: var(--gray-400);
+    background: transparent;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: var(--radius-md);
+
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    transition:
+        color var(--transition),
+        background var(--transition),
+        border-color var(--transition);
+}
+
+
+.logout-button:hover {
+    color: #fca5a5;
+
+    background:
+        rgba(220, 38, 38, 0.1);
+
+    border-color:
+        rgba(220, 38, 38, 0.25);
+}
+
+
+/* =========================================================
+   5. DASHBOARD HEADER
+========================================================= */
+
+.dashboard-header {
+    min-height: 76px;
+
+    padding: 0 1.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    background: var(--white);
+
+    border-bottom: 1px solid var(--gray-200);
+
+    position: sticky;
+    top: 0;
+
+    z-index: 900;
+}
+
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+
+.header-left {
+    min-width: 0;
+
+    gap: 1rem;
+}
+
+
+.header-right {
+    gap: 0.75rem;
+}
+
+
+/* =========================================================
+   6. PAGE TITLE
+========================================================= */
+
+.page-title {
+    min-width: 0;
+}
+
+
+.page-title h1 {
+    color: var(--gray-900);
+
+    font-size: 1.15rem;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.page-title p {
+    margin-top: 3px;
+
+    color: var(--gray-500);
+
+    font-size: 0.72rem;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   7. MENU BUTTON
+========================================================= */
+
+.menu-toggle {
+    width: 40px;
+    height: 40px;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--gray-600);
+    background: var(--gray-100);
+
+    border: 0;
+    border-radius: var(--radius-md);
+
+    font-size: 1rem;
+}
+
+
+.menu-toggle:hover {
+    color: var(--primary);
+
+    background: var(--primary-light);
+}
+
+
+/* =========================================================
+   8. HEADER SEARCH
+========================================================= */
+
+.header-search {
+    width: 220px;
+    height: 40px;
+
+    padding: 0 0.75rem;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.5rem;
+
+    color: var(--gray-400);
+    background: var(--gray-50);
+
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+}
+
+
+.header-search input {
+    width: 100%;
+
+    color: var(--gray-800);
+    background: transparent;
+
+    border: 0;
+    outline: 0;
+
+    font-size: 0.8rem;
+}
+
+
+.header-search input::placeholder {
+    color: var(--gray-400);
+}
+
+
+.header-search:focus-within {
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.08);
+}
+
+
+/* =========================================================
+   9. NOTIFICATION
+========================================================= */
+
+.header-icon-button {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    color: var(--gray-600);
+    background: transparent;
+
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+
+    font-size: 0.95rem;
+}
+
+
+.header-icon-button:hover {
+    color: var(--primary);
+
+    background: var(--primary-light);
+}
+
+
+.notification-dot {
+    width: 7px;
+    height: 7px;
+
+    position: absolute;
+    top: 7px;
+    right: 7px;
+
+    background: var(--danger);
+
+    border: 2px solid var(--white);
+    border-radius: 50%;
+}
+
+
+.notification-dot.hidden {
+    display: none;
+}
+
+
+/* =========================================================
+   10. USER PROFILE
+========================================================= */
+
+.user-profile {
+    min-height: 42px;
+
+    padding-left: 0.5rem;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.6rem;
+}
+
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--white);
+    background: var(--primary);
+
+    border-radius: 50%;
+
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+
+.user-info {
+    min-width: 80px;
+}
+
+
+.user-info strong {
+    display: block;
+
+    color: var(--gray-800);
+
+    font-size: 0.75rem;
+}
+
+
+.user-info span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--gray-500);
+
+    font-size: 0.65rem;
+}
+
+
+.user-menu-button {
+    padding: 0.25rem;
+
+    color: var(--gray-400);
+    background: transparent;
+
+    border: 0;
+}
+
+
+/* =========================================================
+   11. MAIN CONTENT
+========================================================= */
+
+.dashboard-content {
+    width: 100%;
+
+    padding: 1.75rem;
+
+    flex: 1;
+}
+
+
+/* =========================================================
+   12. CONTENT HEADER
+========================================================= */
+
+.content-header {
+    margin-bottom: 1.5rem;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 1rem;
+}
+
+
+.content-header h2 {
+    color: var(--gray-900);
+
+    font-size: 1.45rem;
+    font-weight: 750;
+
+    letter-spacing: -0.025em;
+}
+
+
+.content-header p {
+    margin-top: 0.3rem;
+
+    color: var(--gray-500);
+
+    font-size: 0.8rem;
+}
+
+
+.content-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.6rem;
+}
+
+
+/* =========================================================
+   13. STATISTICS GRID
+========================================================= */
+
+.stats-grid {
+    margin-bottom: 1.5rem;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 1rem;
+}
+
+
+.dashboard-stat-card {
+    min-width: 0;
+
+    padding: 1.2rem;
+
+    background: var(--white);
+
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+
+.dashboard-stat-card:hover {
+    transform: translateY(-2px);
+
+    border-color: var(--gray-300);
+
+    box-shadow: var(--shadow-md);
+}
+
+
+.stat-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+}
+
+
+.stat-card-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius-md);
+
+    font-size: 1.1rem;
+}
+
+
+.stat-card-icon.blue {
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+
+.stat-card-icon.green {
+    color: var(--success);
+    background: var(--success-light);
+}
+
+
+.stat-card-icon.orange {
+    color: #b45309;
+    background: var(--warning-light);
+}
+
+
+.stat-card-icon.purple {
+    color: #7c3aed;
+    background: #ede9fe;
+}
+
+
+.stat-change {
+    padding: 0.25rem 0.45rem;
+
+    color: var(--gray-500);
+    background: var(--gray-100);
+
+    border-radius: var(--radius-full);
+
+    font-size: 0.65rem;
+    font-weight: 600;
+}
+
+
+.stat-change.positive {
+    color: #166534;
+    background: var(--success-light);
+}
+
+
+.stat-change.negative {
+    color: #991b1b;
+    background: var(--danger-light);
+}
+
+
+.stat-card-body {
+    margin-top: 1rem;
+}
+
+
+.stat-label {
+    display: block;
+
+    color: var(--gray-500);
+
+    font-size: 0.75rem;
+}
+
+
+.stat-value {
+    display: block;
+
+    margin-top: 0.25rem;
+
+    color: var(--gray-900);
+
+    font-size: 1.65rem;
+    font-weight: 750;
+
+    letter-spacing: -0.035em;
+}
+
+
+.stat-description {
+    display: block;
+
+    margin-top: 0.4rem;
+
+    color: var(--gray-400);
+
+    font-size: 0.65rem;
+}
+
+
+/* =========================================================
+   14. DASHBOARD GRID
+========================================================= */
+
+.dashboard-grid {
+    margin-bottom: 1.5rem;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.7fr)
+        minmax(320px, 1fr);
+
+    gap: 1rem;
+}
+
+
+.bottom-grid {
+    grid-template-columns:
+        minmax(0, 1.7fr)
+        minmax(300px, 1fr);
+}
+
+
+/* =========================================================
+   15. DASHBOARD CARDS
+========================================================= */
+
+.dashboard-card {
+    min-width: 0;
+
+    background: var(--white);
+
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-sm);
+
+    overflow: hidden;
+}
+
+
+.card-header {
+    padding: 1.2rem 1.25rem;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    border-bottom: 1px solid var(--gray-100);
+}
+
+
+.card-header h3 {
+    color: var(--gray-900);
+
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+
+.card-header p {
+    margin-top: 0.25rem;
+
+    color: var(--gray-500);
+
+    font-size: 0.7rem;
+}
+
+
+.view-link {
+    flex-shrink: 0;
+
+    color: var(--primary);
+
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+
+.view-link:hover {
+    color: var(--primary-dark);
+
+    text-decoration: underline;
+}
+
+
+.chart-select {
+    width: auto;
+    min-width: 130px;
+
+    padding: 0.45rem 0.65rem;
+
+    font-size: 0.7rem;
+}
+
+
+/* =========================================================
+   16. EMPTY STATES
+========================================================= */
+
+.dashboard-empty-state {
+    min-height: 280px;
+
+    padding: 2rem;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+
+.dashboard-empty-state.compact {
+    min-height: 220px;
+}
+
+
+.empty-state-icon {
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 0.8rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--gray-500);
+    background: var(--gray-100);
+
+    border-radius: 50%;
+
+    font-size: 1.15rem;
+}
+
+
+.dashboard-empty-state h4 {
+    color: var(--gray-700);
+
+    font-size: 0.85rem;
+}
+
+
+.dashboard-empty-state p {
+    max-width: 320px;
+
+    margin-top: 0.35rem;
+
+    color: var(--gray-400);
+
+    font-size: 0.7rem;
+    line-height: 1.6;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   17. SALES CHART
+========================================================= */
+
+.chart-container {
+    min-height: 330px;
+
+    padding:
+        1.25rem
+        1.25rem
+        1rem;
+
+    display: flex;
+
+    gap: 0.75rem;
+}
+
+
+.chart-y-axis {
+    width: 35px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    padding-bottom: 25px;
+
+    color: var(--gray-400);
+
+    font-size: 0.6rem;
+
+    text-align: right;
+}
+
+
+.sales-chart {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+}
+
+
+.chart-grid-lines {
+    position: absolute;
+    inset: 0 0 25px 0;
+
+    pointer-events: none;
+}
+
+
+.chart-grid-line {
+    width: 100%;
+    height: 1px;
+
+    position: absolute;
+
+    background: var(--gray-100);
+}
+
+
+.chart-bars {
+    min-height: 270px;
+
+    flex: 1;
+
+    display: flex;
+    align-items: flex-end;
+
+    justify-content: space-around;
+
+    gap: 0.75rem;
+
+    position: relative;
+
+    padding:
+        0 0.75rem
+        0.25rem;
+}
+
+
+.chart-bar {
+    width: min(45px, 10%);
+
+    min-width: 10px;
+
+    position: relative;
+    z-index: 2;
+
+    background:
+        linear-gradient(
+            to top,
+            var(--primary),
+            #60a5fa
+        );
+
+    border-radius:
+        5px 5px 0 0;
+
+    cursor: pointer;
+
+    transition:
+        opacity var(--transition),
+        transform var(--transition);
+}
+
+
+.chart-bar:hover {
+    opacity: 0.8;
+
+    transform: scaleY(1.02);
+}
+
+
+.chart-x-axis {
+    min-height: 25px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+
+    gap: 0.5rem;
+
+    color: var(--gray-400);
+
+    font-size: 0.6rem;
+}
+
+
+/* =========================================================
+   18. INVENTORY STATUS
+========================================================= */
+
+.inventory-status {
+    min-height: 300px;
+
+    padding: 1.5rem;
+
+    display: flex;
+    align-items: center;
+
+    gap: 1.5rem;
+}
+
+
+.inventory-donut {
+    flex: 0 0 170px;
+
+    display: flex;
+    justify-content: center;
+}
+
+
+.donut {
+    width: 155px;
+    height: 155px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            var(--gray-200) 0deg,
+            var(--gray-200) 360deg
+        );
+}
+
+
+.donut::after {
+    content: "";
+
+    width: 105px;
+    height: 105px;
+
+    position: absolute;
+
+    background: var(--white);
+
+    border-radius: 50%;
+}
+
+
+.donut-center {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+
+.donut-center strong {
+    color: var(--gray-900);
+
+    font-size: 1.1rem;
+}
+
+
+.donut-center span {
+    color: var(--gray-400);
+
+    font-size: 0.65rem;
+}
+
+
+.inventory-legend {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 1rem;
+}
+
+
+.legend-item {
+    display: grid;
+
+    grid-template-columns:
+        10px
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 0.6rem;
+}
+
+
+.legend-color {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+}
+
+
+.legend-color.in-stock {
+    background: var(--success);
+}
+
+
+.legend-color.low-stock {
+    background: var(--warning);
+}
+
+
+.legend-color.out-stock {
+    background: var(--danger);
+}
+
+
+.legend-item div {
+    min-width: 0;
+}
+
+
+.legend-item strong {
+    display: block;
+
+    color: var(--gray-700);
+
+    font-size: 0.7rem;
+}
+
+
+.legend-item div span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--gray-400);
+
+    font-size: 0.6rem;
+}
+
+
+.legend-item > b {
+    color: var(--gray-600);
+
+    font-size: 0.7rem;
+}
+
+
+/* =========================================================
+   19. TRANSACTION TABLE
+========================================================= */
+
+.transactions-card .table-container {
+    border: 0;
+
+    border-radius: 0;
+}
+
+
+.transactions-card table {
+    min-width: 700px;
+}
+
+
+.transactions-card th {
+    background: var(--gray-50);
+
+    font-size: 0.6rem;
+}
+
+
+.transactions-card td {
+    font-size: 0.7rem;
+}
+
+
+.transactions-card td strong {
+    color: var(--gray-800);
+}
+
+
+.transaction-sale {
+    color: var(--primary);
+
+    font-weight: 600;
+}
+
+
+.transaction-purchase {
+    color: var(--success);
+
+    font-weight: 600;
+}
+
+
+.table-empty-state {
+    height: 180px;
+
+    color: var(--gray-400);
+
+    text-align: center !important;
+
+    vertical-align: middle;
+}
+
+
+/* =========================================================
+   20. LOW STOCK PRODUCTS
+========================================================= */
+
+.low-stock-list {
+    padding: 0.4rem 1.25rem 1rem;
+}
+
+
+.low-stock-item {
+    min-height: 65px;
+
+    padding: 0.7rem 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.7rem;
+
+    border-bottom: 1px solid var(--gray-100);
+}
+
+
+.low-stock-item:last-child {
+    border-bottom: 0;
+}
+
+
+.product-image {
+    width: 40px;
+    height: 40px;
+
+    flex: 0 0 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--gray-100);
+
+    border-radius: var(--radius-md);
+
+    font-size: 1rem;
+}
+
+
+.product-info {
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.product-info strong {
+    display: block;
+
+    overflow: hidden;
+
+    color: var(--gray-700);
+
+    font-size: 0.7rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.product-info span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--gray-400);
+
+    font-size: 0.6rem;
+}
+
+
+.stock-quantity {
+    min-width: 38px;
+
+    text-align: right;
+}
+
+
+.stock-quantity strong {
+    display: block;
+
+    font-size: 0.8rem;
+}
+
+
+.stock-quantity span {
+    display: block;
+
+    margin-top: -2px;
+
+    color: var(--gray-400);
+
+    font-size: 0.55rem;
+}
+
+
+.stock-quantity.danger strong {
+    color: var(--danger);
+}
+
+
+.stock-quantity.warning strong {
+    color: var(--warning);
+}
+
+
+/* =========================================================
+   21. QUICK ACTIONS
+========================================================= */
+
+.quick-actions-card {
+    margin-bottom: 1.5rem;
+}
+
+
+.quick-actions {
+    padding: 1.25rem;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 0.8rem;
+}
+
+
+.quick-action {
+    min-width: 0;
+
+    padding: 0.85rem;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.65rem;
+
+    color: var(--gray-700);
+
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+
+    transition:
+        border-color var(--transition),
+        background var(--transition),
+        transform var(--transition);
+}
+
+
+.quick-action:hover {
+    border-color: #bfdbfe;
+
+    background: var(--gray-50);
+
+    transform: translateY(-2px);
+}
+
+
+.quick-action > span:nth-child(2) {
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.quick-action strong {
+    display: block;
+
+    color: var(--gray-800);
+
+    font-size: 0.7rem;
+}
+
+
+.quick-action small {
+    display: block;
+
+    margin-top: 2px;
+
+    overflow: hidden;
+
+    color: var(--gray-400);
+
+    font-size: 0.58rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.quick-action > b {
+    color: var(--gray-300);
+
+    font-size: 0.8rem;
+}
+
+
+.quick-action:hover > b {
+    color: var(--primary);
+}
+
+
+.quick-action-icon {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius-md);
+
+    font-size: 0.9rem;
+}
+
+
+.quick-action-icon.blue {
+    background: var(--primary-light);
+}
+
+
+.quick-action-icon.green {
+    background: var(--success-light);
+}
+
+
+.quick-action-icon.purple {
+    background: #ede9fe;
+}
+
+
+.quick-action-icon.orange {
+    background: var(--warning-light);
+}
+
+
+/* =========================================================
+   22. FOOTER
+========================================================= */
+
+.dashboard-footer {
+    min-height: 55px;
+
+    padding: 1rem 1.75rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    color: var(--gray-400);
+    background: var(--white);
+
+    border-top: 1px solid var(--gray-200);
+
+    font-size: 0.65rem;
+}
+
+
+/* =========================================================
+   23. MOBILE SIDEBAR OVERLAY
+========================================================= */
+
+.sidebar-overlay {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 1050;
+
+    background:
+        rgba(15, 23, 42, 0.5);
+
+    backdrop-filter: blur(2px);
+}
+
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+
+/* =========================================================
+   24. RESPONSIVE - LARGE TABLET
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .quick-actions {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   25. RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 1024px) {
+
+    .dashboard-main {
+        margin-left: 220px;
+    }
+
+
+    .sidebar {
+        width: 220px;
+    }
+
+
+    .header-search {
+        width: 170px;
+    }
+
+
+    .dashboard-grid,
+    .bottom-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .inventory-status {
+        min-height: 280px;
+    }
+
+}
+
+
+/* =========================================================
+   26. RESPONSIVE - MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .dashboard-main {
+        margin-left: 0;
+    }
+
+
+    .sidebar {
+        width: 260px;
+
+        transform:
+            translateX(-100%);
+
+        transition:
+            transform 0.25s ease;
+
+        box-shadow:
+            10px 0 30px
+            rgba(15, 23, 42, 0.15);
+    }
+
+
+    .sidebar.open {
+        transform:
+            translateX(0);
+    }
+
+
+    .menu-toggle {
+        display: flex;
+    }
+
+
+    .dashboard-header {
+        padding: 0 1rem;
+    }
+
+
+    .header-search {
+        display: none;
+    }
+
+
+    .user-info,
+    .user-menu-button {
+        display: none;
+    }
+
+
+    .dashboard-content {
+        padding: 1rem;
+    }
+
+
+    .content-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .content-actions {
+        width: 100%;
+    }
+
+
+    .content-actions .btn {
+        flex: 1;
+    }
+
+
+    .stats-grid {
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 0.75rem;
+    }
+
+
+    .dashboard-stat-card {
+        padding: 1rem;
+    }
+
+
+    .stat-value {
+        font-size: 1.4rem;
+    }
+
+
+    .dashboard-grid,
+    .bottom-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .inventory-status {
+        flex-direction: column;
+
+        justify-content: center;
+    }
+
+
+    .inventory-donut {
+        flex-basis: auto;
+    }
+
+
+    .inventory-legend {
+        width: 100%;
+    }
+
+
+    .quick-actions {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .dashboard-footer {
+        padding:
+            1rem;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+}
+
+
+/* =========================================================
+   27. RESPONSIVE - SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .dashboard-header {
+        min-height: 65px;
+    }
+
+
+    .page-title h1 {
+        font-size: 1rem;
+    }
+
+
+    .page-title p {
+        display: none;
+    }
+
+
+    .header-right {
+        gap: 0.4rem;
+    }
+
+
+    .header-icon-button {
+        width: 36px;
+        height: 36px;
+    }
+
+
+    .user-avatar {
+        width: 34px;
+        height: 34px;
+
+        flex-basis: 34px;
+    }
+
+
+    .content-header h2 {
+        font-size: 1.25rem;
+    }
+
+
+    .stats-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .stats-grid .dashboard-stat-card {
+        min-height: 145px;
+    }
+
+
+    .card-header {
+        padding: 1rem;
+    }
+
+
+    .dashboard-empty-state {
+        min-height: 240px;
+
+        padding: 1.5rem;
+    }
+
+
+    .chart-container {
+        min-height: 270px;
+
+        padding:
+            1rem
+            0.65rem;
+    }
+
+
+    .chart-bars {
+        min-height: 215px;
+
+        gap: 0.3rem;
+
+        padding-left: 0.2rem;
+        padding-right: 0.2rem;
+    }
+
+
+    .chart-bar {
+        width: 9%;
+    }
+
+
+    .inventory-status {
+        padding: 1rem;
+    }
+
+
+    .donut {
+        width: 135px;
+        height: 135px;
+    }
+
+
+    .donut::after {
+        width: 90px;
+        height: 90px;
+    }
+
+
+    .quick-actions {
+        grid-template-columns:
+            1fr;
+
+        padding: 1rem;
+    }
+
+
+    .quick-action {
+        min-height: 60px;
+    }
+
+
+    .dashboard-footer {
+        font-size: 0.6rem;
+    }
+
+}
+
+
+/* =========================================================
+   28. ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sidebar {
+        transition: none;
+    }
+
+
+    .dashboard-stat-card,
+    .quick-action,
+    .chart-bar {
+        transition: none;
+    }
+
+}
+
+
+/* =========================================================
+   29. PRINT
+========================================================= */
+
+@media print {
+
+    .sidebar,
+    .dashboard-header,
+    .content-actions,
+    .quick-actions-card,
+    .dashboard-footer {
+        display: none !important;
+    }
+
+
+    .dashboard-main {
+        margin-left: 0;
+    }
+
+
+    .dashboard-content {
+        padding: 0;
+    }
+
+
+    .dashboard-card,
+    .dashboard-stat-card {
+        box-shadow: none;
+
+        break-inside: avoid;
+    }
+
+}
