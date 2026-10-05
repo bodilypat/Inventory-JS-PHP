@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Inventory Management System Reports"
+    >
+
+    <title>Reports | Inventory Management System</title>
+
+    <!-- Main stylesheet -->
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <!-- Reports stylesheet -->
+    <link
+        rel="stylesheet"
+        href="../css/reports.css"
+    >
+</head>
+
+<body>
+
+    <!-- =====================================================
+         APPLICATION LAYOUT
+         ===================================================== -->
+
+    <div class="app-layout">
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <div class="sidebar-header">
+
+                <a
+                    href="dashboard.html"
+                    class="brand"
+                >
+                    <span class="brand-icon">📦</span>
+
+                    <span class="brand-text">
+                        Inventory
+                    </span>
+                </a>
+
+                <button
+                    type="button"
+                    class="sidebar-close"
+                    id="sidebarClose"
+                    aria-label="Close sidebar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <nav
+                class="sidebar-nav"
+                aria-label="Main navigation"
+            >
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Main
+                    </span>
+
+                    <a
+                        href="dashboard.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Inventory
+                    </span>
+
+                    <a
+                        href="products.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">📦</span>
+                        <span>Products</span>
+                    </a>
+
+                    <a
+                        href="categories.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🗂️</span>
+                        <span>Categories</span>
+                    </a>
+
+                    <a
+                        href="inventory.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🏷️</span>
+                        <span>Inventory</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Transactions
+                    </span>
+
+                    <a
+                        href="purchases.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🛒</span>
+                        <span>Purchases</span>
+                    </a>
+
+                    <a
+                        href="sales.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">💰</span>
+                        <span>Sales</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Contacts
+                    </span>
+
+                    <a
+                        href="suppliers.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🚚</span>
+                        <span>Suppliers</span>
+                    </a>
+
+                    <a
+                        href="customers.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">👥</span>
+                        <span>Customers</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Administration
+                    </span>
+
+                    <a
+                        href="reports.html"
+                        class="nav-link active"
+                        aria-current="page"
+                    >
+                        <span class="nav-icon">📈</span>
+                        <span>Reports</span>
+                    </a>
+
+                    <a
+                        href="users.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">👤</span>
+                        <span>Users</span>
+                    </a>
+
+                </div>
+
+            </nav>
+
+
+            <div class="sidebar-footer">
+
+                <a
+                    href="login.html"
+                    class="logout-link"
+                >
+                    <span>🚪</span>
+                    <span>Logout</span>
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN CONTENT
+             ================================================= -->
+
+        <main class="main-content">
+
+            <!-- =============================================
+                 TOP HEADER
+                 ============================================= -->
+
+            <header class="top-header">
+
+                <button
+                    type="button"
+                    class="mobile-menu-button"
+                    id="mobileMenuButton"
+                    aria-label="Open navigation"
+                >
+                    ☰
+                </button>
+
+
+                <div class="header-title">
+
+                    <h1>Reports</h1>
+
+                    <p>
+                        Analyze your inventory,
+                        sales and purchasing activity.
+                    </p>
+
+                </div>
+
+
+                <div class="header-actions">
+
+                    <button
+                        type="button"
+                        class="icon-button"
+                        id="refreshReportButton"
+                        title="Refresh report"
+                        aria-label="Refresh report"
+                    >
+                        ↻
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- =============================================
+                 PAGE CONTENT
+                 ============================================= -->
+
+            <section class="page-content">
+
+
+                <!-- =========================================
+                     REPORT FILTERS
+                     ========================================= -->
+
+                <div class="report-card filter-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2>
+                                Report Filters
+                            </h2>
+
+                            <p>
+                                Select a report and
+                                date range.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="filter-grid">
+
+                        <!-- Report Type -->
+
+                        <div class="form-group">
+
+                            <label
+                                for="reportType"
+                            >
+                                Report Type
+                            </label>
+
+                            <select
+                                id="reportType"
+                                name="report_type"
+                                class="form-control"
+                            >
+
+                                <option value="sales">
+                                    Sales Report
+                                </option>
+
+                                <option value="purchases">
+                                    Purchases Report
+                                </option>
+
+                                <option value="inventory">
+                                    Inventory Report
+                                </option>
+
+                                <option value="products">
+                                    Products Report
+                                </option>
+
+                                <option value="customers">
+                                    Customers Report
+                                </option>
+
+                                <option value="suppliers">
+                                    Suppliers Report
+                                </option>
+
+                                <option value="profit">
+                                    Profit Report
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Date Range -->
+
+                        <div class="form-group">
+
+                            <label
+                                for="dateRange"
+                            >
+                                Date Range
+                            </label>
+
+                            <select
+                                id="dateRange"
+                                name="date_range"
+                                class="form-control"
+                            >
+
+                                <option value="today">
+                                    Today
+                                </option>
+
+                                <option value="yesterday">
+                                    Yesterday
+                                </option>
+
+                                <option value="this_week">
+                                    This Week
+                                </option>
+
+                                <option value="last_week">
+                                    Last Week
+                                </option>
+
+                                <option
+                                    value="this_month"
+                                    selected
+                                >
+                                    This Month
+                                </option>
+
+                                <option value="last_month">
+                                    Last Month
+                                </option>
+
+                                <option value="this_year">
+                                    This Year
+                                </option>
+
+                                <option value="last_year">
+                                    Last Year
+                                </option>
+
+                                <option value="custom">
+                                    Custom Range
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Start Date -->
+
+                        <div class="form-group">
+
+                            <label
+                                for="startDate"
+                            >
+                                Start Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="startDate"
+                                name="start_date"
+                                class="form-control"
+                            >
+
+                        </div>
+
+
+                        <!-- End Date -->
+
+                        <div class="form-group">
+
+                            <label
+                                for="endDate"
+                            >
+                                End Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="endDate"
+                                name="end_date"
+                                class="form-control"
+                            >
+
+                        </div>
+
+
+                        <!-- Generate -->
+
+                        <div class="form-group filter-action">
+
+                            <button
+                                type="button"
+                                id="generateReportButton"
+                                class="btn btn-primary"
+                            >
+                                Generate Report
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Quick Filters -->
+
+                    <div class="quick-filters">
+
+                        <span class="quick-filter-label">
+                            Quick range:
+                        </span>
+
+                        <button
+                            type="button"
+                            class="quick-filter-button"
+                            data-report-range="today"
+                        >
+                            Today
+                        </button>
+
+                        <button
+                            type="button"
+                            class="quick-filter-button"
+                            data-report-range="this_week"
+                        >
+                            This Week
+                        </button>
+
+                        <button
+                            type="button"
+                            class="quick-filter-button"
+                            data-report-range="this_month"
+                        >
+                            This Month
+                        </button>
+
+                        <button
+                            type="button"
+                            class="quick-filter-button"
+                            data-report-range="this_year"
+                        >
+                            This Year
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     SUMMARY CARDS
+                     ========================================= -->
+
+                <div
+                    class="summary-grid"
+                    id="reportSummary"
+                >
+
+                    <!-- Sales -->
+
+                    <div class="summary-card sales-card">
+
+                        <div class="summary-icon">
+                            💰
+                        </div>
+
+                        <div class="summary-content">
+
+                            <span class="summary-label">
+                                Total Sales
+                            </span>
+
+                            <strong
+                                id="totalSales"
+                                class="summary-value"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Purchases -->
+
+                    <div class="summary-card purchase-card">
+
+                        <div class="summary-icon">
+                            🛒
+                        </div>
+
+                        <div class="summary-content">
+
+                            <span class="summary-label">
+                                Total Purchases
+                            </span>
+
+                            <strong
+                                id="totalPurchases"
+                                class="summary-value"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Profit -->
+
+                    <div class="summary-card profit-card">
+
+                        <div class="summary-icon">
+                            📈
+                        </div>
+
+                        <div class="summary-content">
+
+                            <span class="summary-label">
+                                Total Profit
+                            </span>
+
+                            <strong
+                                id="totalProfit"
+                                class="summary-value"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Items -->
+
+                    <div class="summary-card inventory-card">
+
+                        <div class="summary-icon">
+                            📦
+                        </div>
+
+                        <div class="summary-content">
+
+                            <span class="summary-label">
+                                Total Items
+                            </span>
+
+                            <strong
+                                id="totalItems"
+                                class="summary-value"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Quantity -->
+
+                    <div class="summary-card quantity-card">
+
+                        <div class="summary-icon">
+                            🔢
+                        </div>
+
+                        <div class="summary-content">
+
+                            <span class="summary-label">
+                                Total Quantity
+                            </span>
+
+                            <strong
+                                id="totalQuantity"
+                                class="summary-value"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Receivable -->
+
+                    <div class="summary-card receivable-card">
+
+                        <div class="summary-icon">
+                            💳
+                        </div>
+
+                        <div class="summary-content">
+
+                            <span class="summary-label">
+                                Receivable
+                            </span>
+
+                            <strong
+                                id="totalReceivable"
+                                class="summary-value"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Payable -->
+
+                    <div class="summary-card payable-card">
+
+                        <div class="summary-icon">
+                            💸
+                        </div>
+
+                        <div class="summary-content">
+
+                            <span class="summary-label">
+                                Payable
+                            </span>
+
+                            <strong
+                                id="totalPayable"
+                                class="summary-value"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     REPORT RESULTS
+                     ========================================= -->
+
+                <div class="report-card results-card">
+
+                    <div class="card-header report-results-header">
+
+                        <div>
+
+                            <h2>
+                                Report Results
+                            </h2>
+
+                            <p>
+                                <span
+                                    id="reportRecordCount"
+                                >
+                                    0
+                                </span>
+                                records
+                            </p>
+
+                        </div>
+
+
+                        <div class="results-actions">
+
+                            <button
+                                type="button"
+                                id="exportReportButton"
+                                class="btn btn-secondary"
+                            >
+                                <span>⬇</span>
+                                Export CSV
+                            </button>
+
+                            <button
+                                type="button"
+                                id="printReportButton"
+                                class="btn btn-secondary"
+                            >
+                                <span>🖨</span>
+                                Print
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Search -->
+
+                    <div class="table-toolbar">
+
+                        <div class="search-box">
+
+                            <span
+                                class="search-icon"
+                                aria-hidden="true"
+                            >
+                                🔎
+                            </span>
+
+                            <input
+                                type="search"
+                                id="reportSearch"
+                                class="form-control"
+                                placeholder="Search report..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="table-info">
+
+                            <span
+                                id="paginationInfo"
+                            >
+                                No records found
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         TABLE
+                         ===================================== -->
+
+                    <div class="table-wrapper">
+
+                        <table
+                            class="data-table reports-table"
+                            id="reportsTable"
+                        >
+
+                            <thead>
+
+                                <tr
+                                    id="reportsTableHead"
+                                >
+
+                                    <th
+                                        data-report-sort="invoice_number"
+                                    >
+                                        Reference
+                                        <span
+                                            class="sort-icon"
+                                        >
+                                            ↕
+                                        </span>
+                                    </th>
+
+                                    <th
+                                        data-report-sort="date"
+                                    >
+                                        Date
+                                        <span
+                                            class="sort-icon"
+                                        >
+                                            ↕
+                                        </span>
+                                    </th>
+
+                                    <th
+                                        data-report-sort="customer_name"
+                                    >
+                                        Customer
+                                        <span
+                                            class="sort-icon"
+                                        >
+                                            ↕
+                                        </span>
+                                    </th>
+
+                                    <th
+                                        data-report-sort="payment_method"
+                                    >
+                                        Payment
+                                        <span
+                                            class="sort-icon"
+                                        >
+                                            ↕
+                                        </span>
+                                    </th>
+
+                                    <th
+                                        data-report-sort="subtotal"
+                                    >
+                                        Subtotal
+                                        <span
+                                            class="sort-icon"
+                                        >
+                                            ↕
+                                        </span>
+                                    </th>
+
+                                    <th
+                                        data-report-sort="tax"
+                                    >
+                                        Tax
+                                        <span
+                                            class="sort-icon"
+                                        >
+                                            ↕
+                                        </span>
+                                    </th>
+
+                                    <th
+                                        data-report-sort="discount"
+                                    >
+                                        Discount
+                                        <span
+                                            class="sort-icon"
+                                        >
+                                            ↕
+                                        </span>
+                                    </th>
+
+                                    <th
+                                        data-report-sort="total"
+                                    >
+                                        Total
+                                        <span
+                                            class="sort-icon"
+                                        >
+                                            ↕
+                                        </span>
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="reportsTableBody"
+                            >
+
+                                <!--
+                                    Data is loaded from the PHP API.
+                                    No mock data is used.
+                                -->
+
+                                <tr>
+                                    <td
+                                        colspan="100%"
+                                        class="table-loading"
+                                    >
+                                        Loading report...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         PAGINATION
+                         ===================================== -->
+
+                    <div class="pagination">
+
+                        <div class="pagination-left">
+
+                            <label
+                                for="perPage"
+                            >
+                                Rows per page
+                            </label>
+
+                            <select
+                                id="perPage"
+                                class="pagination-select"
+                            >
+
+                                <option value="10">
+                                    10
+                                </option>
+
+                                <option
+                                    value="25"
+                                    selected
+                                >
+                                    25
+                                </option>
+
+                                <option value="50">
+                                    50
+                                </option>
+
+                                <option value="100">
+                                    100
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="pagination-controls">
+
+                            <button
+                                type="button"
+                                id="previousPage"
+                                class="pagination-button"
+                                disabled
+                                aria-label="Previous page"
+                            >
+                                ‹
+                            </button>
+
+
+                            <span class="pagination-page">
+
+                                Page
+
+                                <strong
+                                    id="currentPage"
+                                >
+                                    1
+                                </strong>
+
+                                of
+
+                                <strong
+                                    id="totalPages"
+                                >
+                                    1
+                                </strong>
+
+                            </span>
+
+
+                            <button
+                                type="button"
+                                id="nextPage"
+                                class="pagination-button"
+                                disabled
+                                aria-label="Next page"
+                            >
+                                ›
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         MOBILE SIDEBAR OVERLAY
+         ===================================================== -->
+
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+        aria-hidden="true"
+    ></div>
+
+
+    <!-- =====================================================
+         TOAST CONTAINER
+         ===================================================== -->
+
+    <div
+        id="toastContainer"
+        class="toast-container"
+        aria-live="polite"
+        aria-atomic="true"
+    ></div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script src="../js/reports.js"></script>
+
+
+    <!-- =====================================================
+         BASIC SIDEBAR BEHAVIOR
+         ===================================================== -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const sidebar =
+                document.getElementById("sidebar");
+
+            const menuButton =
+                document.getElementById("mobileMenuButton");
+
+            const closeButton =
+                document.getElementById("sidebarClose");
+
+            const overlay =
+                document.getElementById("sidebarOverlay");
+
+
+            function openSidebar() {
+
+                sidebar?.classList.add("open");
+
+                overlay?.classList.add("active");
+
+                overlay?.setAttribute(
+                    "aria-hidden",
+                    "false"
+                );
+
+            }
+
+
+            function closeSidebar() {
+
+                sidebar?.classList.remove("open");
+
+                overlay?.classList.remove("active");
+
+                overlay?.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+            }
+
+
+            menuButton?.addEventListener(
+                "click",
+                openSidebar
+            );
+
+
+            closeButton?.addEventListener(
+                "click",
+                closeSidebar
+            );
+
+
+            overlay?.addEventListener(
+                "click",
+                closeSidebar
+            );
+
+
+            document
+                .querySelectorAll(".nav-link")
+                .forEach(link => {
+
+                    link.addEventListener(
+                        "click",
+                        closeSidebar
+                    );
+
+                });
+
+        });
+    </script>
+
+</body>
+</html>

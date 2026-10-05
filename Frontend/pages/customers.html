@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Inventory Management System - Customers"
+    >
+
+    <title>Customers | Inventory Management System</title>
+
+    <!-- Main stylesheet -->
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <!-- Customer page stylesheet -->
+    <link
+        rel="stylesheet"
+        href="../css/customers.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         APPLICATION LAYOUT
+         ===================================================== -->
+
+    <div class="app-layout">
+
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <div class="sidebar-header">
+
+                <a
+                    href="../index.html"
+                    class="brand"
+                >
+
+                    <span class="brand-icon">
+                        📦
+                    </span>
+
+                    <span class="brand-text">
+                        Inventory
+                    </span>
+
+                </a>
+
+                <button
+                    type="button"
+                    class="sidebar-close"
+                    id="sidebarClose"
+                    aria-label="Close sidebar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <nav
+                class="sidebar-nav"
+                aria-label="Main navigation"
+            >
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Main
+                    </span>
+
+
+                    <a
+                        href="dashboard.html"
+                        class="nav-item"
+                    >
+
+                        <span class="nav-icon">
+                            📊
+                        </span>
+
+                        <span>
+                            Dashboard
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Inventory
+                    </span>
+
+
+                    <a
+                        href="products.html"
+                        class="nav-item"
+                    >
+
+                        <span class="nav-icon">
+                            📦
+                        </span>
+
+                        <span>
+                            Products
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="categories.html"
+                        class="nav-item"
+                    >
+
+                        <span class="nav-icon">
+                            🗂️
+                        </span>
+
+                        <span>
+                            Categories
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="inventory.html"
+                        class="nav-item"
+                    >
+
+                        <span class="nav-icon">
+                            🏷️
+                        </span>
+
+                        <span>
+                            Inventory
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Transactions
+                    </span>
+
+
+                    <a
+                        href="purchases.html"
+                        class="nav-item"
+                    >
+
+                        <span class="nav-icon">
+                            🛒
+                        </span>
+
+                        <span>
+                            Purchases
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="sales.html"
+                        class="nav-item"
+                    >
+
+                        <span class="nav-icon">
+                            💰
+                        </span>
+
+                        <span>
+                            Sales
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Contacts
+                    </span>
+
+
+                    <a
+                        href="suppliers.html"
+                        class="nav-item"
+                    >
+
+                        <span class="nav-icon">
+                            🚚
+                        </span>
+
+                        <span>
+                            Suppliers
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="customers.html"
+                        class="nav-item active"
+                        aria-current="page"
+                    >
+
+                        <span class="nav-icon">
+                            👥
+                        </span>
+
+                        <span>
+                            Customers
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Management
+                    </span>
+
+
+                    <a
+                        href="reports.html"
+                        class="nav-item"
+                    >
+
+                        <span class="nav-icon">
+                            📈
+                        </span>
+
+                        <span>
+                            Reports
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="users.html"
+                        class="nav-item"
+                    >
+
+                        <span class="nav-icon">
+                            👤
+                        </span>
+
+                        <span>
+                            Users
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </nav>
+
+
+            <div class="sidebar-footer">
+
+                <div class="system-version">
+                    Inventory Management v1.0
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN CONTENT
+             ================================================= -->
+
+        <main class="main-content">
+
+
+            <!-- =============================================
+                 TOP HEADER
+                 ============================================= -->
+
+            <header class="topbar">
+
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                >
+                    ☰
+                </button>
+
+
+                <div class="topbar-title">
+
+                    <h1>
+                        Customers
+                    </h1>
+
+                    <p>
+                        Manage your customers and receivables
+                    </p>
+
+                </div>
+
+
+                <div class="topbar-actions">
+
+                    <button
+                        type="button"
+                        class="icon-button"
+                        id="notificationsButton"
+                        aria-label="Notifications"
+                        title="Notifications"
+                    >
+                        🔔
+                    </button>
+
+
+                    <div class="user-menu">
+
+                        <div class="user-avatar">
+                            U
+                        </div>
+
+                        <div class="user-info">
+
+                            <span class="user-name">
+                                User
+                            </span>
+
+                            <span class="user-role">
+                                Administrator
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- =============================================
+                 PAGE CONTENT
+                 ============================================= -->
+
+            <section class="page-content">
+
+
+                <!-- =========================================
+                     PAGE HEADER
+                     ========================================= -->
+
+                <div class="page-header">
+
+                    <div>
+
+                        <h2>
+                            Customer Management
+                        </h2>
+
+                        <p>
+                            Add, edit, view and manage customers.
+                        </p>
+
+                    </div>
+
+
+                    <div class="page-header-actions">
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            id="refreshCustomersButton"
+                        >
+
+                            <span>
+                                ↻
+                            </span>
+
+                            Refresh
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="addCustomerButton"
+                        >
+
+                            <span>
+                                +
+                            </span>
+
+                            Add Customer
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     CUSTOMER STATISTICS
+                     ========================================= -->
+
+                <div class="stats-grid customer-stats">
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon blue">
+                            👥
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Total Customers
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="totalCustomers"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon green">
+                            ✓
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Active Customers
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="activeCustomers"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon orange">
+                            ◷
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Inactive Customers
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="inactiveCustomers"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon purple">
+                            $
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Total Sales
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="totalCustomerSales"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon red">
+                            !
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Receivables
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="totalCustomerReceivable"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     CUSTOMER TABLE CARD
+                     ========================================= -->
+
+                <div class="content-card">
+
+
+                    <!-- =====================================
+                         TABLE TOOLBAR
+                         ===================================== -->
+
+                    <div class="table-toolbar">
+
+
+                        <div class="toolbar-search">
+
+                            <label
+                                for="customerSearch"
+                                class="sr-only"
+                            >
+                                Search customers
+                            </label>
+
+                            <span class="search-icon">
+                                🔍
+                            </span>
+
+                            <input
+                                type="search"
+                                id="customerSearch"
+                                class="form-control search-input"
+                                placeholder="Search customers..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="toolbar-filters">
+
+
+                            <div class="filter-group">
+
+                                <label
+                                    for="customerTypeFilter"
+                                    class="sr-only"
+                                >
+                                    Customer type
+                                </label>
+
+                                <select
+                                    id="customerTypeFilter"
+                                    class="form-control"
+                                >
+
+                                    <option value="">
+                                        All Types
+                                    </option>
+
+                                    <option value="individual">
+                                        Individual
+                                    </option>
+
+                                    <option value="business">
+                                        Business
+                                    </option>
+
+                                    <option value="company">
+                                        Company
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="filter-group">
+
+                                <label
+                                    for="customerStatusFilter"
+                                    class="sr-only"
+                                >
+                                    Customer status
+                                </label>
+
+                                <select
+                                    id="customerStatusFilter"
+                                    class="form-control"
+                                >
+
+                                    <option value="">
+                                        All Statuses
+                                    </option>
+
+                                    <option value="active">
+                                        Active
+                                    </option>
+
+                                    <option value="inactive">
+                                        Inactive
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         TABLE
+                         ===================================== -->
+
+                    <div class="table-wrapper">
+
+                        <table
+                            class="data-table customers-table"
+                        >
+
+                            <thead>
+
+                                <tr>
+
+                                    <th
+                                        data-sort-customer="name"
+                                        class="sortable"
+                                    >
+
+                                        <span>
+                                            Customer
+                                        </span>
+
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+
+                                    </th>
+
+
+                                    <th
+                                        data-sort-customer="customer_type"
+                                        class="sortable"
+                                    >
+
+                                        <span>
+                                            Type
+                                        </span>
+
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+
+                                    </th>
+
+
+                                    <th>
+                                        Contact
+                                    </th>
+
+
+                                    <th
+                                        data-sort-customer="total_sales"
+                                        class="sortable"
+                                    >
+
+                                        <span>
+                                            Total Sales
+                                        </span>
+
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+
+                                    </th>
+
+
+                                    <th
+                                        data-sort-customer="total_receivable"
+                                        class="sortable"
+                                    >
+
+                                        <span>
+                                            Receivable
+                                        </span>
+
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+
+                                    </th>
+
+
+                                    <th
+                                        data-sort-customer="status"
+                                        class="sortable"
+                                    >
+
+                                        <span>
+                                            Status
+                                        </span>
+
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+
+                                    </th>
+
+
+                                    <th
+                                        data-sort-customer="updated_at"
+                                        class="sortable"
+                                    >
+
+                                        <span>
+                                            Updated
+                                        </span>
+
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+
+                                    </th>
+
+
+                                    <th>
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="customersTableBody">
+
+                                <tr>
+
+                                    <td
+                                        colspan="8"
+                                        class="table-loading"
+                                    >
+                                        Loading customers...
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         TABLE FOOTER / PAGINATION
+                         ===================================== -->
+
+                    <div class="table-footer">
+
+
+                        <div
+                            class="table-record-info"
+                            id="paginationInfo"
+                        >
+                            No customers found
+                        </div>
+
+
+                        <div class="pagination">
+
+
+                            <div class="per-page">
+
+                                <label
+                                    for="perPage"
+                                >
+                                    Per page
+                                </label>
+
+                                <select
+                                    id="perPage"
+                                    class="form-control form-control-sm"
+                                >
+
+                                    <option value="10">
+                                        10
+                                    </option>
+
+                                    <option value="25">
+                                        25
+                                    </option>
+
+                                    <option value="50">
+                                        50
+                                    </option>
+
+                                    <option value="100">
+                                        100
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="pagination-button"
+                                id="previousPage"
+                                aria-label="Previous page"
+                                disabled
+                            >
+                                ‹
+                            </button>
+
+
+                            <span class="page-number">
+
+                                <span id="currentPage">
+                                    1
+                                </span>
+
+                                <span>
+                                    /
+                                </span>
+
+                                <span id="totalPages">
+                                    1
+                                </span>
+
+                            </span>
+
+
+                            <button
+                                type="button"
+                                class="pagination-button"
+                                id="nextPage"
+                                aria-label="Next page"
+                                disabled
+                            >
+                                ›
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     RECORD COUNT
+                     ========================================= -->
+
+                <div class="page-record-summary">
+
+                    <span>
+                        Customer records:
+                    </span>
+
+                    <strong id="customerRecordCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         CUSTOMER CREATE / EDIT MODAL
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="customerModal"
+        aria-hidden="true"
+    >
+
+        <div class="modal-overlay"></div>
+
+
+        <div
+            class="modal-dialog customer-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="customerModalTitle"
+        >
+
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h2 id="customerModalTitle">
+                        Add Customer
+                    </h2>
+
+                    <p>
+                        Enter customer information below.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-customer-modal
+                    aria-label="Close customer form"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="customerForm"
+                novalidate
+            >
+
+
+                <div class="modal-body">
+
+
+                    <!-- =================================
+                         BASIC INFORMATION
+                         ================================= -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-header">
+
+                            <h3>
+                                Basic Information
+                            </h3>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerCode"
+                                >
+                                    Customer Code
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerCode"
+                                    name="customer_code"
+                                    class="form-control"
+                                    placeholder="Optional"
+                                    maxlength="50"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerType"
+                                >
+                                    Customer Type
+                                    <span class="required">
+                                        *
+                                    </span>
+                                </label>
+
+                                <select
+                                    id="customerType"
+                                    name="customer_type"
+                                    class="form-control"
+                                    required
+                                >
+
+                                    <option value="individual">
+                                        Individual
+                                    </option>
+
+                                    <option value="business">
+                                        Business
+                                    </option>
+
+                                    <option value="company">
+                                        Company
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerFirstName"
+                                >
+                                    First Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerFirstName"
+                                    name="first_name"
+                                    class="form-control"
+                                    placeholder="First name"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerLastName"
+                                >
+                                    Last Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerLastName"
+                                    name="last_name"
+                                    class="form-control"
+                                    placeholder="Last name"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group form-group-full">
+
+                                <label
+                                    for="customerName"
+                                >
+                                    Customer Name
+                                    <span class="required">
+                                        *
+                                    </span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerName"
+                                    name="name"
+                                    class="form-control"
+                                    placeholder="Enter customer name"
+                                    maxlength="200"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group form-group-full">
+
+                                <label
+                                    for="companyName"
+                                >
+                                    Company Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="companyName"
+                                    name="company_name"
+                                    class="form-control"
+                                    placeholder="Company or business name"
+                                    maxlength="200"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================
+                         CONTACT INFORMATION
+                         ================================= -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-header">
+
+                            <h3>
+                                Contact Information
+                            </h3>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerEmail"
+                                >
+                                    Email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="customerEmail"
+                                    name="email"
+                                    class="form-control"
+                                    placeholder="customer@example.com"
+                                    maxlength="150"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerPhone"
+                                >
+                                    Phone
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="customerPhone"
+                                    name="phone"
+                                    class="form-control"
+                                    placeholder="Phone number"
+                                    maxlength="50"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerMobile"
+                                >
+                                    Mobile
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="customerMobile"
+                                    name="mobile"
+                                    class="form-control"
+                                    placeholder="Mobile number"
+                                    maxlength="50"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================
+                         ADDRESS
+                         ================================= -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-header">
+
+                            <h3>
+                                Address
+                            </h3>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            <div class="form-group form-group-full">
+
+                                <label
+                                    for="customerAddress"
+                                >
+                                    Address
+                                </label>
+
+                                <textarea
+                                    id="customerAddress"
+                                    name="address"
+                                    class="form-control"
+                                    rows="2"
+                                    placeholder="Street address"
+                                    maxlength="500"
+                                ></textarea>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerCity"
+                                >
+                                    City
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerCity"
+                                    name="city"
+                                    class="form-control"
+                                    placeholder="City"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerState"
+                                >
+                                    State / Province
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerState"
+                                    name="state"
+                                    class="form-control"
+                                    placeholder="State or province"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerPostalCode"
+                                >
+                                    Postal Code
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerPostalCode"
+                                    name="postal_code"
+                                    class="form-control"
+                                    placeholder="Postal code"
+                                    maxlength="30"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerCountry"
+                                >
+                                    Country
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerCountry"
+                                    name="country"
+                                    class="form-control"
+                                    placeholder="Country"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================
+                         FINANCIAL INFORMATION
+                         ================================= -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-header">
+
+                            <h3>
+                                Financial Information
+                            </h3>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerTaxNumber"
+                                >
+                                    Tax Number
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerTaxNumber"
+                                    name="tax_number"
+                                    class="form-control"
+                                    placeholder="Tax / VAT number"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerCreditLimit"
+                                >
+                                    Credit Limit
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="customerCreditLimit"
+                                    name="credit_limit"
+                                    class="form-control"
+                                    placeholder="0.00"
+                                    min="0"
+                                    step="0.01"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerPaymentTerms"
+                                >
+                                    Payment Terms
+                                </label>
+
+                                <select
+                                    id="customerPaymentTerms"
+                                    name="payment_terms"
+                                    class="form-control"
+                                >
+
+                                    <option value="">
+                                        Select payment terms
+                                    </option>
+
+                                    <option value="cash">
+                                        Cash
+                                    </option>
+
+                                    <option value="7">
+                                        7 Days
+                                    </option>
+
+                                    <option value="15">
+                                        15 Days
+                                    </option>
+
+                                    <option value="30">
+                                        30 Days
+                                    </option>
+
+                                    <option value="45">
+                                        45 Days
+                                    </option>
+
+                                    <option value="60">
+                                        60 Days
+                                    </option>
+
+                                    <option value="90">
+                                        90 Days
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="customerStatus"
+                                >
+                                    Status
+                                </label>
+
+                                <select
+                                    id="customerStatus"
+                                    name="status"
+                                    class="form-control"
+                                >
+
+                                    <option value="active">
+                                        Active
+                                    </option>
+
+                                    <option value="inactive">
+                                        Inactive
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================
+                         NOTES
+                         ================================= -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-header">
+
+                            <h3>
+                                Notes
+                            </h3>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label
+                                for="customerNotes"
+                            >
+                                Additional Notes
+                            </label>
+
+                            <textarea
+                                id="customerNotes"
+                                name="notes"
+                                class="form-control"
+                                rows="4"
+                                placeholder="Additional information about this customer..."
+                                maxlength="2000"
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-close-customer-modal
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Save Customer
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CUSTOMER DETAILS MODAL
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="customerDetailsModal"
+        aria-hidden="true"
+    >
+
+        <div class="modal-overlay"></div>
+
+
+        <div
+            class="modal-dialog customer-details-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="customerDetailsName"
+        >
+
+
+            <div class="modal-header">
+
+                <div class="customer-details-heading">
+
+                    <div
+                        class="customer-details-avatar"
+                        id="customerDetailsAvatar"
+                    >
+                        ?
+                    </div>
+
+
+                    <div>
+
+                        <h2 id="customerDetailsName">
+                            Customer
+                        </h2>
+
+                        <span
+                            id="customerDetailsCode"
+                            class="customer-code"
+                        >
+                            —
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-customer-details
+                    aria-label="Close customer details"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+
+                <!-- Status / type -->
+
+                <div class="details-badges">
+
+                    <span
+                        id="customerDetailsStatus"
+                        class="status-badge active"
+                    >
+                        Active
+                    </span>
+
+                    <span
+                        id="customerDetailsType"
+                        class="customer-type-badge"
+                    >
+                        Individual
+                    </span>
+
+                </div>
+
+
+                <!-- Contact -->
+
+                <div class="details-section">
+
+                    <h3>
+                        Contact Information
+                    </h3>
+
+
+                    <div class="details-grid">
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Email
+                            </span>
+
+                            <span
+                                class="detail-value"
+                                id="customerDetailsEmail"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Phone
+                            </span>
+
+                            <span
+                                class="detail-value"
+                                id="customerDetailsPhone"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Address -->
+
+                <div class="details-section">
+
+                    <h3>
+                        Address
+                    </h3>
+
+
+                    <div class="details-grid">
+
+
+                        <div class="detail-item detail-wide">
+
+                            <span class="detail-label">
+                                Address
+                            </span>
+
+                            <span
+                                class="detail-value"
+                                id="customerDetailsAddress"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                City
+                            </span>
+
+                            <span
+                                class="detail-value"
+                                id="customerDetailsCity"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                State / Province
+                            </span>
+
+                            <span
+                                class="detail-value"
+                                id="customerDetailsState"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Country
+                            </span>
+
+                            <span
+                                class="detail-value"
+                                id="customerDetailsCountry"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Financial -->
+
+                <div class="details-section">
+
+                    <h3>
+                        Financial Information
+                    </h3>
+
+
+                    <div class="details-grid">
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Tax Number
+                            </span>
+
+                            <span
+                                class="detail-value"
+                                id="customerDetailsTaxNumber"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Payment Terms
+                            </span>
+
+                            <span
+                                class="detail-value"
+                                id="customerDetailsPaymentTerms"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Credit Limit
+                            </span>
+
+                            <strong
+                                class="detail-value"
+                                id="customerDetailsCreditLimit"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Total Sales
+                            </span>
+
+                            <strong
+                                class="detail-value"
+                                id="customerDetailsSales"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Receivable
+                            </span>
+
+                            <strong
+                                class="detail-value receivable"
+                                id="customerDetailsReceivable"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Notes -->
+
+                <div class="details-section">
+
+                    <h3>
+                        Notes
+                    </h3>
+
+
+                    <div
+                        class="customer-notes"
+                        id="customerDetailsNotes"
+                    >
+                        No notes available.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-close-customer-details
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOAST CONTAINER
+         ===================================================== -->
+
+    <div
+        id="toastContainer"
+        class="toast-container"
+        aria-live="polite"
+        aria-atomic="true"
+    ></div>
+
+
+    <!-- =====================================================
+         MOBILE SIDEBAR OVERLAY
+         ===================================================== -->
+
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script src="../js/customers.js"></script>
+
+
+    <!-- Small layout-only script -->
+    <script>
+
+        (() => {
+
+            const sidebar =
+                document.getElementById("sidebar");
+
+            const menuToggle =
+                document.getElementById("menuToggle");
+
+            const sidebarClose =
+                document.getElementById("sidebarClose");
+
+            const sidebarOverlay =
+                document.getElementById("sidebarOverlay");
+
+
+            function openSidebar() {
+
+                sidebar?.classList.add("open");
+
+                sidebarOverlay?.classList.add("active");
+
+                document.body.classList.add(
+                    "sidebar-open"
+                );
+
+            }
+
+
+            function closeSidebar() {
+
+                sidebar?.classList.remove("open");
+
+                sidebarOverlay?.classList.remove("active");
+
+                document.body.classList.remove(
+                    "sidebar-open"
+                );
+
+            }
+
+
+            menuToggle?.addEventListener(
+                "click",
+                openSidebar
+            );
+
+
+            sidebarClose?.addEventListener(
+                "click",
+                closeSidebar
+            );
+
+
+            sidebarOverlay?.addEventListener(
+                "click",
+                closeSidebar
+            );
+
+
+            document
+                .querySelectorAll(".sidebar .nav-item")
+                .forEach(item => {
+
+                    item.addEventListener(
+                        "click",
+                        closeSidebar
+                    );
+
+                });
+
+        })();
+
+    </script>
+
+</body>
+
+</html>

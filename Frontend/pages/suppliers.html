@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Supplier management for Inventory Management System"
+    >
+
+    <title>Suppliers | Inventory Management</title>
+
+    <!-- Main styles -->
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <!-- Supplier styles -->
+    <link
+        rel="stylesheet"
+        href="../css/suppliers.css"
+    >
+</head>
+
+<body>
+
+    <!-- =====================================================
+         APPLICATION
+         ===================================================== -->
+
+    <div class="app">
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-header">
+
+                <a
+                    href="../index.html"
+                    class="brand"
+                >
+                    <span class="brand-icon">📦</span>
+
+                    <span class="brand-text">
+                        Inventory
+                    </span>
+                </a>
+
+                <button
+                    type="button"
+                    class="sidebar-close"
+                    id="sidebarClose"
+                    aria-label="Close sidebar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <nav
+                class="sidebar-nav"
+                aria-label="Main navigation"
+            >
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Main
+                    </span>
+
+                    <a
+                        href="dashboard.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Inventory
+                    </span>
+
+                    <a
+                        href="products.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">📦</span>
+                        <span>Products</span>
+                    </a>
+
+                    <a
+                        href="categories.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🏷️</span>
+                        <span>Categories</span>
+                    </a>
+
+                    <a
+                        href="inventory.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🗃️</span>
+                        <span>Inventory</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Transactions
+                    </span>
+
+                    <a
+                        href="purchases.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🛒</span>
+                        <span>Purchases</span>
+                    </a>
+
+                    <a
+                        href="sales.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">💰</span>
+                        <span>Sales</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Management
+                    </span>
+
+                    <a
+                        href="suppliers.html"
+                        class="nav-link active"
+                        aria-current="page"
+                    >
+                        <span class="nav-icon">🏢</span>
+                        <span>Suppliers</span>
+                    </a>
+
+                    <a
+                        href="customers.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">👥</span>
+                        <span>Customers</span>
+                    </a>
+
+                    <a
+                        href="users.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">👤</span>
+                        <span>Users</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Analytics
+                    </span>
+
+                    <a
+                        href="reports.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">📈</span>
+                        <span>Reports</span>
+                    </a>
+
+                </div>
+
+            </nav>
+
+
+            <div class="sidebar-footer">
+
+                <div class="sidebar-user">
+
+                    <div class="user-avatar">
+                        U
+                    </div>
+
+                    <div class="user-info">
+
+                        <span class="user-name">
+                            User
+                        </span>
+
+                        <span class="user-role">
+                            Administrator
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN CONTENT
+             ================================================= -->
+
+        <main class="main-content">
+
+            <!-- =============================================
+                 TOP HEADER
+                 ============================================= -->
+
+            <header class="topbar">
+
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                >
+                    ☰
+                </button>
+
+
+                <div class="breadcrumb">
+
+                    <a href="dashboard.html">
+                        Dashboard
+                    </a>
+
+                    <span>/</span>
+
+                    <span>
+                        Suppliers
+                    </span>
+
+                </div>
+
+
+                <div class="topbar-actions">
+
+                    <button
+                        type="button"
+                        class="icon-button"
+                        title="Notifications"
+                        aria-label="Notifications"
+                    >
+                        🔔
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- =============================================
+                 PAGE CONTENT
+                 ============================================= -->
+
+            <section class="page-content">
+
+                <!-- PAGE HEADER -->
+
+                <div class="page-header">
+
+                    <div>
+
+                        <h1>
+                            Suppliers
+                        </h1>
+
+                        <p>
+                            Manage your suppliers and supplier information.
+                        </p>
+
+                    </div>
+
+
+                    <div class="page-header-actions">
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            id="refreshSuppliersButton"
+                        >
+                            ↻
+                            <span>Refresh</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="addSupplierButton"
+                        >
+                            <span>+</span>
+                            <span>Add Supplier</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     STATISTICS
+                     ========================================= -->
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon blue">
+                            🏢
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Total Suppliers
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="totalSuppliers"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon green">
+                            ✓
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Active Suppliers
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="activeSuppliers"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon orange">
+                            !
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Inactive Suppliers
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="inactiveSuppliers"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon purple">
+                            💵
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Total Purchases
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="totalSupplierPurchases"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon red">
+                            💳
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Total Payable
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="totalSupplierPayable"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     SUPPLIER TABLE CARD
+                     ========================================= -->
+
+                <div class="card suppliers-card">
+
+                    <!-- TOOLBAR -->
+
+                    <div class="card-header">
+
+                        <div class="card-title-wrapper">
+
+                            <h2 class="card-title">
+                                Supplier List
+                            </h2>
+
+                            <span
+                                class="record-count"
+                                id="supplierRecordCount"
+                            >
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div class="supplier-toolbar">
+
+                            <!-- SEARCH -->
+
+                            <div class="search-box">
+
+                                <span
+                                    class="search-icon"
+                                    aria-hidden="true"
+                                >
+                                    🔍
+                                </span>
+
+                                <input
+                                    type="search"
+                                    id="supplierSearch"
+                                    placeholder="Search suppliers..."
+                                    autocomplete="off"
+                                    aria-label="Search suppliers"
+                                >
+
+                            </div>
+
+
+                            <!-- STATUS FILTER -->
+
+                            <div class="filter-box">
+
+                                <label
+                                    for="supplierStatusFilter"
+                                    class="sr-only"
+                                >
+                                    Filter by status
+                                </label>
+
+                                <select
+                                    id="supplierStatusFilter"
+                                >
+                                    <option value="">
+                                        All Status
+                                    </option>
+
+                                    <option value="active">
+                                        Active
+                                    </option>
+
+                                    <option value="inactive">
+                                        Inactive
+                                    </option>
+
+                                    <option value="suspended">
+                                        Suspended
+                                    </option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TABLE -->
+
+                    <div class="table-container">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th
+                                        data-sort-supplier="name"
+                                        class="sortable"
+                                    >
+                                        Supplier
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+                                    </th>
+
+
+                                    <th
+                                        data-sort-supplier="contact_person"
+                                        class="sortable"
+                                    >
+                                        Contact Person
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+                                    </th>
+
+
+                                    <th>
+                                        Contact Information
+                                    </th>
+
+
+                                    <th
+                                        data-sort-supplier="total_purchases"
+                                        class="sortable"
+                                    >
+                                        Purchases
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+                                    </th>
+
+
+                                    <th
+                                        data-sort-supplier="total_payable"
+                                        class="sortable"
+                                    >
+                                        Payable
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+                                    </th>
+
+
+                                    <th
+                                        data-sort-supplier="status"
+                                        class="sortable"
+                                    >
+                                        Status
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+                                    </th>
+
+
+                                    <th
+                                        data-sort-supplier="updated_at"
+                                        class="sortable"
+                                    >
+                                        Updated
+                                        <span class="sort-icon">
+                                            ↕
+                                        </span>
+                                    </th>
+
+
+                                    <th>
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="suppliersTableBody">
+
+                                <tr>
+
+                                    <td
+                                        colspan="8"
+                                        class="table-loading"
+                                    >
+                                        Loading suppliers...
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- PAGINATION -->
+
+                    <div class="pagination">
+
+                        <div class="pagination-info">
+
+                            <span id="paginationInfo">
+                                No suppliers found
+                            </span>
+
+                        </div>
+
+
+                        <div class="pagination-controls">
+
+                            <button
+                                type="button"
+                                class="pagination-button"
+                                id="previousPage"
+                                disabled
+                                aria-label="Previous page"
+                            >
+                                ‹
+                            </button>
+
+
+                            <span class="pagination-page">
+
+                                Page
+
+                                <strong id="currentPage">
+                                    1
+                                </strong>
+
+                                of
+
+                                <strong id="totalPages">
+                                    1
+                                </strong>
+
+                            </span>
+
+
+                            <button
+                                type="button"
+                                class="pagination-button"
+                                id="nextPage"
+                                disabled
+                                aria-label="Next page"
+                            >
+                                ›
+                            </button>
+
+                        </div>
+
+
+                        <div class="pagination-size">
+
+                            <label for="perPage">
+                                Per page
+                            </label>
+
+                            <select id="perPage">
+
+                                <option value="10">
+                                    10
+                                </option>
+
+                                <option value="25">
+                                    25
+                                </option>
+
+                                <option value="50">
+                                    50
+                                </option>
+
+                                <option value="100">
+                                    100
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         ADD / EDIT SUPPLIER MODAL
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="supplierModal"
+        aria-hidden="true"
+    >
+
+        <div class="modal-overlay"></div>
+
+
+        <div
+            class="modal-dialog supplier-modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="supplierModalTitle"
+        >
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h2 id="supplierModalTitle">
+                        Add Supplier
+                    </h2>
+
+                    <p>
+                        Enter supplier information below.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-supplier-modal
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="supplierForm"
+                novalidate
+            >
+
+                <div class="modal-body">
+
+                    <!-- SUPPLIER ID -->
+
+                    <input
+                        type="hidden"
+                        name="supplier_id"
+                    >
+
+
+                    <!-- BASIC INFORMATION -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+                            Basic Information
+                        </div>
+
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="supplierCode">
+                                    Supplier Code
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="supplierCode"
+                                    name="supplier_code"
+                                    placeholder="e.g. SUP-001"
+                                    maxlength="50"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="supplierName">
+                                    Supplier Name
+                                    <span class="required">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="supplierName"
+                                    name="name"
+                                    placeholder="Enter supplier name"
+                                    maxlength="150"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="companyName">
+                                    Company Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="companyName"
+                                    name="company_name"
+                                    placeholder="Enter company name"
+                                    maxlength="150"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="contactPerson">
+                                    Contact Person
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="contactPerson"
+                                    name="contact_person"
+                                    placeholder="Enter contact person"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONTACT INFORMATION -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+                            Contact Information
+                        </div>
+
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="supplierEmail">
+                                    Email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="supplierEmail"
+                                    name="email"
+                                    placeholder="supplier@example.com"
+                                    maxlength="150"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="supplierPhone">
+                                    Phone
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="supplierPhone"
+                                    name="phone"
+                                    placeholder="Enter phone number"
+                                    maxlength="50"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="supplierMobile">
+                                    Mobile
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="supplierMobile"
+                                    name="mobile"
+                                    placeholder="Enter mobile number"
+                                    maxlength="50"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="supplierWebsite">
+                                    Website
+                                </label>
+
+                                <input
+                                    type="url"
+                                    id="supplierWebsite"
+                                    name="website"
+                                    placeholder="https://example.com"
+                                    maxlength="255"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ADDRESS -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+                            Address
+                        </div>
+
+
+                        <div class="form-grid">
+
+                            <div class="form-group form-group-full">
+
+                                <label for="supplierAddress">
+                                    Address
+                                </label>
+
+                                <textarea
+                                    id="supplierAddress"
+                                    name="address"
+                                    rows="2"
+                                    placeholder="Street address"
+                                ></textarea>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="supplierCity">
+                                    City
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="supplierCity"
+                                    name="city"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="supplierState">
+                                    State / Province
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="supplierState"
+                                    name="state"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="supplierPostalCode">
+                                    Postal Code
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="supplierPostalCode"
+                                    name="postal_code"
+                                    maxlength="30"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="supplierCountry">
+                                    Country
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="supplierCountry"
+                                    name="country"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FINANCIAL INFORMATION -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+                            Financial Information
+                        </div>
+
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="taxNumber">
+                                    Tax Number
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="taxNumber"
+                                    name="tax_number"
+                                    maxlength="100"
+                                    placeholder="Tax / VAT number"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="paymentTerms">
+                                    Payment Terms
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="paymentTerms"
+                                    name="payment_terms"
+                                    maxlength="100"
+                                    placeholder="e.g. Net 30"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="creditLimit">
+                                    Credit Limit
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="creditLimit"
+                                    name="credit_limit"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0.00"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="supplierStatus">
+                                    Status
+                                </label>
+
+                                <select
+                                    id="supplierStatus"
+                                    name="status"
+                                >
+
+                                    <option value="active">
+                                        Active
+                                    </option>
+
+                                    <option value="inactive">
+                                        Inactive
+                                    </option>
+
+                                    <option value="suspended">
+                                        Suspended
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NOTES -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+                            Additional Information
+                        </div>
+
+
+                        <div class="form-group form-group-full">
+
+                            <label for="supplierNotes">
+                                Notes
+                            </label>
+
+                            <textarea
+                                id="supplierNotes"
+                                name="notes"
+                                rows="4"
+                                placeholder="Additional supplier notes..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-close-supplier-modal
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Save Supplier
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUPPLIER DETAILS MODAL
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="supplierDetailsModal"
+        aria-hidden="true"
+    >
+
+        <div class="modal-overlay"></div>
+
+
+        <div
+            class="modal-dialog supplier-details-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="supplierDetailsName"
+        >
+
+            <div class="modal-header">
+
+                <div class="details-heading">
+
+                    <div
+                        class="supplier-details-avatar"
+                        id="supplierDetailsAvatar"
+                    >
+                        🏢
+                    </div>
+
+                    <div>
+
+                        <h2 id="supplierDetailsName">
+                            Supplier
+                        </h2>
+
+                        <span
+                            id="supplierDetailsStatus"
+                            class="status-badge active"
+                        >
+                            Active
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-supplier-details
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <!-- SUMMARY -->
+
+                <div class="details-summary">
+
+                    <div class="detail-stat">
+
+                        <span>
+                            Supplier Code
+                        </span>
+
+                        <strong id="supplierDetailsCode">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-stat">
+
+                        <span>
+                            Total Purchases
+                        </span>
+
+                        <strong id="supplierDetailsPurchases">
+                            $0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-stat">
+
+                        <span>
+                            Amount Payable
+                        </span>
+
+                        <strong id="supplierDetailsPayable">
+                            $0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONTACT -->
+
+                <div class="details-section">
+
+                    <h3>
+                        Contact Information
+                    </h3>
+
+
+                    <div class="details-grid">
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Contact Person
+                            </span>
+
+                            <strong
+                                id="supplierDetailsContact"
+                                class="detail-value"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Email
+                            </span>
+
+                            <strong
+                                id="supplierDetailsEmail"
+                                class="detail-value"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Phone
+                            </span>
+
+                            <strong
+                                id="supplierDetailsPhone"
+                                class="detail-value"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Tax Number
+                            </span>
+
+                            <strong
+                                id="supplierDetailsTaxNumber"
+                                class="detail-value"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ADDRESS -->
+
+                <div class="details-section">
+
+                    <h3>
+                        Address
+                    </h3>
+
+
+                    <div class="details-grid">
+
+                        <div class="detail-item detail-item-wide">
+
+                            <span class="detail-label">
+                                Address
+                            </span>
+
+                            <strong
+                                id="supplierDetailsAddress"
+                                class="detail-value"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                City
+                            </span>
+
+                            <strong
+                                id="supplierDetailsCity"
+                                class="detail-value"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Country
+                            </span>
+
+                            <strong
+                                id="supplierDetailsCountry"
+                                class="detail-value"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PAYMENT -->
+
+                <div class="details-section">
+
+                    <h3>
+                        Payment Information
+                    </h3>
+
+
+                    <div class="details-grid">
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Payment Terms
+                            </span>
+
+                            <strong
+                                id="supplierDetailsPaymentTerms"
+                                class="detail-value"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Credit Limit
+                            </span>
+
+                            <strong
+                                id="supplierDetailsCreditLimit"
+                                class="detail-value"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NOTES -->
+
+                <div class="details-section">
+
+                    <h3>
+                        Notes
+                    </h3>
+
+                    <p
+                        id="supplierDetailsNotes"
+                        class="details-notes"
+                    >
+                        No notes available.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-close-supplier-details
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOAST CONTAINER
+         ===================================================== -->
+
+    <div
+        id="toastContainer"
+        class="toast-container"
+        aria-live="polite"
+        aria-atomic="true"
+    ></div>
+
+
+    <!-- =====================================================
+         SCRIPTS
+         ===================================================== -->
+
+    <script
+        src="../js/suppliers.js"
+        defer
+    ></script>
+
+
+    <!-- =====================================================
+         SIDEBAR MOBILE BEHAVIOR
+         ===================================================== -->
+
+    <script>
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const sidebar =
+                    document.getElementById("sidebar");
+
+                const menuToggle =
+                    document.getElementById("menuToggle");
+
+                const sidebarClose =
+                    document.getElementById("sidebarClose");
+
+
+                if (
+                    menuToggle &&
+                    sidebar
+                ) {
+
+                    menuToggle.addEventListener(
+                        "click",
+                        function () {
+
+                            sidebar.classList.add(
+                                "open"
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                if (
+                    sidebarClose &&
+                    sidebar
+                ) {
+
+                    sidebarClose.addEventListener(
+                        "click",
+                        function () {
+
+                            sidebar.classList.remove(
+                                "open"
+                            );
+
+                        }
+                    );
+
+                }
+
+            }
+        );
+    </script>
+
+</body>
+</html>

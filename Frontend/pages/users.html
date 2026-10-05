@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Inventory Management System - User Management"
+    >
+
+    <title>Users | Inventory Management</title>
+
+    <!-- Main Styles -->
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <!-- Users Page Styles -->
+    <link
+        rel="stylesheet"
+        href="../css/users.css"
+    >
+</head>
+
+<body>
+
+    <!-- =====================================================
+         APPLICATION LAYOUT
+         ===================================================== -->
+
+    <div class="app-layout">
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <div class="sidebar-header">
+
+                <a
+                    href="../index.html"
+                    class="brand"
+                >
+                    <span class="brand-icon">📦</span>
+
+                    <span class="brand-text">
+                        Inventory
+                    </span>
+                </a>
+
+                <button
+                    type="button"
+                    class="sidebar-close"
+                    id="sidebarClose"
+                    aria-label="Close navigation"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <nav
+                class="sidebar-nav"
+                aria-label="Main navigation"
+            >
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Main
+                    </span>
+
+                    <a
+                        href="dashboard.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Inventory
+                    </span>
+
+                    <a
+                        href="products.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">📦</span>
+                        <span>Products</span>
+                    </a>
+
+                    <a
+                        href="categories.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🗂️</span>
+                        <span>Categories</span>
+                    </a>
+
+                    <a
+                        href="inventory.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🏷️</span>
+                        <span>Inventory</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Transactions
+                    </span>
+
+                    <a
+                        href="purchases.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🛒</span>
+                        <span>Purchases</span>
+                    </a>
+
+                    <a
+                        href="sales.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">💰</span>
+                        <span>Sales</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Contacts
+                    </span>
+
+                    <a
+                        href="suppliers.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">🚚</span>
+                        <span>Suppliers</span>
+                    </a>
+
+                    <a
+                        href="customers.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">👥</span>
+                        <span>Customers</span>
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <span class="nav-section-title">
+                        Administration
+                    </span>
+
+                    <a
+                        href="reports.html"
+                        class="nav-link"
+                    >
+                        <span class="nav-icon">📈</span>
+                        <span>Reports</span>
+                    </a>
+
+                    <a
+                        href="users.html"
+                        class="nav-link active"
+                        aria-current="page"
+                    >
+                        <span class="nav-icon">👤</span>
+                        <span>Users</span>
+                    </a>
+
+                </div>
+
+            </nav>
+
+
+            <div class="sidebar-footer">
+
+                <a
+                    href="profile.html"
+                    class="profile-mini"
+                >
+                    <div class="profile-avatar">
+                        U
+                    </div>
+
+                    <div class="profile-info">
+
+                        <strong>
+                            Account
+                        </strong>
+
+                        <small>
+                            Manage profile
+                        </small>
+
+                    </div>
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             SIDEBAR OVERLAY
+             ================================================= -->
+
+        <div
+            class="sidebar-overlay"
+            id="sidebarOverlay"
+            aria-hidden="true"
+        ></div>
+
+
+        <!-- =================================================
+             MAIN CONTENT
+             ================================================= -->
+
+        <main class="main-content">
+
+            <!-- =============================================
+                 TOP HEADER
+                 ============================================= -->
+
+            <header class="top-header">
+
+                <div class="header-left">
+
+                    <button
+                        type="button"
+                        class="mobile-menu-button"
+                        id="mobileMenuButton"
+                        aria-label="Open navigation"
+                        aria-expanded="false"
+                    >
+                        ☰
+                    </button>
+
+                    <div class="page-heading">
+
+                        <h1>
+                            Users
+                        </h1>
+
+                        <p>
+                            Manage system users and access.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="header-actions">
+
+                    <button
+                        type="button"
+                        class="header-icon-button"
+                        id="refreshUsersButton"
+                        title="Refresh users"
+                        aria-label="Refresh users"
+                    >
+                        ↻
+                    </button>
+
+                    <div class="header-profile">
+
+                        <div class="header-avatar">
+                            U
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- =============================================
+                 PAGE CONTENT
+                 ============================================= -->
+
+            <div class="page-content">
+
+
+                <!-- =========================================
+                     STATISTICS
+                     ========================================= -->
+
+                <section
+                    class="user-statistics"
+                    aria-label="User statistics"
+                >
+
+                    <article class="user-stat-card">
+
+                        <div class="stat-icon blue">
+                            👥
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Total Users
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="totalUsers"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="user-stat-card">
+
+                        <div class="stat-icon green">
+                            ✓
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Active Users
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="activeUsers"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="user-stat-card">
+
+                        <div class="stat-icon red">
+                            ⏸
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Inactive Users
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="inactiveUsers"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="user-stat-card">
+
+                        <div class="stat-icon purple">
+                            🛡️
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span class="stat-label">
+                                Administrators
+                            </span>
+
+                            <strong
+                                class="stat-value"
+                                id="adminUsers"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+
+                <!-- =========================================
+                     USER MANAGEMENT CARD
+                     ========================================= -->
+
+                <section class="users-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2>
+                                System Users
+                            </h2>
+
+                            <p>
+                                Create, update, activate, or
+                                deactivate system accounts.
+                            </p>
+
+                        </div>
+
+
+                        <div class="card-header-actions">
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                id="refreshUsersButton"
+                            >
+                                <span>↻</span>
+                                Refresh
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                id="addUserButton"
+                            >
+                                <span>＋</span>
+                                Add User
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         FILTERS
+                         ===================================== -->
+
+                    <div class="users-toolbar">
+
+                        <div class="search-box">
+
+                            <span
+                                class="search-icon"
+                                aria-hidden="true"
+                            >
+                                🔎
+                            </span>
+
+                            <input
+                                type="search"
+                                id="userSearch"
+                                class="form-control"
+                                placeholder="Search users..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="filter-group">
+
+                            <label
+                                for="roleFilter"
+                                class="sr-only"
+                            >
+                                Filter by role
+                            </label>
+
+                            <select
+                                id="roleFilter"
+                                class="form-control"
+                            >
+                                <option value="">
+                                    All Roles
+                                </option>
+
+                                <option value="admin">
+                                    Administrator
+                                </option>
+
+                                <option value="manager">
+                                    Manager
+                                </option>
+
+                                <option value="staff">
+                                    Staff
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="filter-group">
+
+                            <label
+                                for="statusFilter"
+                                class="sr-only"
+                            >
+                                Filter by status
+                            </label>
+
+                            <select
+                                id="statusFilter"
+                                class="form-control"
+                            >
+                                <option value="">
+                                    All Status
+                                </option>
+
+                                <option value="active">
+                                    Active
+                                </option>
+
+                                <option value="inactive">
+                                    Inactive
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="user-count">
+
+                            <span id="userCount">
+                                0
+                            </span>
+
+                            users
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         TABLE
+                         ===================================== -->
+
+                    <div class="table-wrapper">
+
+                        <table
+                            class="data-table users-table"
+                        >
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        User
+                                    </th>
+
+                                    <th>
+                                        Email
+                                    </th>
+
+                                    <th>
+                                        Role
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Created
+                                    </th>
+
+                                    <th class="actions-column">
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="usersTableBody"
+                            >
+
+                                <tr>
+
+                                    <td
+                                        colspan="6"
+                                        class="table-loading"
+                                    >
+                                        Loading users...
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         PAGINATION
+                         ===================================== -->
+
+                    <div class="pagination">
+
+                        <div class="pagination-left">
+
+                            <span>
+                                Rows per page
+                            </span>
+
+                            <select
+                                id="perPage"
+                                class="pagination-select"
+                                aria-label="Rows per page"
+                            >
+                                <option value="10">
+                                    10
+                                </option>
+
+                                <option
+                                    value="25"
+                                    selected
+                                >
+                                    25
+                                </option>
+
+                                <option value="50">
+                                    50
+                                </option>
+
+                                <option value="100">
+                                    100
+                                </option>
+
+                            </select>
+
+                            <span
+                                id="paginationInfo"
+                            >
+                                No users found
+                            </span>
+
+                        </div>
+
+
+                        <div class="pagination-controls">
+
+                            <button
+                                type="button"
+                                id="previousPage"
+                                class="pagination-button"
+                                disabled
+                                aria-label="Previous page"
+                            >
+                                ‹
+                            </button>
+
+
+                            <span class="pagination-page">
+
+                                Page
+
+                                <strong
+                                    id="currentPage"
+                                >
+                                    1
+                                </strong>
+
+                                of
+
+                                <strong
+                                    id="totalPages"
+                                >
+                                    1
+                                </strong>
+
+                            </span>
+
+
+                            <button
+                                type="button"
+                                id="nextPage"
+                                class="pagination-button"
+                                disabled
+                                aria-label="Next page"
+                            >
+                                ›
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         ADD / EDIT USER MODAL
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="userModal"
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="userModalTitle"
+    >
+
+        <div class="modal-backdrop"></div>
+
+
+        <div class="modal-dialog">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h2 id="userModalTitle">
+                        Add User
+                    </h2>
+
+                    <p>
+                        Create a system account.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeUserModal"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="userForm"
+                novalidate
+            >
+
+                <input
+                    type="hidden"
+                    id="userId"
+                    name="id"
+                >
+
+
+                <div class="modal-body">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label for="fullName">
+                                Full Name
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="fullName"
+                                name="full_name"
+                                class="form-control"
+                                placeholder="Enter full name"
+                                maxlength="150"
+                                autocomplete="name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="username">
+                                Username
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                class="form-control"
+                                placeholder="Enter username"
+                                maxlength="80"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="email">
+                                Email
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="form-control"
+                                placeholder="name@example.com"
+                                maxlength="150"
+                                autocomplete="email"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="phone">
+                                Phone
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                class="form-control"
+                                placeholder="Enter phone number"
+                                maxlength="30"
+                                autocomplete="tel"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="role">
+                                Role
+                                <span class="required">*</span>
+                            </label>
+
+                            <select
+                                id="role"
+                                name="role"
+                                class="form-control"
+                                required
+                            >
+
+                                <option value="">
+                                    Select role
+                                </option>
+
+                                <option value="admin">
+                                    Administrator
+                                </option>
+
+                                <option value="manager">
+                                    Manager
+                                </option>
+
+                                <option value="staff">
+                                    Staff
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="userStatus">
+                                Status
+                            </label>
+
+                            <select
+                                id="userStatus"
+                                name="status"
+                                class="form-control"
+                            >
+
+                                <option value="active">
+                                    Active
+                                </option>
+
+                                <option value="inactive">
+                                    Inactive
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group form-group-full">
+
+                            <label for="password">
+                                Password
+                                <span
+                                    class="required"
+                                    id="passwordRequired"
+                                >
+                                    *
+                                </span>
+                            </label>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="Enter password"
+                                minlength="8"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                            <small
+                                id="passwordHint"
+                                class="form-hint"
+                            >
+                                Use a strong password for the
+                                new account.
+                            </small>
+
+                        </div>
+
+
+                        <div class="form-group form-group-full">
+
+                            <label for="confirmPassword">
+                                Confirm Password
+                                <span
+                                    class="required"
+                                    id="confirmPasswordRequired"
+                                >
+                                    *
+                                </span>
+                            </label>
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirm_password"
+                                class="form-control"
+                                placeholder="Confirm password"
+                                minlength="8"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="cancelUserButton"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="userSubmitButton"
+                    >
+                        Create User
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CHANGE PASSWORD MODAL
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="passwordModal"
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="passwordModalTitle"
+    >
+
+        <div class="modal-backdrop"></div>
+
+
+        <div class="modal-dialog modal-small">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h2 id="passwordModalTitle">
+                        Change Password
+                    </h2>
+
+                    <p>
+                        Update the password for
+                        <strong id="passwordUserName">
+                            User
+                        </strong>.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="closePasswordModal()"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="passwordForm">
+
+                <input
+                    type="hidden"
+                    id="passwordUserId"
+                >
+
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+
+                        <label for="newPassword">
+                            New Password
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="password"
+                            id="newPassword"
+                            name="password"
+                            class="form-control"
+                            minlength="8"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="newPasswordConfirm">
+                            Confirm New Password
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="password"
+                            id="newPasswordConfirm"
+                            class="form-control"
+                            minlength="8"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="closePasswordModal()"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Change Password
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DELETE USER MODAL
+         ===================================================== -->
+
+    <div
+        class="modal"
+        id="deleteUserModal"
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="deleteUserTitle"
+    >
+
+        <div class="modal-backdrop"></div>
+
+
+        <div class="modal-dialog modal-small">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h2 id="deleteUserTitle">
+                        Delete User
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="closeDeleteModal()"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="delete-warning">
+
+                    <div class="delete-warning-icon">
+                        ⚠️
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Delete this account?
+                        </h3>
+
+                        <p>
+                            You are about to permanently
+                            delete
+                            <strong
+                                id="deleteUserName"
+                            >
+                                this user
+                            </strong>.
+                            This action cannot be undone.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="closeDeleteModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="confirmDeleteUser"
+                >
+                    Delete User
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOAST CONTAINER
+         ===================================================== -->
+
+    <div
+        id="toastContainer"
+        class="toast-container"
+        aria-live="polite"
+        aria-atomic="true"
+    ></div>
+
+
+    <!-- =====================================================
+         PAGE SCRIPT
+         ===================================================== -->
+
+    <script src="../js/users.js"></script>
+
+
+    <!-- =====================================================
+         MOBILE SIDEBAR SCRIPT
+         ===================================================== -->
+
+    <script>
+        (() => {
+
+            const sidebar =
+                document.getElementById("sidebar");
+
+            const overlay =
+                document.getElementById("sidebarOverlay");
+
+            const menuButton =
+                document.getElementById("mobileMenuButton");
+
+            const closeButton =
+                document.getElementById("sidebarClose");
+
+
+            function openSidebar() {
+
+                sidebar?.classList.add("open");
+
+                overlay?.classList.add("active");
+
+                menuButton?.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+                document.body.classList.add(
+                    "sidebar-open"
+                );
+
+            }
+
+
+            function closeSidebar() {
+
+                sidebar?.classList.remove("open");
+
+                overlay?.classList.remove("active");
+
+                menuButton?.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+                document.body.classList.remove(
+                    "sidebar-open"
+                );
+
+            }
+
+
+            menuButton?.addEventListener(
+                "click",
+                openSidebar
+            );
+
+
+            closeButton?.addEventListener(
+                "click",
+                closeSidebar
+            );
+
+
+            overlay?.addEventListener(
+                "click",
+                closeSidebar
+            );
+
+
+            document
+                .querySelectorAll(".sidebar .nav-link")
+                .forEach(link => {
+
+                    link.addEventListener(
+                        "click",
+                        closeSidebar
+                    );
+
+                });
+
+
+            document.addEventListener(
+                "keydown",
+                event => {
+
+                    if (
+                        event.key === "Escape"
+                    ) {
+
+                        closeSidebar();
+
+                    }
+
+                }
+            );
+
+        })();
+    </script>
+
+</body>
+
+</html>
