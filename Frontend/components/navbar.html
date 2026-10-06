@@ -1,0 +1,232 @@
+<!-- ============================================================
+     INVENTORY MANAGEMENT SYSTEM
+     Reusable Navbar / Topbar Component
+
+     File:
+     frontend/components/navbar.html
+
+     Features:
+     - Mobile sidebar toggle
+     - Page title
+     - Page subtitle
+     - Connection status
+     - User profile menu
+     - Profile link
+     - Logout action
+
+     No mock business data is included.
+     User information is populated by app.js/auth.js.
+     ============================================================ -->
+
+<header class="topbar" id="appNavbar">
+
+    <!-- ========================================================
+         LEFT SIDE
+         ======================================================== -->
+
+    <div class="topbar-left">
+
+        <!-- Mobile Sidebar Toggle -->
+        <button
+            type="button"
+            class="mobile-menu-button"
+            id="mobileMenuButton"
+            aria-label="Open navigation menu"
+            aria-controls="appSidebar"
+            aria-expanded="false"
+            title="Open navigation menu">
+
+            <span aria-hidden="true">☰</span>
+
+        </button>
+
+
+        <!-- Desktop Sidebar Toggle -->
+        <button
+            type="button"
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            aria-label="Toggle navigation sidebar"
+            aria-controls="appSidebar"
+            aria-expanded="true"
+            title="Toggle sidebar">
+
+            <span aria-hidden="true">☰</span>
+
+        </button>
+
+
+        <!-- Page Information -->
+        <div class="topbar-page-info">
+
+            <h1
+                class="topbar-title"
+                id="topbarPageTitle">
+                Inventory Management
+            </h1>
+
+            <span
+                class="topbar-subtitle"
+                id="topbarPageSubtitle">
+                Manage your inventory efficiently
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================
+         RIGHT SIDE
+         ======================================================== -->
+
+    <div class="topbar-right">
+
+
+        <!-- Connection Status -->
+        <div
+            data-connection-status
+            id="connectionStatus"
+            class="online"
+            role="status"
+            aria-live="polite"
+            title="Connection status">
+
+            <span class="connection-status-text">
+                Online
+            </span>
+
+        </div>
+
+
+        <!-- User Menu -->
+        <div class="user-menu" id="userMenu">
+
+
+            <!-- User Menu Button -->
+            <button
+                type="button"
+                class="user-menu-button"
+                id="userMenuButton"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="userMenuDropdown">
+
+
+                <!-- Avatar -->
+                <span
+                    class="user-menu-avatar"
+                    id="navbarUserAvatar"
+                    aria-hidden="true">
+                    U
+                </span>
+
+
+                <!-- User Information -->
+                <span class="user-menu-info">
+
+                    <span
+                        class="user-menu-name"
+                        id="navbarUserName">
+                        User
+                    </span>
+
+                    <span
+                        class="user-menu-role"
+                        id="navbarUserRole">
+                        Account
+                    </span>
+
+                </span>
+
+
+                <!-- Dropdown Indicator -->
+                <span
+                    aria-hidden="true"
+                    class="user-menu-arrow">
+                    ▾
+                </span>
+
+            </button>
+
+
+            <!-- ==================================================
+                 Dropdown
+                 ================================================== -->
+
+            <div
+                class="dropdown-menu"
+                id="userMenuDropdown"
+                hidden
+                role="menu"
+                aria-label="User menu">
+
+
+                <!-- Profile -->
+                <a
+                    href="users.html"
+                    class="dropdown-item"
+                    data-user-action="profile"
+                    role="menuitem">
+
+                    <span aria-hidden="true">
+                        👤
+                    </span>
+
+                    <span>
+                        My Profile
+                    </span>
+
+                </a>
+
+
+                <!-- Settings -->
+                <a
+                    href="users.html"
+                    class="dropdown-item"
+                    data-user-action="settings"
+                    role="menuitem">
+
+                    <span aria-hidden="true">
+                        ⚙️
+                    </span>
+
+                    <span>
+                        Account Settings
+                    </span>
+
+                </a>
+
+
+                <!-- Divider -->
+                <div
+                    class="dropdown-divider"
+                    aria-hidden="true">
+                </div>
+
+
+                <!-- Logout -->
+                <button
+                    type="button"
+                    class="dropdown-item danger"
+                    id="logoutButton"
+                    data-action="logout"
+                    role="menuitem">
+
+                    <span aria-hidden="true">
+                        🚪
+                    </span>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>

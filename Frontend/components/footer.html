@@ -1,0 +1,135 @@
+<!-- ============================================================
+     INVENTORY MANAGEMENT SYSTEM
+     Reusable Footer Component
+
+     File:
+     frontend/components/footer.html
+
+     Features:
+     - Application copyright
+     - Dynamic year
+     - Application version
+     - Quick links
+     - Connection status
+     ============================================================ -->
+
+<footer class="app-footer" id="appFooter">
+
+    <div class="app-footer-inner">
+
+        <!-- ====================================================
+             LEFT SIDE
+             ==================================================== -->
+
+        <div class="app-footer-left">
+
+            <span class="app-footer-copyright">
+                &copy;
+                <span id="footerYear"></span>
+                Inventory Management System
+            </span>
+
+        </div>
+
+
+        <!-- ====================================================
+             CENTER
+             ==================================================== -->
+
+        <div class="app-footer-center">
+
+            <span
+                class="app-footer-status"
+                data-connection-status
+                id="footerConnectionStatus"
+                role="status"
+                aria-live="polite">
+
+                <span
+                    class="app-footer-status-dot"
+                    aria-hidden="true">
+                </span>
+
+                <span
+                    class="app-footer-status-text">
+                    Online
+                </span>
+
+            </span>
+
+        </div>
+
+
+        <!-- ====================================================
+             RIGHT SIDE
+             ==================================================== -->
+
+        <div class="app-footer-right">
+
+            <a
+                href="dashboard.html"
+                class="app-footer-link">
+
+                Dashboard
+
+            </a>
+
+
+            <a
+                href="reports.html"
+                class="app-footer-link">
+
+                Reports
+
+            </a>
+
+
+            <span
+                class="app-footer-version"
+                id="footerVersion">
+
+                v1.0.0
+
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- ============================================================
+     FOOTER SCRIPT
+     ============================================================ -->
+
+<script>
+(function initializeFooter() {
+
+    const yearElement =
+        document.getElementById("footerYear");
+
+    if (yearElement) {
+
+        yearElement.textContent =
+            new Date().getFullYear();
+
+    }
+
+
+    const versionElement =
+        document.getElementById("footerVersion");
+
+    if (
+        versionElement &&
+        window.APP_CONFIG &&
+        window.APP_CONFIG.version
+    ) {
+
+        versionElement.textContent =
+            `v${window.APP_CONFIG.version}`;
+
+    }
+
+})();
+</script>
