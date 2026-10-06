@@ -1,0 +1,300 @@
+<!-- ============================================================
+     INVENTORY MANAGEMENT SYSTEM
+     Reusable Sidebar Component
+
+     File:
+     frontend/components/sidebar.html
+
+     Navigation:
+     Dashboard
+     Products
+     Categories
+     Inventory
+     Purchases
+     Sales
+     Suppliers
+     Customers
+     Reports
+     Users
+     ============================================================ -->
+
+<aside class="sidebar" id="appSidebar">
+
+    <!-- Brand -->
+    <a href="../index.html" class="sidebar-brand" aria-label="Inventory Management">
+        <span class="sidebar-brand-icon" aria-hidden="true">
+            📦
+        </span>
+
+        <span class="sidebar-brand-text">
+            <span class="sidebar-brand-title">
+                Inventory Manager
+            </span>
+
+            <span class="sidebar-brand-subtitle">
+                Management System
+            </span>
+        </span>
+    </a>
+
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav" aria-label="Main navigation">
+
+        <!-- Main -->
+        <div class="sidebar-nav-section">
+            Main
+        </div>
+
+        <ul>
+
+            <!-- Dashboard -->
+            <li>
+                <a href="dashboard.html"
+                   data-page="dashboard"
+                   data-nav-link
+                   title="Dashboard">
+
+                    <span class="sidebar-nav-icon" aria-hidden="true">
+                        🏠
+                    </span>
+
+                    <span class="sidebar-nav-text">
+                        Dashboard
+                    </span>
+                </a>
+            </li>
+
+        </ul>
+
+
+        <!-- Inventory -->
+        <div class="sidebar-nav-section">
+            Inventory
+        </div>
+
+        <ul>
+
+            <!-- Products -->
+            <li>
+                <a href="products.html"
+                   data-page="products"
+                   data-nav-link
+                   title="Products">
+
+                    <span class="sidebar-nav-icon" aria-hidden="true">
+                        📦
+                    </span>
+
+                    <span class="sidebar-nav-text">
+                        Products
+                    </span>
+                </a>
+            </li>
+
+
+            <!-- Categories -->
+            <li>
+                <a href="categories.html"
+                   data-page="categories"
+                   data-nav-link
+                   title="Categories">
+
+                    <span class="sidebar-nav-icon" aria-hidden="true">
+                        🗂️
+                    </span>
+
+                    <span class="sidebar-nav-text">
+                        Categories
+                    </span>
+                </a>
+            </li>
+
+
+            <!-- Inventory -->
+            <li>
+                <a href="inventory.html"
+                   data-page="inventory"
+                   data-nav-link
+                   title="Inventory">
+
+                    <span class="sidebar-nav-icon" aria-hidden="true">
+                        📊
+                    </span>
+
+                    <span class="sidebar-nav-text">
+                        Inventory
+                    </span>
+                </a>
+            </li>
+
+        </ul>
+
+
+        <!-- Transactions -->
+        <div class="sidebar-nav-section">
+            Transactions
+        </div>
+
+        <ul>
+
+            <!-- Purchases -->
+            <li>
+                <a href="purchases.html"
+                   data-page="purchases"
+                   data-nav-link
+                   title="Purchases">
+
+                    <span class="sidebar-nav-icon" aria-hidden="true">
+                        🛒
+                    </span>
+
+                    <span class="sidebar-nav-text">
+                        Purchases
+                    </span>
+                </a>
+            </li>
+
+
+            <!-- Sales -->
+            <li>
+                <a href="sales.html"
+                   data-page="sales"
+                   data-nav-link
+                   title="Sales">
+
+                    <span class="sidebar-nav-icon" aria-hidden="true">
+                        💰
+                    </span>
+
+                    <span class="sidebar-nav-text">
+                        Sales
+                    </span>
+                </a>
+            </li>
+
+        </ul>
+
+
+        <!-- Contacts -->
+        <div class="sidebar-nav-section">
+            Contacts
+        </div>
+
+        <ul>
+
+            <!-- Suppliers -->
+            <li>
+                <a href="suppliers.html"
+                   data-page="suppliers"
+                   data-nav-link
+                   title="Suppliers">
+
+                    <span class="sidebar-nav-icon" aria-hidden="true">
+                        🚚
+                    </span>
+
+                    <span class="sidebar-nav-text">
+                        Suppliers
+                    </span>
+                </a>
+            </li>
+
+
+            <!-- Customers -->
+            <li>
+                <a href="customers.html"
+                   data-page="customers"
+                   data-nav-link
+                   title="Customers">
+
+                    <span class="sidebar-nav-icon" aria-hidden="true">
+                        👥
+                    </span>
+
+                    <span class="sidebar-nav-text">
+                        Customers
+                    </span>
+                </a>
+            </li>
+
+        </ul>
+
+
+        <!-- Administration -->
+        <div class="sidebar-nav-section">
+            Administration
+        </div>
+
+        <ul>
+
+            <!-- Reports -->
+            <li>
+                <a href="reports.html"
+                   data-page="reports"
+                   data-nav-link
+                   title="Reports">
+
+                    <span class="sidebar-nav-icon" aria-hidden="true">
+                        📈
+                    </span>
+
+                    <span class="sidebar-nav-text">
+                        Reports
+                    </span>
+                </a>
+            </li>
+
+
+            <!-- Users -->
+            <li>
+                <a href="users.html"
+                   data-page="users"
+                   data-nav-link
+                   title="Users">
+
+                    <span class="sidebar-nav-icon" aria-hidden="true">
+                        👤
+                    </span>
+
+                    <span class="sidebar-nav-text">
+                        Users
+                    </span>
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+
+        <div class="sidebar-user">
+
+            <div class="sidebar-user-avatar"
+                 id="sidebarUserAvatar"
+                 aria-hidden="true">
+                U
+            </div>
+
+            <div class="sidebar-user-info">
+
+                <span class="sidebar-user-name"
+                      id="sidebarUserName">
+                    User
+                </span>
+
+                <span class="sidebar-user-role"
+                      id="sidebarUserRole">
+                    Administrator
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
