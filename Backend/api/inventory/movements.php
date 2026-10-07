@@ -5,16 +5,23 @@ declare(strict_types=1);
 /**
  * Inventory Management System
  *
- * GET /api/inventory/list.php
+ * GET /api/inventory/movements.php
  *
  * Query parameters:
+ *
  * ?page=1
- * &per_page=10
+ * &per_page=20
+ * &product_id=12
+ * &type=stock_out
  * &search=keyboard
- * &category_id=2
- * &status=in_stock
- * &active=1
- * &sort=name_asc
+ * &date_from=2026-10-01
+ * &date_to=2026-10-07
+ * &sort=newest
+ *
+ * Allowed movement types:
+ * - stock_in
+ * - stock_out
+ * - adjustment
  */
 
 require_once __DIR__ . '/../../config/config.php';
@@ -26,9 +33,8 @@ require_once __DIR__ . '/../../middleware/auth.php';
 require_once __DIR__ . '/../../middleware/error.php';
 
 require_once __DIR__ . '/../../helpers/response.php';
-require_once __DIR__ . '/../../helpers/pagination.php';
 
-require_once __DIR__ . '/../../models/Inventory.php';
+require_once __DIR__ . '/../../models/InventoryMovement.php';
 
 
 /*
@@ -49,9 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 |--------------------------------------------------------------------------
 | Authentication
 |--------------------------------------------------------------------------
-|
-| auth.php should validate the current authentication token/session.
-|
 */
 
 $user = requireAuth();
@@ -59,7 +62,7 @@ $user = requireAuth();
 
 /*
 |--------------------------------------------------------------------------
-| Query Parameters
+| Pagination
 |--------------------------------------------------------------------------
 */
 
@@ -75,51 +78,20 @@ $perPage = filter_input(
     FILTER_VALIDATE_INT
 );
 
-$categoryId = filter_input(
-    INPUT_GET,
-    'category_id',
-    FILTER_VALIDATE_INT
-);
-
-$active = filter_input(
-    INPUT_GET,
-    'active',
-    FILTER_VALIDATE_INT
-);
-
-$search = isset($_GET['search'])
-    ? trim((string) $_GET['search'])
-    : '';
-
-$status = isset($_GET['status'])
-    ? trim((string) $_GET['status'])
-    : '';
-
-$sort = isset($_GET['sort'])
-    ? trim((string) $_GET['sort'])
-    : 'name_asc';
-
-
-/*
-|--------------------------------------------------------------------------
-| Defaults
-|--------------------------------------------------------------------------
-*/
-
-$page = $page !== false && $page !== null
+$page = (
+    $page !== false &&
+    $page !== null
+)
     ? $page
     : 1;
 
-$perPage = $perPage !== false && $perPage !== null
+$perPage = (
+    $perPage !== false &&
+    $perPage !== null
+)
     ? $perPage
-    : 10;
+    : 20;
 
-
-/*
-|--------------------------------------------------------------------------
-| Validate Pagination
-|--------------------------------------------------------------------------
-*/
 
 if ($page < 1) {
     respondError(
@@ -138,17 +110,23 @@ if ($perPage < 1 || $perPage > 100) {
 
 /*
 |--------------------------------------------------------------------------
-| Validate Category
+| Product Filter
 |--------------------------------------------------------------------------
 */
 
+$productId = filter_input(
+    INPUT_GET,
+    'product_id',
+    FILTER_VALIDATE_INT
+);
+
 if (
-    $categoryId !== false &&
-    $categoryId !== null &&
-    $categoryId < 1
+    $productId !== false &&
+    $productId !== null &&
+    $productId < 1
 ) {
     respondError(
-        'Invalid category_id.',
+        'Invalid product_id.',
         422
     );
 }
@@ -156,17 +134,18 @@ if (
 
 /*
 |--------------------------------------------------------------------------
-| Validate Active Filter
+| Search
 |--------------------------------------------------------------------------
 */
 
-if (
-    $active !== false &&
-    $active !== null &&
-    !in_array($active, [0, 1], true)
-) {
+$search = isset($_GET['search'])
+    ? trim((string) $_GET['search'])
+    : '';
+
+
+if (strlen($search) > 150) {
     respondError(
-        'active must be either 0 or 1.',
+        'Search term is too long.',
         422
     );
 }
@@ -174,28 +153,32 @@ if (
 
 /*
 |--------------------------------------------------------------------------
-| Validate Status
+| Movement Type
 |--------------------------------------------------------------------------
 */
 
-$allowedStatuses = [
+$type = isset($_GET['type'])
+    ? trim((string) $_GET['type'])
+    : '';
+
+
+$allowedTypes = [
     '',
-    'in_stock',
-    'out_of_stock',
-    'low_stock',
-    'over_stock'
+    'stock_in',
+    'stock_out',
+    'adjustment'
 ];
 
-if (!in_array($status, $allowedStatuses, true)) {
+
+if (!in_array($type, $allowedTypes, true)) {
     respondError(
-        'Invalid inventory status.',
+        'Invalid movement type.',
         422,
         [
-            'allowed_statuses' => [
-                'in_stock',
-                'out_of_stock',
-                'low_stock',
-                'over_stock'
+            'allowed_types' => [
+                'stock_in',
+                'stock_out',
+                'adjustment'
             ]
         ]
     );
@@ -204,20 +187,90 @@ if (!in_array($status, $allowedStatuses, true)) {
 
 /*
 |--------------------------------------------------------------------------
-| Validate Sort
+| Date Filters
 |--------------------------------------------------------------------------
 */
 
+$dateFrom = isset($_GET['date_from'])
+    ? trim((string) $_GET['date_from'])
+    : '';
+
+$dateTo = isset($_GET['date_to'])
+    ? trim((string) $_GET['date_to'])
+    : '';
+
+
+/*
+|--------------------------------------------------------------------------
+| Validate Dates
+|--------------------------------------------------------------------------
+*/
+
+function validateDate(
+    string $date
+): bool {
+    if ($date === '') {
+        return true;
+    }
+
+    $parsed = DateTime::createFromFormat(
+        'Y-m-d',
+        $date
+    );
+
+    return $parsed !== false &&
+        $parsed->format('Y-m-d') === $date;
+}
+
+
+if (!validateDate($dateFrom)) {
+    respondError(
+        'Invalid date_from. Expected format: YYYY-MM-DD.',
+        422
+    );
+}
+
+
+if (!validateDate($dateTo)) {
+    respondError(
+        'Invalid date_to. Expected format: YYYY-MM-DD.',
+        422
+    );
+}
+
+
+if (
+    $dateFrom !== '' &&
+    $dateTo !== '' &&
+    $dateFrom > $dateTo
+) {
+    respondError(
+        'date_from cannot be later than date_to.',
+        422
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Sorting
+|--------------------------------------------------------------------------
+*/
+
+$sort = isset($_GET['sort'])
+    ? trim((string) $_GET['sort'])
+    : 'newest';
+
+
 $allowedSorts = [
-    'name_asc',
-    'name_desc',
-    'stock_asc',
-    'stock_desc',
-    'category_asc',
-    'category_desc',
-    'updated_desc',
-    'updated_asc'
+    'newest',
+    'oldest',
+    'quantity_high',
+    'quantity_low',
+    'product_asc',
+    'product_desc'
 ];
+
 
 if (!in_array($sort, $allowedSorts, true)) {
     respondError(
@@ -239,10 +292,11 @@ if (!in_array($sort, $allowedSorts, true)) {
 $filters = [
     'page' => $page,
     'per_page' => $perPage,
+    'product_id' => $productId,
     'search' => $search,
-    'category_id' => $categoryId,
-    'status' => $status,
-    'active' => $active,
+    'type' => $type,
+    'date_from' => $dateFrom,
+    'date_to' => $dateTo,
     'sort' => $sort
 ];
 
@@ -254,13 +308,16 @@ $filters = [
 */
 
 try {
+
     $database = new Database();
 
     $db = $database->getConnection();
 
-    $inventoryModel = new Inventory($db);
+    $movementModel = new InventoryMovement($db);
 
-    $result = $inventoryModel->list($filters);
+    $result = $movementModel->list(
+        $filters
+    );
 
 
     /*
@@ -270,29 +327,37 @@ try {
     */
 
     respondSuccess(
-        'Inventory retrieved successfully.',
+        'Inventory movements retrieved successfully.',
         [
-            'items' => $result['items'],
-            'pagination' => $result['pagination']
+            'items' =>
+                $result['items'] ?? [],
+
+            'pagination' =>
+                $result['pagination'] ?? [
+                    'page' => $page,
+                    'per_page' => $perPage,
+                    'total' => 0,
+                    'total_pages' => 0
+                ]
         ]
     );
 
 } catch (PDOException $e) {
 
     error_log(
-        'Inventory list database error: ' .
+        'Inventory movements database error: ' .
         $e->getMessage()
     );
 
     respondError(
-        'Unable to retrieve inventory.',
+        'Unable to retrieve inventory movements.',
         500
     );
 
 } catch (Throwable $e) {
 
     error_log(
-        'Inventory list error: ' .
+        'Inventory movements error: ' .
         $e->getMessage()
     );
 

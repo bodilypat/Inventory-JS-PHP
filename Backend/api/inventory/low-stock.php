@@ -5,16 +5,22 @@ declare(strict_types=1);
 /**
  * Inventory Management System
  *
- * GET /api/inventory/list.php
+ * GET /api/inventory/low-stock.php
  *
  * Query parameters:
+ *
  * ?page=1
- * &per_page=10
+ * &per_page=20
  * &search=keyboard
  * &category_id=2
- * &status=in_stock
- * &active=1
- * &sort=name_asc
+ * &sort=stock_asc
+ *
+ * Returns products where:
+ *
+ *     current_stock <= minimum_stock
+ *
+ * Products with zero stock are included because they also
+ * require replenishment.
  */
 
 require_once __DIR__ . '/../../config/config.php';
@@ -26,7 +32,6 @@ require_once __DIR__ . '/../../middleware/auth.php';
 require_once __DIR__ . '/../../middleware/error.php';
 
 require_once __DIR__ . '/../../helpers/response.php';
-require_once __DIR__ . '/../../helpers/pagination.php';
 
 require_once __DIR__ . '/../../models/Inventory.php';
 
@@ -49,9 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 |--------------------------------------------------------------------------
 | Authentication
 |--------------------------------------------------------------------------
-|
-| auth.php should validate the current authentication token/session.
-|
 */
 
 $user = requireAuth();
@@ -59,7 +61,7 @@ $user = requireAuth();
 
 /*
 |--------------------------------------------------------------------------
-| Query Parameters
+| Pagination
 |--------------------------------------------------------------------------
 */
 
@@ -75,51 +77,22 @@ $perPage = filter_input(
     FILTER_VALIDATE_INT
 );
 
-$categoryId = filter_input(
-    INPUT_GET,
-    'category_id',
-    FILTER_VALIDATE_INT
-);
 
-$active = filter_input(
-    INPUT_GET,
-    'active',
-    FILTER_VALIDATE_INT
-);
-
-$search = isset($_GET['search'])
-    ? trim((string) $_GET['search'])
-    : '';
-
-$status = isset($_GET['status'])
-    ? trim((string) $_GET['status'])
-    : '';
-
-$sort = isset($_GET['sort'])
-    ? trim((string) $_GET['sort'])
-    : 'name_asc';
-
-
-/*
-|--------------------------------------------------------------------------
-| Defaults
-|--------------------------------------------------------------------------
-*/
-
-$page = $page !== false && $page !== null
+$page = (
+    $page !== false &&
+    $page !== null
+)
     ? $page
     : 1;
 
-$perPage = $perPage !== false && $perPage !== null
+
+$perPage = (
+    $perPage !== false &&
+    $perPage !== null
+)
     ? $perPage
-    : 10;
+    : 20;
 
-
-/*
-|--------------------------------------------------------------------------
-| Validate Pagination
-|--------------------------------------------------------------------------
-*/
 
 if ($page < 1) {
     respondError(
@@ -127,6 +100,7 @@ if ($page < 1) {
         422
     );
 }
+
 
 if ($perPage < 1 || $perPage > 100) {
     respondError(
@@ -138,9 +112,35 @@ if ($perPage < 1 || $perPage > 100) {
 
 /*
 |--------------------------------------------------------------------------
-| Validate Category
+| Search
 |--------------------------------------------------------------------------
 */
+
+$search = isset($_GET['search'])
+    ? trim((string) $_GET['search'])
+    : '';
+
+
+if (strlen($search) > 150) {
+    respondError(
+        'Search term is too long.',
+        422
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Category Filter
+|--------------------------------------------------------------------------
+*/
+
+$categoryId = filter_input(
+    INPUT_GET,
+    'category_id',
+    FILTER_VALIDATE_INT
+);
+
 
 if (
     $categoryId !== false &&
@@ -156,68 +156,26 @@ if (
 
 /*
 |--------------------------------------------------------------------------
-| Validate Active Filter
+| Sorting
 |--------------------------------------------------------------------------
 */
 
-if (
-    $active !== false &&
-    $active !== null &&
-    !in_array($active, [0, 1], true)
-) {
-    respondError(
-        'active must be either 0 or 1.',
-        422
-    );
-}
+$sort = isset($_GET['sort'])
+    ? trim((string) $_GET['sort'])
+    : 'stock_asc';
 
-
-/*
-|--------------------------------------------------------------------------
-| Validate Status
-|--------------------------------------------------------------------------
-*/
-
-$allowedStatuses = [
-    '',
-    'in_stock',
-    'out_of_stock',
-    'low_stock',
-    'over_stock'
-];
-
-if (!in_array($status, $allowedStatuses, true)) {
-    respondError(
-        'Invalid inventory status.',
-        422,
-        [
-            'allowed_statuses' => [
-                'in_stock',
-                'out_of_stock',
-                'low_stock',
-                'over_stock'
-            ]
-        ]
-    );
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| Validate Sort
-|--------------------------------------------------------------------------
-*/
 
 $allowedSorts = [
-    'name_asc',
-    'name_desc',
     'stock_asc',
     'stock_desc',
-    'category_asc',
-    'category_desc',
+    'name_asc',
+    'name_desc',
+    'shortage_desc',
+    'shortage_asc',
     'updated_desc',
     'updated_asc'
 ];
+
 
 if (!in_array($sort, $allowedSorts, true)) {
     respondError(
@@ -241,8 +199,6 @@ $filters = [
     'per_page' => $perPage,
     'search' => $search,
     'category_id' => $categoryId,
-    'status' => $status,
-    'active' => $active,
     'sort' => $sort
 ];
 
@@ -254,13 +210,23 @@ $filters = [
 */
 
 try {
+
     $database = new Database();
 
     $db = $database->getConnection();
 
     $inventoryModel = new Inventory($db);
 
-    $result = $inventoryModel->list($filters);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get Low Stock Products
+    |--------------------------------------------------------------------------
+    */
+
+    $result = $inventoryModel->getLowStock(
+        $filters
+    );
 
 
     /*
@@ -270,29 +236,37 @@ try {
     */
 
     respondSuccess(
-        'Inventory retrieved successfully.',
+        'Low-stock products retrieved successfully.',
         [
-            'items' => $result['items'],
-            'pagination' => $result['pagination']
+            'items' =>
+                $result['items'] ?? [],
+
+            'pagination' =>
+                $result['pagination'] ?? [
+                    'page' => $page,
+                    'per_page' => $perPage,
+                    'total' => 0,
+                    'total_pages' => 0
+                ]
         ]
     );
 
 } catch (PDOException $e) {
 
     error_log(
-        'Inventory list database error: ' .
+        'Low-stock database error: ' .
         $e->getMessage()
     );
 
     respondError(
-        'Unable to retrieve inventory.',
+        'Unable to retrieve low-stock products.',
         500
     );
 
 } catch (Throwable $e) {
 
     error_log(
-        'Inventory list error: ' .
+        'Low-stock error: ' .
         $e->getMessage()
     );
 
