@@ -14,24 +14,11 @@ header('Content-Type: application/json; charset=utf-8');
 try {
     $user = requireAuth();
 
-    $dateFrom = $_GET['date_from'] ?? date('Y-m-01');
-    $dateTo   = $_GET['date_to'] ?? date('Y-m-d');
-
-    if ($dateFrom > $dateTo) {
-        jsonResponse([
-            'success' => false,
-            'message' => 'Invalid date range.'
-        ], 422);
-    }
-
     $db = Database::getConnection();
 
     $service = new ReportService($db);
 
-    $report = $service->getSalesReport(
-        $dateFrom,
-        $dateTo
-    );
+    $report = $service->getLowStockReport();
 
     jsonResponse([
         'success' => true,
@@ -42,6 +29,6 @@ try {
 
     jsonResponse([
         'success' => false,
-        'message' => 'Unable to generate sales report.'
+        'message' => 'Unable to generate low-stock report.'
     ], 500);
 }

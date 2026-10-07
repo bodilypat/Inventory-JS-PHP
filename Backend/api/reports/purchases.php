@@ -28,7 +28,7 @@ try {
 
     $service = new ReportService($db);
 
-    $report = $service->getSalesReport(
+    $report = $service->getPurchaseReport(
         $dateFrom,
         $dateTo
     );
@@ -42,6 +42,6 @@ try {
 
     jsonResponse([
         'success' => false,
-        'message' => 'Unable to generate sales report.'
+        'message' => 'Unable to generate purchase report.'
     ], 500);
 }

@@ -14,23 +14,19 @@ header('Content-Type: application/json; charset=utf-8');
 try {
     $user = requireAuth();
 
-    $dateFrom = $_GET['date_from'] ?? date('Y-m-01');
-    $dateTo   = $_GET['date_to'] ?? date('Y-m-d');
+    $categoryId = isset($_GET['category_id'])
+        ? (int) $_GET['category_id']
+        : null;
 
-    if ($dateFrom > $dateTo) {
-        jsonResponse([
-            'success' => false,
-            'message' => 'Invalid date range.'
-        ], 422);
-    }
+    $status = $_GET['status'] ?? null;
 
     $db = Database::getConnection();
 
     $service = new ReportService($db);
 
-    $report = $service->getSalesReport(
-        $dateFrom,
-        $dateTo
+    $report = $service->getInventoryReport(
+        $categoryId,
+        $status
     );
 
     jsonResponse([
@@ -42,6 +38,6 @@ try {
 
     jsonResponse([
         'success' => false,
-        'message' => 'Unable to generate sales report.'
+        'message' => 'Unable to generate inventory report.'
     ], 500);
 }
