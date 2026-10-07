@@ -1,200 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="Inventory Management System - Purchase Management"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inventory Management System - Purchase Management">
     <title>Purchases | Inventory Management System</title>
-
     <!-- Main stylesheet -->
-    <link
-        rel="stylesheet"
-        href="../css/style.css"
-    >
-
+    <link rel="stylesheet" href="../css/style.css">
     <!-- Purchase page stylesheet -->
-    <link
-        rel="stylesheet"
-        href="../css/purchases.css"
-    >
+    <link rel="stylesheet" href="../css/purchases.css">
 </head>
-
-
 <body>
-
-    <!-- =====================================================
-         APPLICATION LAYOUT
-    ====================================================== -->
-
+    <!-- APPLICATION LAYOUT -->
     <div class="app-layout">
-
-
-        <!-- =================================================
-             SIDEBAR
-        ================================================== -->
-
-        <aside
-            class="sidebar"
-            id="sidebar"
-        >
-
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-
-                <a
-                    href="../index.html"
-                    class="brand"
-                >
-
+                <a href="../index.html" class="brand">
                     <span class="brand-icon">
                         📦
                     </span>
-
-                    <span class="brand-text">
-                        Inventory
-                    </span>
-
+                    <span class="brand-text">Inventory</span>
                 </a>
-
             </div>
-
-
-            <nav
-                class="sidebar-navigation"
-                aria-label="Main navigation"
-            >
-
-                <a
-                    href="dashboard.html"
-                    class="nav-item"
-                >
+            <nav class="sidebar-navigation" aria-label="Main navigation">
+                <a href="dashboard.html" class="nav-item">
                     <span class="nav-icon">📊</span>
                     <span class="nav-text">Dashboard</span>
                 </a>
-
-
-                <a
-                    href="products.html"
-                    class="nav-item"
-                >
+                <ahref="products.html" class="nav-item">
                     <span class="nav-icon">📦</span>
                     <span class="nav-text">Products</span>
                 </a>
-
-
-                <a
-                    href="categories.html"
-                    class="nav-item"
-                >
+                <a href="categories.html" class="nav-item">
                     <span class="nav-icon">🗂️</span>
                     <span class="nav-text">Categories</span>
                 </a>
-
-
-                <a
-                    href="inventory.html"
-                    class="nav-item"
-                >
+                <a href="inventory.html" class="nav-item">
                     <span class="nav-icon">🏷️</span>
                     <span class="nav-text">Inventory</span>
                 </a>
 
-
-                <a
-                    href="purchases.html"
-                    class="nav-item active"
-                    aria-current="page"
-                >
+                <a href="purchases.html" class="nav-item active" aria-current="page">
                     <span class="nav-icon">🛒</span>
                     <span class="nav-text">Purchases</span>
                 </a>
-
-
-                <a
-                    href="sales.html"
-                    class="nav-item"
-                >
+                <a href="sales.html" class="nav-item">
                     <span class="nav-icon">💰</span>
                     <span class="nav-text">Sales</span>
                 </a>
-
-
-                <a
-                    href="suppliers.html"
-                    class="nav-item"
-                >
+                <a href="suppliers.html" class="nav-item">
                     <span class="nav-icon">🚚</span>
                     <span class="nav-text">Suppliers</span>
                 </a>
-
-
-                <a
-                    href="customers.html"
-                    class="nav-item"
-                >
+                <a href="customers.html" class="nav-item">
                     <span class="nav-icon">👥</span>
                     <span class="nav-text">Customers</span>
                 </a>
-
-
-                <a
-                    href="reports.html"
-                    class="nav-item"
-                >
+                <a href="reports.html" class="nav-item">
                     <span class="nav-icon">📈</span>
                     <span class="nav-text">Reports</span>
                 </a>
-
-
-                <a
-                    href="users.html"
-                    class="nav-item"
-                >
+                <a href="users.html" class="nav-item">
                     <span class="nav-icon">👤</span>
                     <span class="nav-text">Users</span>
                 </a>
-
             </nav>
-
-
             <div class="sidebar-footer">
-
-                <a
-                    href="login.html"
-                    class="nav-item logout-link"
-                >
+                <a href="login.html" class="nav-item logout-link">
                     <span class="nav-icon">↪</span>
                     <span class="nav-text">Logout</span>
                 </a>
-
             </div>
-
         </aside>
-
-
-
-        <!-- =================================================
-             MAIN CONTENT
-        ================================================== -->
-
+        <!-- MAIN CONTENT -->
         <main class="main-content">
-
-
-            <!-- =============================================
-                 TOP HEADER
-            ============================================== -->
-
+            <!-- TOP HEADER -->
             <header class="top-header">
-
                 <button
                     type="button"
                     class="menu-toggle"
@@ -203,23 +85,11 @@
                 >
                     ☰
                 </button>
-
-
                 <div class="page-heading">
-
-                    <h1>
-                        Purchases
-                    </h1>
-
-                    <p>
-                        Manage supplier purchases and payments
-                    </p>
-
+                    <h1>Purchases</h1>
+                    <p>Manage supplier purchases and payments</p>
                 </div>
-
-
                 <div class="header-actions">
-
                     <button
                         type="button"
                         class="icon-button"
@@ -229,201 +99,86 @@
                     >
                         ↻
                     </button>
-
-
                     <div class="user-menu">
-
-                        <div class="user-avatar">
-                            U
-                        </div>
-
+                        <div class="user-avatar">U</div>
                         <div class="user-info">
-
-                            <strong>
-                                User
-                            </strong>
-
-                            <span>
-                                Administrator
-                            </span>
-
+                            <strong>User</strong>
+                            <span>Administrator</span>
                         </div>
-
                     </div>
-
                 </div>
-
             </header>
-
-
-
-            <!-- =============================================
-                 PAGE CONTENT
-            ============================================== -->
-
+            <!-- PAGE CONTENT -->
             <section class="page-content">
-
-
-                <!-- =========================================
-                     PURCHASE STATISTICS
-                ========================================== -->
-
+                <!-- PURCHASE STATISTICS -->
                 <div class="statistics-grid">
-
-
                     <div class="stat-card">
-
                         <div class="stat-card-icon blue">
                             🛒
                         </div>
-
                         <div class="stat-card-content">
-
-                            <span>
-                                Total Purchases
-                            </span>
-
-                            <strong id="totalPurchases">
-                                0
-                            </strong>
-
+                            <span>Total Purchases</span>
+                            <strong id="totalPurchases">0</strong>
                         </div>
-
                     </div>
-
-
                     <div class="stat-card">
-
                         <div class="stat-card-icon orange">
                             ⏳
                         </div>
-
                         <div class="stat-card-content">
-
-                            <span>
-                                Pending Purchases
-                            </span>
-
-                            <strong id="pendingPurchases">
-                                0
-                            </strong>
-
+                            <span>Pending Purchases</span>
+                            <strong id="pendingPurchases">0</strong>
                         </div>
-
                     </div>
-
-
                     <div class="stat-card">
-
                         <div class="stat-card-icon green">
                             ✓
                         </div>
-
                         <div class="stat-card-content">
-
-                            <span>
-                                Completed
-                            </span>
-
-                            <strong id="completedPurchases">
-                                0
-                            </strong>
-
+                            <span>Completed</span>
+                            <strong id="completedPurchases">0</strong>
                         </div>
-
                     </div>
-
-
                     <div class="stat-card">
-
-                        <div class="stat-card-icon purple">
-                            $
-                        </div>
-
+                        <div class="stat-card-icon purple">$</div>
                         <div class="stat-card-content">
-
-                            <span>
-                                Purchase Amount
-                            </span>
-
-                            <strong id="totalPurchaseAmount">
-                                $0.00
-                            </strong>
-
+                            <span>Purchase Amount</span>
+                            <strong id="totalPurchaseAmount">$0.00</strong>
                         </div>
-
                     </div>
-
-
                     <div class="stat-card">
-
                         <div class="stat-card-icon teal">
                             💳
                         </div>
-
                         <div class="stat-card-content">
-
                             <span>
                                 Paid
                             </span>
-
                             <strong id="totalPaidAmount">
                                 $0.00
                             </strong>
-
                         </div>
-
                     </div>
-
-
                     <div class="stat-card">
-
                         <div class="stat-card-icon red">
                             !
                         </div>
-
                         <div class="stat-card-content">
-
-                            <span>
-                                Amount Due
-                            </span>
-
+                            <span>Amount Due</span>
                             <strong id="totalDueAmount">
                                 $0.00
                             </strong>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
-
-                <!-- =========================================
-                     PURCHASE MANAGEMENT CARD
-                ========================================== -->
-
+                <!-- PURCHASE MANAGEMENT CARD -->
                 <div class="content-card">
-
-
                     <!-- Card Header -->
-
                     <div class="content-card-header">
-
                         <div>
-
-                            <h2>
-                                Purchase Orders
-                            </h2>
-
-                            <p>
-                                View and manage all purchase transactions.
-                            </p>
-
+                            <h2>Purchase Orders</h2>
+                            <p>View and manage all purchase transactions.</p>
                         </div>
-
-
                         <button
                             type="button"
                             class="btn btn-primary"
@@ -432,297 +187,125 @@
                             <span>+</span>
                             Add Purchase
                         </button>
-
                     </div>
-
-
-
-                    <!-- =====================================
-                         FILTER BAR
-                    ====================================== -->
-
+                    <!-- FILTER BAR -->
                     <div class="filter-bar">
-
-
                         <!-- Search -->
-
                         <div class="search-box">
-
                             <span class="search-icon">
                                 🔍
                             </span>
-
                             <input
                                 type="search"
                                 id="purchaseSearch"
                                 placeholder="Search purchases..."
                                 autocomplete="off"
                             >
-
                         </div>
-
-
                         <!-- Status -->
-
                         <div class="filter-control">
-
-                            <label
-                                for="purchaseStatusFilter"
-                                class="sr-only"
-                            >
-                                Status
-                            </label>
-
-                            <select
-                                id="purchaseStatusFilter"
-                            >
-
-                                <option value="">
-                                    All Statuses
-                                </option>
-
-                                <option value="draft">
-                                    Draft
-                                </option>
-
-                                <option value="pending">
-                                    Pending
-                                </option>
-
-                                <option value="ordered">
-                                    Ordered
-                                </option>
-
-                                <option value="processing">
-                                    Processing
-                                </option>
-
-                                <option value="received">
-                                    Received
-                                </option>
-
-                                <option value="completed">
-                                    Completed
-                                </option>
-
-                                <option value="cancelled">
-                                    Cancelled
-                                </option>
-
+                            <label for="purchaseStatusFilter" class="sr-only">Status</label>
+                            <selectid="purchaseStatusFilter">
+                                <option value="">All Statuses</option>
+                                <option value="draft">Draft</option>
+                                <option value="pending">Pending</option>
+                                <option value="ordered">Ordered</option>
+                                <option value="processing">Processing</option>
+                                <option value="received">Received</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
                             </select>
-
                         </div>
-
-
                         <!-- Supplier -->
-
                         <div class="filter-control">
-
-                            <label
-                                for="purchaseSupplierFilter"
-                                class="sr-only"
-                            >
-                                Supplier
-                            </label>
-
-                            <select
-                                id="purchaseSupplierFilter"
-                            >
-
-                                <option value="">
-                                    All Suppliers
-                                </option>
-
+                            <label for="purchaseSupplierFilter" class="sr-only">Supplier</label>
+                            <select id="purchaseSupplierFilter">
+                                <option value="">All Suppliers</option>
                             </select>
-
                         </div>
-
-
                         <!-- Per Page -->
-
                         <div class="filter-control">
-
-                            <label
-                                for="perPage"
-                                class="sr-only"
-                            >
-                                Items per page
-                            </label>
-
+                            <label for="perPage" class="sr-only">Items per page</label>
                             <select id="perPage">
-
-                                <option value="10">
-                                    10 per page
-                                </option>
-
-                                <option value="25">
-                                    25 per page
-                                </option>
-
-                                <option value="50">
-                                    50 per page
-                                </option>
-
-                                <option value="100">
-                                    100 per page
-                                </option>
-
+                                <option value="10">10 per page</option>
+                                <option value="25">25 per page</option>
+                                <option value="50">50 per page</option>
+                                <option value="100">100 per page</option>
                             </select>
-
                         </div>
-
                     </div>
-
-
-
-                    <!-- =====================================
-                         PURCHASE TABLE
-                    ====================================== -->
-
+                    <!-- PURCHASE TABLE -->
                     <div class="table-container">
-
                         <table class="data-table">
-
                             <thead>
-
                                 <tr>
-
-                                    <th
-                                        data-sort-purchase="purchase_number"
-                                        class="sortable"
-                                    >
+                                    <th data-sort-purchase="purchase_number" class="sortable">
                                         Purchase #
                                         <span class="sort-icon">
                                             ↕
                                         </span>
                                     </th>
-
-
-                                    <th
-                                        data-sort-purchase="supplier_name"
-                                        class="sortable"
-                                    >
+                                    <th data-sort-purchase="supplier_name" class="sortable">
                                         Supplier
                                         <span class="sort-icon">
                                             ↕
                                         </span>
                                     </th>
-
-
-                                    <th
-                                        data-sort-purchase="purchase_date"
-                                        class="sortable"
-                                    >
+                                    <th data-sort-purchase="purchase_date" class="sortable">
                                         Date
                                         <span class="sort-icon">
                                             ↕
                                         </span>
                                     </th>
-
-
-                                    <th
-                                        data-sort-purchase="total"
-                                        class="sortable"
-                                    >
+                                    <th data-sort-purchase="total" class="sortable">
                                         Total
                                         <span class="sort-icon">
                                             ↕
                                         </span>
                                     </th>
-
-
-                                    <th
-                                        data-sort-purchase="paid"
-                                        class="sortable"
-                                    >
+                                    <th data-sort-purchase="paid" class="sortable">
                                         Paid
                                         <span class="sort-icon">
                                             ↕
                                         </span>
                                     </th>
-
-
-                                    <th
-                                        data-sort-purchase="due"
-                                        class="sortable"
-                                    >
+                                    <th data-sort-purchase="due" class="sortable">
                                         Due
                                         <span class="sort-icon">
                                             ↕
                                         </span>
                                     </th>
-
-
-                                    <th
-                                        data-sort-purchase="status"
-                                        class="sortable"
-                                    >
+                                    <th data-sort-purchase="status" class="sortable">
                                         Status
                                         <span class="sort-icon">
                                             ↕
                                         </span>
                                     </th>
-
-
-                                    <th>
-                                        Payment
-                                    </th>
-
-
-                                    <th>
-                                        Actions
-                                    </th>
-
+                                    <th>Payment</th>
+                                    <th>Actions</th>
                                 </tr>
-
                             </thead>
-
-
                             <tbody id="purchasesTableBody">
-
                                 <tr>
-
-                                    <td
-                                        colspan="9"
-                                        class="table-loading-state"
-                                    >
-
+                                    <td colspan="9" class="table-loading-state">
                                         <div class="loading-spinner">
                                             <span></span>
                                         </div>
-
-                                        <p>
-                                            Loading purchases...
-                                        </p>
-
+                                        <p>Loading purchases...</p>
                                     </td>
-
                                 </tr>
-
                             </tbody>
-
                         </table>
-
                     </div>
-
-
-
-                    <!-- =====================================
-                         PAGINATION
-                    ====================================== -->
-
+                    <!-- PAGINATION -->
                     <div class="pagination">
-
                         <div
                             class="pagination-info"
                             id="paginationInfo"
                         >
                             No purchases found
                         </div>
-
-
                         <div class="pagination-controls">
-
                             <button
                                 type="button"
                                 class="pagination-button"
@@ -731,24 +314,16 @@
                             >
                                 ← Previous
                             </button>
-
-
                             <span class="pagination-current">
-
                                 Page
                                 <strong id="currentPage">
                                     1
                                 </strong>
-
                                 of
-
                                 <strong id="totalPages">
                                     1
                                 </strong>
-
                             </span>
-
-
                             <button
                                 type="button"
                                 class="pagination-button"
@@ -757,25 +332,14 @@
                             >
                                 Next →
                             </button>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </section>
-
         </main>
-
     </div>
 
-
-
-    <!-- =====================================================
-         ADD / EDIT PURCHASE MODAL
-    ====================================================== -->
-
+    <!-- ADD / EDIT PURCHASE MODAL -->
     <div
         class="modal"
         id="purchaseModal"
@@ -784,24 +348,12 @@
         aria-modal="true"
         aria-labelledby="purchaseModalTitle"
     >
-
         <div class="modal-dialog modal-lg">
-
             <div class="modal-header">
-
                 <div>
-
-                    <h2 id="purchaseModalTitle">
-                        Add Purchase
-                    </h2>
-
-                    <p>
-                        Create or update a supplier purchase.
-                    </p>
-
+                    <h2 id="purchaseModalTitle">Add Purchase</h2>
+                    <p>Create or update a supplier purchase.</p>
                 </div>
-
-
                 <button
                     type="button"
                     class="modal-close"
@@ -810,213 +362,95 @@
                 >
                     ×
                 </button>
-
             </div>
-
-
-            <form
-                id="purchaseForm"
-                novalidate
-            >
-
+            <form id="purchaseForm" novalidate>
                 <div class="modal-body">
-
-
                     <!-- Purchase Information -->
-
                     <div class="form-section">
-
                         <div class="form-section-title">
-
-                            <h3>
-                                Purchase Information
-                            </h3>
-
+                            <h3>Purchase Information</h3>
                         </div>
-
-
                         <div class="form-grid">
-
-
                             <div class="form-group">
-
                                 <label
                                     for="purchaseSupplier"
                                 >
                                     Supplier
                                     <span>*</span>
                                 </label>
-
                                 <select
                                     id="purchaseSupplier"
                                     name="supplier_id"
                                     required
                                 >
-
-                                    <option value="">
-                                        Select supplier
-                                    </option>
-
+                                    <option value="">Select supplier</option>
                                 </select>
-
                             </div>
-
-
                             <div class="form-group">
-
-                                <label
-                                    for="purchaseNumber"
-                                >
-                                    Purchase Number
-                                </label>
-
+                                <label for="purchaseNumber">Purchase Number</label>
                                 <input
                                     type="text"
                                     id="purchaseNumber"
                                     name="purchase_number"
                                     placeholder="Auto-generated if empty"
                                 >
-
                             </div>
-
-
                             <div class="form-group">
-
                                 <label
                                     for="invoiceNumber"
                                 >
                                     Invoice Number
                                 </label>
-
                                 <input
                                     type="text"
                                     id="invoiceNumber"
                                     name="invoice_number"
                                     placeholder="Supplier invoice number"
                                 >
-
                             </div>
-
-
                             <div class="form-group">
-
                                 <label
                                     for="purchaseDate"
                                 >
                                     Purchase Date
                                     <span>*</span>
                                 </label>
-
                                 <input
                                     type="date"
                                     id="purchaseDate"
                                     name="purchase_date"
                                     required
                                 >
-
                             </div>
-
-
                             <div class="form-group">
-
-                                <label
-                                    for="purchaseStatus"
-                                >
-                                    Status
-                                </label>
-
-                                <select
-                                    id="purchaseStatus"
-                                    name="status"
-                                >
-
-                                    <option value="draft">
-                                        Draft
-                                    </option>
-
-                                    <option value="pending">
-                                        Pending
-                                    </option>
-
-                                    <option value="ordered">
-                                        Ordered
-                                    </option>
-
-                                    <option value="processing">
-                                        Processing
-                                    </option>
-
-                                    <option value="received">
-                                        Received
-                                    </option>
-
-                                    <option value="completed">
-                                        Completed
-                                    </option>
-
-                                    <option value="cancelled">
-                                        Cancelled
-                                    </option>
-
+                                <label for="purchaseStatus">Status</label>
+                                <select id="purchaseStatus" name="status">
+                                    <option value="draft">Draft</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="ordered">Ordered</option>
+                                    <option value="processing">Processing</option>
+                                    <option value="received">Received</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
                                 </select>
-
                             </div>
-
-
                             <div class="form-group">
-
-                                <label
-                                    for="paymentStatus"
-                                >
-                                    Payment Status
-                                </label>
-
-                                <select
-                                    id="paymentStatus"
-                                    name="payment_status"
-                                >
-
-                                    <option value="unpaid">
-                                        Unpaid
-                                    </option>
-
-                                    <option value="partial">
-                                        Partially Paid
-                                    </option>
-
-                                    <option value="paid">
-                                        Paid
-                                    </option>
-
+                                <label for="paymentStatus">Payment Status</label>
+                                <select id="paymentStatus" name="payment_status">
+                                    <option value="unpaid">Unpaid</option>
+                                    <option value="partial">Partially Paid</option>
+                                    <option value="paid">Paid</option>
                                 </select>
-
                             </div>
-
                         </div>
-
                     </div>
-
-
-
                     <!-- Purchase Items -->
-
                     <div class="form-section">
-
                         <div class="form-section-title">
-
                             <div>
-
-                                <h3>
-                                    Purchase Items
-                                </h3>
-
-                                <p>
-                                    Add products included in this purchase.
-                                </p>
-
+                                <h3>Purchase Items</h3>
+                                <p>Add products included in this purchase.</p>
                             </div>
-
-
                             <button
                                 type="button"
                                 class="btn btn-secondary btn-sm"
@@ -1024,63 +458,30 @@
                             >
                                 + Add Item
                             </button>
-
                         </div>
-
-
-                        <div
-                            id="purchaseItems"
-                            class="purchase-items"
-                        >
-
-                            <div
-                                class="purchase-items-empty"
-                            >
-
-                                <span>
-                                    No items added
-                                </span>
-
-                                <small>
-                                    Use "Add Item" to add products.
-                                </small>
-
+                        <div id="purchaseItems" class="purchase-items">
+                            <div class="purchase-items-empty">
+                                <span>No items added</span>
+                                <small>Use "Add Item" to add products.</small>
                             </div>
-
                         </div>
-
                     </div>
-
-
-
                     <!-- Notes -->
-
                     <div class="form-section">
-
                         <div class="form-group">
-
-                            <label
-                                for="purchaseNotes"
-                            >
+                            <label for="purchaseNotes">
                                 Notes
                             </label>
-
                             <textarea
                                 id="purchaseNotes"
                                 name="notes"
                                 rows="4"
                                 placeholder="Additional purchase notes..."
                             ></textarea>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
                 <div class="modal-footer">
-
                     <button
                         type="button"
                         class="btn btn-secondary"
@@ -1088,29 +489,17 @@
                     >
                         Cancel
                     </button>
-
-
                     <button
                         type="submit"
                         class="btn btn-primary"
                     >
                         Save Purchase
                     </button>
-
                 </div>
-
             </form>
-
         </div>
-
     </div>
-
-
-
-    <!-- =====================================================
-         PURCHASE DETAILS MODAL
-    ====================================================== -->
-
+    <!-- PURCHASE DETAILS MODAL -->
     <div
         class="modal"
         id="purchaseDetailsModal"
@@ -1119,24 +508,12 @@
         aria-modal="true"
         aria-labelledby="purchaseDetailsTitle"
     >
-
         <div class="modal-dialog modal-lg">
-
             <div class="modal-header">
-
                 <div>
-
-                    <h2 id="purchaseDetailsTitle">
-                        Purchase Details
-                    </h2>
-
-                    <p>
-                        Complete purchase information.
-                    </p>
-
+                    <h2 id="purchaseDetailsTitle">Purchase Details</h2>
+                    <p>Complete purchase information.</p>
                 </div>
-
-
                 <button
                     type="button"
                     class="modal-close"
@@ -1145,177 +522,68 @@
                 >
                     ×
                 </button>
-
             </div>
-
-
             <div class="modal-body">
-
-
                 <div class="details-grid">
-
-
                     <div class="detail-item">
-
-                        <span>
-                            Purchase Number
-                        </span>
-
-                        <strong id="purchaseDetailsNumber">
-                            —
-                        </strong>
-
+                        <span>Purchase Number</span>
+                        <strong id="purchaseDetailsNumber"> — </strong>
                     </div>
-
-
                     <div class="detail-item">
-
-                        <span>
-                            Supplier
-                        </span>
-
-                        <strong id="purchaseDetailsSupplier">
-                            —
-                        </strong>
-
+                        <span>Supplier</span>
+                        <strong id="purchaseDetailsSupplier"> — </strong>
                     </div>
-
-
                     <div class="detail-item">
-
-                        <span>
-                            Purchase Date
-                        </span>
-
-                        <strong id="purchaseDetailsDate">
-                            —
-                        </strong>
-
+                        <span>Purchase Date</span>
+                        <strong id="purchaseDetailsDate"> — </strong>
                     </div>
-
-
                     <div class="detail-item">
-
-                        <span>
-                            Invoice Number
-                        </span>
-
-                        <strong id="purchaseDetailsInvoice">
-                            —
-                        </strong>
-
+                        <span>Invoice Number</span>
+                        <strong id="purchaseDetailsInvoice"> — </strong>
                     </div>
-
-
                     <div class="detail-item">
-
-                        <span>
-                            Total
-                        </span>
-
+                        <span>Total</span>
                         <strong id="purchaseDetailsTotal">
                             $0.00
                         </strong>
-
                     </div>
-
-
                     <div class="detail-item">
-
-                        <span>
-                            Paid
-                        </span>
-
+                        <span>Paid</span>
                         <strong id="purchaseDetailsPaid">
                             $0.00
                         </strong>
-
                     </div>
-
-
                     <div class="detail-item">
-
-                        <span>
-                            Amount Due
-                        </span>
-
+                        <span>Amount Due</span>
                         <strong id="purchaseDetailsDue">
                             $0.00
                         </strong>
-
                     </div>
-
-
                     <div class="detail-item">
-
-                        <span>
-                            Status
-                        </span>
-
-                        <strong id="purchaseDetailsStatus">
-                            —
-                        </strong>
-
+                        <span>Status</span>
+                        <strong id="purchaseDetailsStatus"> — </strong>
                     </div>
-
-
                     <div class="detail-item">
-
-                        <span>
-                            Payment Status
-                        </span>
-
-                        <strong id="purchaseDetailsPaymentStatus">
-                            —
-                        </strong>
-
+                        <span>Payment Status</span>
+                        <strong id="purchaseDetailsPaymentStatus"> — </strong>
                     </div>
-
                 </div>
-
-
-
                 <div class="details-section">
-
-                    <h3>
-                        Purchased Items
-                    </h3>
-
-
-                    <div
-                        id="purchaseDetailsItems"
-                        class="purchase-details-items"
-                    >
+                    <h3>Purchased Items</h3>
+                    <div id="purchaseDetailsItems" class="purchase-details-items">
                         <div class="details-empty">
                             No purchase item details available.
                         </div>
                     </div>
-
                 </div>
-
-
-
                 <div class="details-section">
-
-                    <h3>
-                        Notes
-                    </h3>
-
-
-                    <p
-                        id="purchaseDetailsNotes"
-                        class="purchase-notes"
-                    >
+                    <h3>Notes</h3>
+                    <p id="purchaseDetailsNotes" class="purchase-notes">
                         No notes available.
                     </p>
-
                 </div>
-
             </div>
-
-
             <div class="modal-footer">
-
                 <button
                     type="button"
                     class="btn btn-secondary"
@@ -1323,19 +591,10 @@
                 >
                     Close
                 </button>
-
             </div>
-
         </div>
-
     </div>
-
-
-
-    <!-- =====================================================
-         PAYMENT MODAL
-    ====================================================== -->
-
+    <!-- PAYMENT MODAL -->
     <div
         class="modal"
         id="paymentModal"
@@ -1344,24 +603,12 @@
         aria-modal="true"
         aria-labelledby="paymentModalTitle"
     >
-
         <div class="modal-dialog modal-md">
-
             <div class="modal-header">
-
                 <div>
-
-                    <h2 id="paymentModalTitle">
-                        Record Payment
-                    </h2>
-
-                    <p>
-                        Record a payment against this purchase.
-                    </p>
-
+                    <h2 id="paymentModalTitle">Record Payment</h2>
+                    <p>Record a payment against this purchase.</p>
                 </div>
-
-
                 <button
                     type="button"
                     class="modal-close"
@@ -1370,92 +617,40 @@
                 >
                     ×
                 </button>
-
             </div>
-
-
             <form id="paymentForm">
-
                 <div class="modal-body">
-
-
-                    <input
-                        type="hidden"
-                        name="purchase_id"
-                        value=""
-                    >
-
-
+                    <input type="hidden" name="purchase_id" value="">
                     <div class="payment-summary">
-
-
                         <div class="payment-summary-row">
-
-                            <span>
-                                Purchase
-                            </span>
-
-                            <strong id="paymentPurchaseNumber">
-                                —
-                            </strong>
-
+                            <span>Purchase</span>
+                            <strong id="paymentPurchaseNumber"> — </strong>
                         </div>
-
-
                         <div class="payment-summary-row">
-
-                            <span>
-                                Total
-                            </span>
-
+                            <span>Total</span>
                             <strong id="paymentPurchaseTotal">
                                 $0.00
                             </strong>
-
                         </div>
-
-
                         <div class="payment-summary-row">
-
-                            <span>
-                                Paid
-                            </span>
-
+                            <span>Paid</span>
                             <strong id="paymentPurchasePaid">
                                 $0.00
                             </strong>
-
                         </div>
-
-
                         <div class="payment-summary-row due">
-
-                            <span>
-                                Amount Due
-                            </span>
-
+                            <span>Amount Due</span>
                             <strong id="paymentPurchaseDue">
                                 $0.00
                             </strong>
-
                         </div>
-
                     </div>
-
-
-
                     <div class="form-grid">
-
-
                         <div class="form-group">
-
-                            <label
-                                for="paymentAmount"
-                            >
+                            <label for="paymentAmount">
                                 Payment Amount
                                 <span>*</span>
                             </label>
-
                             <input
                                 type="number"
                                 id="paymentAmount"
@@ -1465,90 +660,41 @@
                                 required
                                 placeholder="0.00"
                             >
-
                         </div>
-
-
                         <div class="form-group">
-
-                            <label
-                                for="paymentMethod"
-                            >
-                                Payment Method
-                            </label>
-
+                            <label for="paymentMethod">Payment Method</label>
                             <select
                                 id="paymentMethod"
                                 name="payment_method"
                             >
-
-                                <option value="cash">
-                                    Cash
-                                </option>
-
-                                <option value="bank_transfer">
-                                    Bank Transfer
-                                </option>
-
-                                <option value="card">
-                                    Card
-                                </option>
-
-                                <option value="check">
-                                    Check
-                                </option>
-
-                                <option value="other">
-                                    Other
-                                </option>
-
+                                <option value="cash">Cash</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                                <option value="card">Card</option>
+                                <option value="check">Check</option>
+                                <option value="other">Other</option>
                             </select>
-
                         </div>
-
-
                         <div class="form-group full-width">
-
-                            <label
-                                for="paymentReference"
-                            >
-                                Reference
-                            </label>
-
+                            <label for="paymentReference">Reference</label>
                             <input
                                 type="text"
                                 id="paymentReference"
                                 name="reference"
                                 placeholder="Transaction or payment reference"
                             >
-
                         </div>
-
-
                         <div class="form-group full-width">
-
-                            <label
-                                for="paymentNotes"
-                            >
-                                Notes
-                            </label>
-
+                            <label for="paymentNotes">Notes</label>
                             <textarea
                                 id="paymentNotes"
                                 name="notes"
                                 rows="3"
                                 placeholder="Payment notes..."
                             ></textarea>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
                 <div class="modal-footer">
-
                     <button
                         type="button"
                         class="btn btn-secondary"
@@ -1556,45 +702,25 @@
                     >
                         Cancel
                     </button>
-
-
                     <button
                         type="submit"
                         class="btn btn-primary"
                     >
                         Record Payment
                     </button>
-
                 </div>
-
             </form>
-
         </div>
-
     </div>
-
-
-
-    <!-- =====================================================
-         TOAST NOTIFICATIONS
-    ====================================================== -->
-
+    <!-- TOAST NOTIFICATIONS -->
     <div
         id="toastContainer"
         class="toast-container"
         aria-live="polite"
         aria-atomic="true"
     ></div>
-
-
-
-    <!-- =====================================================
-         SCRIPTS
-    ====================================================== -->
-
+    <!-- SCRIPTS -->
     <script src="../js/purchases.js"></script>
-
-
     <script>
         /*
          * Mobile sidebar toggle.
@@ -1605,71 +731,49 @@
         document.addEventListener(
             "DOMContentLoaded",
             function () {
-
                 const menuToggle =
                     document.getElementById(
                         "menuToggle"
                     );
-
                 const sidebar =
                     document.getElementById(
                         "sidebar"
                     );
-
-
                 if (
                     menuToggle &&
                     sidebar
                 ) {
-
                     menuToggle.addEventListener(
                         "click",
                         function () {
-
                             sidebar.classList.toggle(
                                 "open"
                             );
-
                         }
                     );
-
                 }
-
-
                 /*
                  * Add purchase item button.
                  */
-
                 const addItemButton =
                     document.getElementById(
                         "addPurchaseItemButton"
                     );
-
-
                 if (addItemButton) {
-
                     addItemButton.addEventListener(
                         "click",
                         function () {
-
                             if (
                                 window.InventoryPurchases &&
                                 typeof window.InventoryPurchases.addItem === "function"
                             ) {
-
                                 window.InventoryPurchases.addItem();
-
                             }
-
                         }
                     );
-
                 }
-
             }
         );
     </script>
-
 </body>
-
 </html>

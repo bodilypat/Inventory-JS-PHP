@@ -1,222 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-
-    <meta
-        name="description"
-        content="Secure login for Inventory Management System"
-    >
-
-    <meta
-        name="theme-color"
-        content="#2563eb"
-    >
+    <meta name="description" content="Secure login for Inventory Management System">
+    <meta name="theme-color" content="#2563eb">
 
     <title>Login | Inventory Management</title>
 
     <!-- Global Styles -->
-    <link
-        rel="stylesheet"
-        href="../css/style.css"
-    >
+    <link rel="stylesheet" href="../css/style.css">
 
     <!-- Authentication Page Styles -->
-    <link
-        rel="stylesheet"
-        href="../css/login.css"
-    >
+    <link rel="stylesheet" href="../css/login.css">
 
 </head>
 
-
 <body class="auth-page">
-
-    <!-- =====================================================
-         AUTHENTICATION CONTAINER
-         ===================================================== -->
-
+    <!--  AUTHENTICATION CONTAINER -->
     <main class="auth-container">
 
-        <!-- =================================================
-             LEFT / BRAND SECTION
-             ================================================= -->
-
-        <section
-            class="auth-brand"
-            aria-label="Inventory Management"
-        >
-
+        <!-- LEFT / BRAND SECTION -->
+        <section class="auth-brand" aria-label="Inventory Management">
             <div class="auth-brand-content">
-
-                <a
-                    href="../index.html"
-                    class="auth-logo"
-                    aria-label="Inventory Management home"
-                >
-
+                <a href="../index.html" class="auth-logo" aria-label="Inventory Management home">
                     <span class="auth-logo-icon">
                         📦
                     </span>
-
                     <span class="auth-logo-text">
                         Inventory
                     </span>
-
                 </a>
-
-
                 <div class="auth-brand-message">
-
-                    <span class="brand-eyebrow">
-                        INVENTORY MANAGEMENT SYSTEM
-                    </span>
-
+                    <span class="brand-eyebrow">INVENTORY MANAGEMENT SYSTEM</span>
                     <h1>
                         Manage your inventory
                         with confidence.
                     </h1>
-
                     <p>
                         Track products, monitor stock,
                         manage purchases and sales,
                         and keep your business organized
                         from one place.
                     </p>
-
                 </div>
-
-
                 <div class="auth-features">
-
                     <div class="auth-feature">
-
                         <span class="feature-icon">
                             ✓
                         </span>
-
                         <div>
-                            <strong>
-                                Inventory Control
-                            </strong>
-
-                            <span>
-                                Monitor stock levels and movements.
-                            </span>
+                            <strong>Inventory Control</strong>
+                            <span>Monitor stock levels and movements.</span>
                         </div>
-
                     </div>
-
-
                     <div class="auth-feature">
-
                         <span class="feature-icon">
                             ✓
                         </span>
-
                         <div>
-                            <strong>
-                                Sales & Purchases
-                            </strong>
-
-                            <span>
-                                Manage business transactions efficiently.
-                            </span>
+                            <strong>Sales & Purchases</strong>
+                            <span>Manage business transactions efficiently.</span>
                         </div>
-
                     </div>
-
-
                     <div class="auth-feature">
-
                         <span class="feature-icon">
                             ✓
                         </span>
-
                         <div>
-                            <strong>
-                                Reports
-                            </strong>
-
-                            <span>
-                                Get clear insights into your business.
-                            </span>
+                            <strong>Reports</strong>
+                            <span>Get clear insights into your business.</span>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
-
             <div class="auth-brand-footer">
-
                 <span>
                     © <span id="brandYear"></span>
                     Inventory Management
                 </span>
-
             </div>
-
         </section>
 
-
-        <!-- =================================================
-             LOGIN SECTION
-             ================================================= -->
-
-        <section
-            class="auth-form-section"
-            aria-labelledby="loginTitle"
-        >
-
+        <!-- LOGIN SECTION -->
+        <section class="auth-form-section" aria-labelledby="loginTitle">
             <div class="auth-form-wrapper">
-
                 <!-- Mobile Logo -->
-
-                <a
-                    href="../index.html"
-                    class="mobile-auth-logo"
-                >
-
+                <a href="../index.html" class="mobile-auth-logo">
                     <span class="auth-logo-icon">
                         📦
                     </span>
-
-                    <span>
-                        Inventory
-                    </span>
-
+                    <span>Inventory</span>
                 </a>
-
-
+                
                 <!-- Login Header -->
-
                 <div class="auth-form-header">
-
-                    <h2 id="loginTitle">
-                        Welcome back
-                    </h2>
-
-                    <p>
-                        Sign in to access your inventory dashboard.
-                    </p>
-
+                    <h2 id="loginTitle">Welcome back</h2>
+                    <p>Sign in to access your inventory dashboard.</p>
                 </div>
 
-
-                <!-- =================================================
-                     LOGIN ERROR
-                     ================================================= -->
-
+                <!-- LOGIN ERROR -->
                 <div
                     id="loginError"
                     class="auth-alert auth-alert-error"
@@ -226,33 +112,20 @@
                 >
                 </div>
 
-
-                <!-- =================================================
-                     LOGIN FORM
-                     ================================================= -->
-
+                <!-- LOGIN FORM -->
                 <form
                     id="loginForm"
                     class="auth-form"
                     method="post"
                     novalidate
                 >
-
                     <!-- Username -->
-
                     <div class="form-group">
-
-                        <label for="username">
-                            Username or Email
+                        <label for="username">Username or Email
                             <span class="required">*</span>
                         </label>
-
                         <div class="input-wrapper">
-
-                            <span
-                                class="input-icon"
-                                aria-hidden="true"
-                            >
+                            <span class="input-icon" aria-hidden="true">
                                 👤
                             </span>
 
@@ -268,45 +141,21 @@
                                 maxlength="150"
                                 required
                             >
-
                         </div>
-
-                        <small
-                            class="field-error"
-                            id="usernameError"
-                            hidden
-                        ></small>
-
+                        <small class="field-error" id="usernameError" hidden></small>
                     </div>
 
-
                     <!-- Password -->
-
                     <div class="form-group">
-
                         <div class="form-label-row">
-
-                            <label for="password">
-                                Password
+                            <label for="password">Password
                                 <span class="required">*</span>
                             </label>
-
-                            <a
-                                href="forgot-password.html"
-                                class="forgot-password"
-                            >
-                                Forgot password?
-                            </a>
-
+                            <a href="forgot-password.html" class="forgot-password">Forgot password?</a>
                         </div>
 
-
                         <div class="input-wrapper">
-
-                            <span
-                                class="input-icon"
-                                aria-hidden="true"
-                            >
+                            <span class="input-icon"aria-hidden="true">
                                 🔒
                             </span>
 
@@ -321,7 +170,6 @@
                                 maxlength="255"
                                 required
                             >
-
                             <button
                                 type="button"
                                 class="password-toggle"
@@ -331,225 +179,101 @@
                             >
                                 👁
                             </button>
-
                         </div>
-
-                        <small
-                            class="field-error"
-                            id="passwordError"
-                            hidden
-                        ></small>
-
+                        <small class="field-error" id="passwordError" hidden></small>
                     </div>
-
 
                     <!-- Remember Me -->
-
                     <div class="login-options">
-
                         <label class="checkbox-label">
-
-                            <input
-                                type="checkbox"
-                                id="rememberMe"
-                                name="remember"
-                                value="1"
-                            >
-
-                            <span class="custom-checkbox">
-                            </span>
-
-                            <span>
-                                Remember me
-                            </span>
-
+                            <input type="checkbox" id="rememberMe" name="remember" value="1">
+                            <span class="custom-checkbox"></span>
+                            <span>Remember me</span>
                         </label>
-
                     </div>
 
-
                     <!-- Submit -->
-
-                    <button
-                        type="submit"
-                        class="btn btn-primary auth-submit"
-                        id="loginButton"
-                    >
-
-                        <span
-                            class="submit-icon"
-                            aria-hidden="true"
-                        >
+                    <button type="submit" class="btn btn-primary auth-submit" id="loginButton">
+                        <span class="submit-icon" aria-hidden="true">
                             →
                         </span>
-
-                        <span class="submit-text">
-                            Sign In
-                        </span>
-
+                        <span class="submit-text">Sign In</span>
                     </button>
-
                 </form>
 
-
                 <!-- Security Message -->
-
                 <div class="auth-security">
-
-                    <span
-                        class="security-icon"
-                        aria-hidden="true"
-                    >
+                    <span class="security-icon" aria-hidden="true" >
                         🔐
                     </span>
 
                     <div>
-
-                        <strong>
-                            Secure access
-                        </strong>
-
+                        <strong>Secure access</strong>
                         <p>
                             Your account credentials are
                             protected by the system.
                         </p>
-
                     </div>
-
                 </div>
-
 
                 <!-- Footer -->
-
                 <div class="auth-form-footer">
-
-                    <p>
-                        Inventory Management System
-                    </p>
-
-                    <span>
-                        Version 1.0
-                    </span>
-
+                    <p>Inventory Management System</p>
+                    <span>Version 1.0</span>
                 </div>
-
             </div>
-
         </section>
-
     </main>
 
-
-    <!-- =====================================================
-         AUTHENTICATION SCRIPT
-         ===================================================== -->
-
+    <!-- AUTHENTICATION SCRIPT -->
     <script src="../js/auth.js"></script>
 
-
-    <!-- =====================================================
-         LOGIN PAGE ENHANCEMENTS
-         ===================================================== -->
-
+    <!-- LOGIN PAGE ENHANCEMENTS -->
     <script>
-
         document.addEventListener(
             "DOMContentLoaded",
             () => {
-
-                /* ---------------------------------------------
-                   Current Year
-                   --------------------------------------------- */
-
-                const yearElement =
-                    document.getElementById("brandYear");
+                /* Current Year */
+                const yearElement = document.getElementById("brandYear");
 
                 if (yearElement) {
-
-                    yearElement.textContent =
-                        new Date().getFullYear();
-
+                    yearElement.textContent = new Date().getFullYear();
                 }
 
+                /* Client-Side Login Validation */
+                const loginForm = document.getElementById("loginForm");
+                const usernameInput = document.getElementById("username");
+                const passwordInput = document.getElementById("password");
+                const usernameError = document.getElementById("usernameError");
+                const passwordError = document.getElementById("passwordError");
 
-                /* ---------------------------------------------
-                   Client-Side Login Validation
-                   --------------------------------------------- */
-
-                const loginForm =
-                    document.getElementById("loginForm");
-
-                const usernameInput =
-                    document.getElementById("username");
-
-                const passwordInput =
-                    document.getElementById("password");
-
-                const usernameError =
-                    document.getElementById("usernameError");
-
-                const passwordError =
-                    document.getElementById("passwordError");
-
-
-                function showFieldError(
-                    element,
-                    message
-                ) {
-
+                function showFieldError(element, message) {
                     if (!element) {
                         return;
                     }
-
-                    element.textContent =
-                        message;
-
-                    element.hidden =
-                        false;
-
+                    element.textContent = message;
+                    element.hidden = false;
                 }
 
-
-                function hideFieldError(
-                    element
-                ) {
-
+                function hideFieldError(element) {
                     if (!element) {
                         return;
                     }
-
-                    element.textContent =
-                        "";
-
-                    element.hidden =
-                        true;
-
+                    element.textContent = "";
+                    element.hidden = true;
                 }
-
-
                 usernameInput?.addEventListener(
                     "input",
                     () => {
-
-                        hideFieldError(
-                            usernameError
-                        );
-
+                        hideFieldError(usernameError);
                     }
                 );
-
-
                 passwordInput?.addEventListener(
                     "input",
                     () => {
-
-                        hideFieldError(
-                            passwordError
-                        );
-
+                        hideFieldError(passwordError);
                     }
                 );
-
 
                 /*
                  * auth.js performs the actual login request.
@@ -561,87 +285,42 @@
                     event => {
 
                         let valid = true;
-
-
-                        const username =
-                            usernameInput?.value.trim() || "";
-
-
-                        const password =
-                            passwordInput?.value || "";
-
+                        const username = usernameInput?.value.trim() || "";
+                        const password = passwordInput?.value || "";
 
                         if (!username) {
-
-                            showFieldError(
-                                usernameError,
-                                "Username or email is required."
-                            );
-
+                            showFieldError(usernameError,"Username or email is required.");
                             valid = false;
-
                         }
 
-
                         if (!password) {
-
-                            showFieldError(
-                                passwordError,
-                                "Password is required."
-                            );
-
+                            showFieldError(passwordError,"Password is required.");
                             valid = false;
-
                         } else if (
                             password.length < 8
                         ) {
-
-                            showFieldError(
-                                passwordError,
-                                "Password must contain at least 8 characters."
-                            );
-
+                            showFieldError(passwordError,"Password must contain at least 8 characters.");
                             valid = false;
-
                         }
-
-
                         if (!valid) {
-
                             event.preventDefault();
-
-
                             if (
                                 !username &&
                                 usernameInput
                             ) {
-
                                 usernameInput.focus();
-
                             } else if (
                                 passwordInput
                             ) {
-
                                 passwordInput.focus();
-
                             }
-
                         }
-
                     },
                     true
                 );
-
-
-                /* ---------------------------------------------
-                   Password Toggle Icon
-                   --------------------------------------------- */
-
+                /* Password Toggle Icon */
                 const passwordToggle =
-                    document.querySelector(
-                        "[data-password-toggle='password']"
-                    );
-
+                    document.querySelector("[data-password-toggle='password']");
 
                 passwordToggle?.addEventListener(
                     "click",
@@ -650,23 +329,12 @@
                         if (!passwordInput) {
                             return;
                         }
-
-
-                        const visible =
-                            passwordInput.type === "text";
-
-
+                        const visible = passwordInput.type === "text";
                         passwordToggle.textContent =
                             visible ? "👁" : "🙈";
-
                     }
                 );
-
-
-                /* ---------------------------------------------
-                   Enter Key
-                   --------------------------------------------- */
-
+                /* Enter Key */
                 passwordInput?.addEventListener(
                     "keydown",
                     event => {
@@ -674,19 +342,12 @@
                         if (
                             event.key === "Enter"
                         ) {
-
                             loginForm?.requestSubmit();
-
                         }
-
                     }
                 );
-
             }
         );
-
     </script>
-
 </body>
-
 </html>

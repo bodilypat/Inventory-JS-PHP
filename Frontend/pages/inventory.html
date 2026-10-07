@@ -3,58 +3,31 @@
 
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="Inventory Management System - Inventory"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inventory Management System - Monitor stock, manage inventory movements and stock levels">
 
     <title>Inventory | Inventory Management System</title>
-
     <!-- Global CSS -->
-    <link
-        rel="stylesheet"
-        href="../css/style.css"
-    >
-
+    <link rel="stylesheet" href="../css/style.css">
     <!-- Inventory CSS -->
-    <link
-        rel="stylesheet"
-        href="../css/inventory.css"
-    >
+    <link rel="stylesheet" href="../css/inventory.css">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="../css/responsive.css">
 </head>
-
 <body>
-
 <div class="app-layout">
-
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
-
-    <aside
-        class="sidebar"
-        id="sidebar"
-    >
-
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-
-            <a
-                href="../index.html"
-                class="brand"
-            >
-                <span class="brand-icon">📦</span>
-
-                <span class="brand-text">
-                    Inventory
+            <a href="../index.html" class="brand">
+                <span
+                    class="brand-icon"
+                    aria-hidden="true"
+                >
+                    📦
                 </span>
+                <span class="brand-text">Inventory</span>
             </a>
-
             <button
                 type="button"
                 class="sidebar-close"
@@ -63,153 +36,96 @@
             >
                 ×
             </button>
-
         </div>
-
-
-        <nav
-            class="sidebar-navigation"
-            aria-label="Main navigation"
-        >
-
-            <a
-                href="dashboard.html"
-                class="nav-item"
-            >
-                <span class="nav-icon">📊</span>
+        <nav class="sidebar-navigation" aria-label="Main navigation">
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">
+                    📊
+                </span>
                 <span>Dashboard</span>
             </a>
-
-
-            <a
-                href="products.html"
-                class="nav-item"
-            >
-                <span class="nav-icon">📦</span>
+            <a href="products.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">
+                    📦
+                </span>
                 <span>Products</span>
             </a>
-
-
-            <a
-                href="categories.html"
-                class="nav-item"
-            >
-                <span class="nav-icon">🗂️</span>
+            <a href="categories.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">
+                    🗂️
+                </span>
                 <span>Categories</span>
             </a>
-
-
             <a
                 href="inventory.html"
                 class="nav-item active"
                 aria-current="page"
             >
-                <span class="nav-icon">🏬</span>
+                <span class="nav-icon" aria-hidden="true">
+                    🏬
+                </span>
                 <span>Inventory</span>
             </a>
-
-
-            <div class="nav-section-title">
-                Transactions
-            </div>
-
-
-            <a
-                href="purchases.html"
-                class="nav-item"
-            >
-                <span class="nav-icon">🛒</span>
+            <div class="nav-section-title">Transactions</div>
+            <a href="purchases.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">
+                    🛒
+                </span>
                 <span>Purchases</span>
             </a>
-
-
-            <a
-                href="sales.html"
-                class="nav-item"
-            >
-                <span class="nav-icon">💰</span>
+            <a href="sales.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">
+                    💰
+                </span>
                 <span>Sales</span>
             </a>
-
-
-            <div class="nav-section-title">
-                Contacts
-            </div>
-
-
-            <a
-                href="suppliers.html"
-                class="nav-item"
-            >
-                <span class="nav-icon">🚚</span>
+            <div class="nav-section-title">Contacts</div>
+            <a href="suppliers.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">
+                    🚚
+                </span>
                 <span>Suppliers</span>
             </a>
-
-
-            <a
-                href="customers.html"
-                class="nav-item"
-            >
-                <span class="nav-icon">👥</span>
+            <a href="customers.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">
+                    👥
+                </span>
                 <span>Customers</span>
             </a>
-
-
-            <div class="nav-section-title">
-                Administration
-            </div>
-
-
-            <a
-                href="reports.html"
-                class="nav-item"
-            >
-                <span class="nav-icon">📈</span>
+            <div class="nav-section-title">Administration</div>
+            <a href="reports.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">
+                    📈
+                </span>
                 <span>Reports</span>
             </a>
-
-
-            <a
-                href="users.html"
-                class="nav-item"
-            >
-                <span class="nav-icon">👤</span>
+            <a href="users.html" class="nav-item">
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    👤
+                </span>
                 <span>Users</span>
             </a>
-
         </nav>
-
-
         <div class="sidebar-footer">
-
-            <a
-                href="login.html"
-                class="nav-item logout-link"
-            >
-                <span class="nav-icon">🚪</span>
+            <a href="login.html" class="nav-item logout-link">
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    🚪
+                </span>
                 <span>Logout</span>
             </a>
-
         </div>
-
     </aside>
-
-
-    <!-- =====================================================
-         MAIN CONTENT
-    ====================================================== -->
-
+    <!-- MAIN CONTENT -->
     <main class="main-content">
-
-
-        <!-- =================================================
-             TOPBAR
-        ================================================== -->
-
+        <!-- TOPBAR -->
         <header class="topbar">
-
             <div class="topbar-left">
-
                 <button
                     type="button"
                     class="menu-toggle"
@@ -218,1022 +134,678 @@
                 >
                     ☰
                 </button>
-
-
                 <div class="page-heading">
-
-                    <h1>
-                        Inventory
-                    </h1>
-
-                    <p>
-                        Monitor stock levels and manage inventory.
-                    </p>
-
+                    <h1>Inventory</h1>
+                    <p>Monitor stock levels and manage inventory movements.</p>
                 </div>
-
             </div>
-
-
             <div class="topbar-right">
-
                 <button
                     type="button"
                     class="icon-button"
                     id="notificationsButton"
-                    aria-label="Notifications"
+                    aria-label="View notifications"
                 >
                     🔔
+                    <span
+                        class="notification-badge"
+                        id="notificationBadge"
+                        hidden
+                    >
+                        0
+                    </span>
                 </button>
-
-
                 <div class="user-menu">
-
-                    <div class="user-avatar">
+                    <div class="user-avatar"aria-hidden="true">
                         A
                     </div>
-
                     <div class="user-information">
-
-                        <strong>
-                            Administrator
-                        </strong>
-
-                        <span>
-                            Admin
-                        </span>
-
+                        <strong>Administrator</strong>
+                        <span>Admin</span>
                     </div>
-
                 </div>
-
             </div>
-
         </header>
-
-
-        <!-- =================================================
-             PAGE CONTENT
-        ================================================== -->
-
+        <!-- PAGE CONTENT -->
         <section class="page-content">
-
-
             <!-- PAGE TOOLBAR -->
-
             <div class="page-toolbar">
-
                 <div>
-
-                    <h2>
-                        Inventory Management
-                    </h2>
-
+                    <h2>Inventory Management</h2>
                     <p>
-                        Track quantities, stock levels, locations,
-                        and inventory value.
+                        Monitor stock, perform inventory transactions,
+                        and review stock movement history.
                     </p>
-
                 </div>
-
 
                 <div class="toolbar-actions">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="exportInventoryButton"
+                    >
+                        <span aria-hidden="true">
+                            ⇩
+                        </span>
+                        Export
+                    </button>
 
                     <button
                         type="button"
                         class="btn btn-secondary"
                         id="refreshInventoryButton"
                     >
-                        <span>↻</span>
+                        <span aria-hidden="true">
+                            ↻
+                        </span>
                         Refresh
                     </button>
 
-
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        id="stockInButton"
+                        data-action="stock-in"
+                    >
+                        <span aria-hidden="true">
+                            ＋
+                        </span>
+                        Stock In
+                    </button>
                     <button
                         type="button"
                         class="btn btn-primary"
-                        id="addInventoryButton"
-                        data-action="add-inventory"
+                        id="stockOutButton"
+                        data-action="stock-out"
                     >
-                        <span>＋</span>
-                        Add Inventory
+                        <span aria-hidden="true">
+                            −
+                        </span>
+                        Stock Out
                     </button>
-
                 </div>
-
             </div>
-
-
-            <!-- =================================================
-                 INVENTORY STATISTICS
-            ================================================== -->
-
+            <!-- INVENTORY SUMMARY -->
             <div class="stats-grid">
-
-
+                <!-- TOTAL ITEMS -->
                 <article class="stat-card">
-
                     <div class="stat-icon stat-icon-blue">
                         📦
                     </div>
-
                     <div class="stat-content">
-
-                        <span>
-                            Inventory Items
-                        </span>
-
-                        <strong id="totalInventoryItems">
-                            0
-                        </strong>
-
+                        <span>Inventory Items</span>
+                        <strong id="totalInventoryItems">0</strong>
                     </div>
-
                 </article>
-
-
+                <!-- IN STOCK -->
                 <article class="stat-card">
-
                     <div class="stat-icon stat-icon-green">
                         ✓
                     </div>
-
                     <div class="stat-content">
-
-                        <span>
-                            In Stock
-                        </span>
-
-                        <strong id="inStockItems">
-                            0
-                        </strong>
-
+                        <span>In Stock</span>
+                        <strong id="inStockItems">0</strong>
                     </div>
-
                 </article>
-
-
+                <!-- LOW STOCK -->
                 <article class="stat-card">
-
                     <div class="stat-icon stat-icon-orange">
                         ⚠
                     </div>
-
                     <div class="stat-content">
-
-                        <span>
-                            Low Stock
-                        </span>
-
-                        <strong id="lowStockItems">
-                            0
-                        </strong>
-
+                        <span>Low Stock</span>
+                        <strong id="lowStockItems">0</strong>
                     </div>
-
                 </article>
-
-
+                <!-- OUT OF STOCK -->
                 <article class="stat-card">
-
                     <div class="stat-icon stat-icon-red">
                         !
                     </div>
-
                     <div class="stat-content">
-
-                        <span>
-                            Out of Stock
-                        </span>
-
-                        <strong id="outOfStockItems">
-                            0
-                        </strong>
-
+                        <span>Out of Stock</span>
+                        <strong id="outOfStockItems">0</strong>
                     </div>
-
                 </article>
-
-
+                <!-- INVENTORY VALUE -->
                 <article class="stat-card">
-
                     <div class="stat-icon stat-icon-purple">
                         💰
                     </div>
-
                     <div class="stat-content">
-
-                        <span>
-                            Inventory Value
-                        </span>
-
-                        <strong id="totalInventoryValue">
-                            $0.00
-                        </strong>
-
+                        <span>Inventory Value</span>
+                        <strong id="totalInventoryValue">$0.00</strong>
                     </div>
-
                 </article>
-
             </div>
-
-
-            <!-- =================================================
-                 INVENTORY TABLE CARD
-            ================================================== -->
-
-            <section class="card inventory-card">
-
-
-                <div class="card-header">
-
-                    <div>
-
-                        <h2>
-                            Stock Inventory
-                        </h2>
-
-                        <p>
-                            Current inventory records from the system.
-                        </p>
-
-                    </div>
-
+            <!-- STOCK ALERT -->
+            <div class="inventory-alert" id="inventoryAlert" hidden>
+                <div class="inventory-alert-icon" aria-hidden="true">
+                    ⚠
                 </div>
-
-
-                <!-- =================================================
-                     FILTERS
-                ================================================== -->
-
+                <div class="inventory-alert-content">
+                    <strong>Low stock requires attention</strong>
+                    <p id="inventoryAlertMessage">Some products have reached their reorder level.</p>
+                </div>
+                <button
+                    type="button"
+                    class="btn btn-sm btn-secondary"
+                    id="viewLowStockButton"
+                >
+                    View Low Stock
+                </button>
+            </div>
+            <!-- INVENTORY CARD -->
+            <section class="card inventory-card">
+                <!-- CARD HEADER -->
+                <div class="card-header">
+                    <div>
+                        <h2>Current Stock</h2>
+                        <p>Current stock levels for all inventory items.</p>
+                    </div>
+                    <div class="card-header-actions">
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-secondary"
+                            id="clearInventoryFiltersButton"
+                        >
+                            Clear Filters
+                        </button>
+                    </div>
+                </div>
+                <!-- FILTERS -->
                 <div class="inventory-filters">
-
-
                     <!-- SEARCH -->
-
-                    <div class="search-box">
-
+                    <div class="search-box search-box-large">
                         <span
                             class="search-icon"
                             aria-hidden="true"
                         >
                             🔍
                         </span>
-
                         <input
                             type="search"
                             id="inventorySearch"
                             name="search"
-                            placeholder="Search product, SKU, barcode..."
+                            placeholder="Search product, SKU or barcode..."
                             autocomplete="off"
                             aria-label="Search inventory"
                         >
-
+                        <button
+                            type="button"
+                            class="search-clear"
+                            id="clearInventorySearchButton"
+                            aria-label="Clear search"
+                            hidden
+                        >
+                            ×
+                        </button>
                     </div>
-
-
                     <!-- CATEGORY -->
-
                     <div class="filter-control">
-
-                        <label
-                            for="inventoryCategoryFilter"
-                        >
-                            Category
-                        </label>
-
-                        <select
-                            id="inventoryCategoryFilter"
-                            name="category"
-                        >
-
-                            <option value="">
-                                All Categories
-                            </option>
-
+                        <label for="inventoryCategoryFilter">Category</label>
+                        <select id="inventoryCategoryFilter" name="category">
+                            <option value="">All Categories</option>
                         </select>
-
                     </div>
-
-
                     <!-- STOCK STATUS -->
-
                     <div class="filter-control">
-
-                        <label
-                            for="inventoryStockStatusFilter"
-                        >
-                            Stock
-                        </label>
-
-                        <select
-                            id="inventoryStockStatusFilter"
-                            name="stock_status"
-                        >
-
-                            <option value="">
-                                All Stock
-                            </option>
-
-                            <option value="in_stock">
-                                In Stock
-                            </option>
-
-                            <option value="low_stock">
-                                Low Stock
-                            </option>
-
-                            <option value="out_of_stock">
-                                Out of Stock
-                            </option>
-
+                        <label for="inventoryStockStatusFilter">Stock Status</label>
+                        <select id="inventoryStockStatusFilter" name="stock_status">
+                            <option value="">All Stock</option>
+                            <option value="in_stock">In Stock</option>
+                            <option value="low_stock">Low Stock</option>
+                            <option value="out_of_stock">Out of Stock</option>
                         </select>
-
                     </div>
-
-
-                    <!-- STATUS -->
-
+                    <!-- LOCATION -->
                     <div class="filter-control">
-
-                        <label
-                            for="inventoryStatusFilter"
-                        >
-                            Status
-                        </label>
-
-                        <select
-                            id="inventoryStatusFilter"
-                            name="status"
-                        >
-
-                            <option value="">
-                                All Status
-                            </option>
-
-                            <option value="active">
-                                Active
-                            </option>
-
-                            <option value="inactive">
-                                Inactive
-                            </option>
-
+                        <label for="inventoryLocationFilter">Location</label>
+                        <select id="inventoryLocationFilter" name="location">
+                            <option value="">All Locations</option>
                         </select>
-
                     </div>
-
-
+                    <!-- PRODUCT STATUS -->
+                    <div class="filter-control">
+                        <label for="inventoryStatusFilter">Product Status</label>
+                        <select id="inventoryStatusFilter" name="status">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <!-- SORT -->
+                    <div class="filter-control">
+                        <label for="inventorySortFilter">Sort By</label>
+                        <select id="inventorySortFilter" name="sort">
+                            <option value="product_asc">Product: A–Z</option>
+                            <option value="product_desc">Product: Z–A</option>
+                            <option value="stock_asc">Stock: Low–High</option>
+                            <option value="stock_desc">Stock: High–Low</option>
+                            <option value="value_desc">Value: High–Low</option>
+                            <option value="value_asc">Value: Low–High</option>
+                        </select>
+                    </div>
                     <!-- PER PAGE -->
-
                     <div class="filter-control">
-
-                        <label
-                            for="perPage"
-                        >
-                            Show
-                        </label>
-
-                        <select
-                            id="perPage"
-                            name="per_page"
-                        >
-
-                            <option value="10">
-                                10
-                            </option>
-
-                            <option value="25">
-                                25
-                            </option>
-
-                            <option value="50">
-                                50
-                            </option>
-
-                            <option value="100">
-                                100
-                            </option>
-
+                        <label for="perPage">Show</label>
+                        <select id="perPage" name="per_page">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
                         </select>
-
                     </div>
-
                 </div>
-
-
-                <!-- =================================================
-                     INVENTORY TABLE
-                ================================================== -->
-
+                <!-- BULK ACTION BAR -->
+                <div class="bulk-actions" id="inventoryBulkActions" hidden>
+                    <div class="bulk-selection">
+                        <strong id="selectedInventoryCount">0</strong>
+                        <span>items selected</span>
+                    </div>
+                    <div class="bulk-action-buttons">
+                        <button type="button" class="btn btn-sm btn-secondary" id="bulkStockCountButton">
+                            Stock Count
+                        </button>
+                        <button type="button" class="btn btn-sm btn-secondary" id="bulkExportButton">
+                            Export Selected
+                        </button>
+                    </div>
+                </div>
+                <!-- INVENTORY TABLE -->
                 <div class="table-container">
-
-                    <table
-                        class="data-table inventory-table"
-                        id="inventoryTable"
-                    >
-
+                    <table class="data-table inventory-table" id="inventoryTable">
                         <thead>
-
                             <tr>
-
-                                <th
-                                    scope="col"
-                                    class="sortable"
-                                    data-sort-inventory="product_name"
-                                >
+                                <th scope="col" class="checkbox-column">
+                                    <input type="checkbox" id="selectAllInventory" aria-label="Select all inventory items">
+                                </th>
+                                <th scope="col" class="sortable" data-sort-inventory="product_name">
                                     Product
                                 </th>
-
-
-                                <th scope="col">
+                                <th scope="col" class="sortable" data-sort-inventory="category">
                                     Category
                                 </th>
-
-
-                                <th
-                                    scope="col"
-                                    class="sortable"
-                                    data-sort-inventory="stock"
-                                >
+                                <th scope="col" class="sortable" data-sort-inventory="stock">
                                     Stock
                                 </th>
-
-
-                                <th
-                                    scope="col"
-                                    class="sortable"
-                                    data-sort-inventory="minimum_stock"
-                                >
-                                    Minimum
+                                <th scope="col" class="sortable" data-sort-inventory="minimum_stock">
+                                    Reorder Level
                                 </th>
-
-
-                                <th
-                                    scope="col"
-                                    class="sortable"
-                                    data-sort-inventory="status"
-                                >
+                                <th scope="col" data-sort-inventory="stock_status">
                                     Stock Status
                                 </th>
-
-
-                                <th
-                                    scope="col"
-                                    class="sortable"
-                                    data-sort-inventory="value"
-                                >
-                                    Value
+                                <th scope="col" class="sortable" data-sort-inventory="value">
+                                    Inventory Value
                                 </th>
-
-
-                                <th scope="col">
-                                    Status
+                                <th scope="col" data-sort-inventory="location">
+                                    Location
                                 </th>
-
-
-                                <th
-                                    scope="col"
-                                    class="actions-column"
-                                >
-                                    Actions
-                                </th>
-
+                                <th scope="col" class="actions-column">
+                                    Actions</th>
                             </tr>
-
                         </thead>
-
-
-                        <tbody
-                            id="inventoryTableBody"
-                        >
-
-                            <!--
-                                Inventory records are loaded
-                                from inventory.js / PHP API.
-
-                                No mock data is included.
-                            -->
-
+                        <tbody id="inventoryTableBody">
                             <tr>
-
-                                <td
-                                    colspan="8"
-                                    class="table-loading-state"
-                                >
-
+                                <td colspan="9" class="table-loading-state">
                                     <div class="loading-spinner">
                                         <span></span>
                                     </div>
-
-                                    <p>
-                                        Loading inventory...
-                                    </p>
-
+                                    <p>Loading inventory...</p>
                                 </td>
-
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
-
-                <!-- =================================================
-                     PAGINATION
-                ================================================== -->
-
-                <div class="pagination-container">
-
-                    <div
-                        id="paginationInfo"
-                        class="pagination-info"
-                    >
-                        No inventory records
+                <!-- EMPTY STATE -->
+                <div class="empty-state" id="inventoryEmptyState" hidden>
+                    <div class="empty-state-icon" aria-hidden="true">
+                        🏬
                     </div>
-
-
+                    <h3>No inventory records found</h3>
+                    <p>Try changing your search or filters.</p>
+                    <buttontype="button" class="btn btn-primary" id="clearEmptyInventoryFilters">
+                        Clear Filters
+                    </button>
+                </div>
+                <!-- PAGINATION -->
+                <div class="pagination-container">
+                    <div id="paginationInfo" class="pagination-info">
+                        Showing 0 of 0 items
+                    </div>
                     <div class="pagination-controls">
-
                         <button
                             type="button"
                             class="pagination-button"
                             id="previousPage"
                             disabled
                         >
-                            ←
-                            Previous
+                            ← Previous
                         </button>
-
-
                         <div class="page-number">
-
-                            <span id="currentPage">
-                                1
-                            </span>
-
-                            <span>
-                                /
-                            </span>
-
-                            <span id="totalPages">
-                                1
-                            </span>
-
+                            <span id="currentPage">1</span>
+                            <span>/</span>
+                            <span id="totalPages">1</span>
                         </div>
-
-
-                        <button
-                            type="button"
-                            class="pagination-button"
-                            id="nextPage"
-                            disabled
-                        >
-                            Next
-                            →
+                        <button type="button" class="pagination-button" id="nextPage" disabled>
+                            Next →
                         </button>
-
                     </div>
-
+                </div>
+            </section>
+            <!-- RECENT MOVEMENTS -->
+            <section class="card inventory-movements-card">
+                <div class="card-header">
+                    <div>
+                        <h2>Recent Inventory Movements</h2>
+                        <p>Latest stock transactions across your inventory.</p>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-secondary" id="viewAllMovementsButton">
+                        View All Movements
+                    </button>
                 </div>
 
+                <div class="table-container">
+                    <table class="data-table movements-table" id="recentMovementsTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Reference</th>
+                                <th scope="col">User</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="recentMovementsBody">
+                            <tr>
+                                <td colspan="6" class="table-loading-state">
+                                    <div class="loading-spinner">
+                                        <span></span>
+                                    </div>
+                                    <p>Loading movements...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
-
         </section>
-
     </main>
-
 </div>
-
-
-<!-- =========================================================
-     ADD / EDIT INVENTORY MODAL
-========================================================== -->
-
+<!-- STOCK TRANSACTION MODAL -->
 <div
     class="modal"
-    id="inventoryModal"
+    id="stockTransactionModal"
     role="dialog"
     aria-modal="true"
-    aria-labelledby="inventoryModalTitle"
+    aria-labelledby="stockTransactionTitle"
+    hidden
 >
-
-    <div class="modal-dialog">
-
-
+    <div class="modal-dialog modal-lg">
         <div class="modal-header">
-
             <div>
-
-                <h2 id="inventoryModalTitle">
-                    Add Inventory
-                </h2>
-
-                <p>
-                    Enter inventory information below.
-                </p>
-
+                <h2 id="stockTransactionTitle">Stock In</h2>
+                <p id="stockTransactionDescription">Add stock to your inventory.</p>
             </div>
-
-
             <button
                 type="button"
                 class="modal-close"
-                data-close-inventory-modal
-                aria-label="Close"
+                data-close-stock-transaction
+                aria-label="Close stock transaction"
             >
                 ×
             </button>
-
         </div>
-
-
-        <form
-            id="inventoryForm"
-            novalidate
-        >
-
+        <form id="stockTransactionForm" novalidate>
             <div class="modal-body">
-
-
-                <div class="form-grid">
-
-
-                    <!-- PRODUCT -->
-
-                    <div class="form-group">
-
-                        <label
-                            for="inventoryProduct"
-                        >
-                            Product
-                            <span class="required">
-                                *
-                            </span>
-                        </label>
-
-                        <select
-                            id="inventoryProduct"
-                            name="product_id"
-                            required
-                        >
-
-                            <option value="">
-                                Select product
-                            </option>
-
-                        </select>
-
+                <!-- PRODUCT -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <div>
+                            <h3>Product</h3>
+                            <p>Select the product affected by this transaction.</p>
+                        </div>
                     </div>
-
-
-                    <!-- QUANTITY -->
-
-                    <div class="form-group">
-
-                        <label
-                            for="inventoryQuantity"
-                        >
-                            Current Stock
-                            <span class="required">
-                                *
-                            </span>
-                        </label>
-
-                        <input
-                            type="number"
-                            id="inventoryQuantity"
-                            name="quantity"
-                            min="0"
-                            step="1"
-                            placeholder="0"
-                            required
-                        >
-
+                    <div class="form-grid">
+                        <div class="form-group form-group-full">
+                            <label for="transactionProduct">
+                                Product
+                                <span class="required">*</span>
+                            </label>
+                            <select
+                                id="transactionProduct"
+                                name="product_id"
+                                required
+                            >
+                                <option value="">Select product</option>
+                            </select>
+                        </div>
                     </div>
-
-
-                    <!-- MINIMUM STOCK -->
-
-                    <div class="form-group">
-
-                        <label
-                            for="inventoryMinimumStock"
-                        >
-                            Minimum Stock
-                        </label>
-
-                        <input
-                            type="number"
-                            id="inventoryMinimumStock"
-                            name="minimum_stock"
-                            min="0"
-                            step="1"
-                            placeholder="0"
-                        >
-
-                    </div>
-
-
-                    <!-- MAXIMUM STOCK -->
-
-                    <div class="form-group">
-
-                        <label
-                            for="inventoryMaximumStock"
-                        >
-                            Maximum Stock
-                        </label>
-
-                        <input
-                            type="number"
-                            id="inventoryMaximumStock"
-                            name="maximum_stock"
-                            min="0"
-                            step="1"
-                            placeholder="Optional"
-                        >
-
-                    </div>
-
-
-                    <!-- LOCATION -->
-
-                    <div class="form-group">
-
-                        <label
-                            for="inventoryLocation"
-                        >
-                            Storage Location
-                        </label>
-
-                        <input
-                            type="text"
-                            id="inventoryLocation"
-                            name="location"
-                            maxlength="150"
-                            placeholder="Warehouse, shelf, rack..."
-                        >
-
-                    </div>
-
-
-                    <!-- STATUS -->
-
-                    <div class="form-group">
-
-                        <label
-                            for="inventoryStatus"
-                        >
-                            Status
-                        </label>
-
-                        <select
-                            id="inventoryStatus"
-                            name="status"
-                        >
-
-                            <option value="active">
-                                Active
-                            </option>
-
-                            <option value="inactive">
-                                Inactive
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- NOTES -->
-
-                    <div class="form-group form-group-full">
-
-                        <label
-                            for="inventoryNotes"
-                        >
-                            Notes
-                        </label>
-
-                        <textarea
-                            id="inventoryNotes"
-                            name="notes"
-                            rows="4"
-                            maxlength="1000"
-                            placeholder="Additional inventory notes..."
-                        ></textarea>
-
-                    </div>
-
                 </div>
-
+                <!-- TRANSACTION -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <div>
+                            <h3>Transaction</h3>
+                            <p>Record the inventory movement.</p>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="transactionType">
+                                Transaction Type
+                                <span class="required">*</span>
+                            </label>
+                            <select
+                                id="transactionType"
+                                name="type"
+                                required
+                            >
+                                <option value="stock_in">Stock In</option>
+                                <option value="stock_out">Stock Out</option>
+                                <option value="adjustment">Adjustment</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionQuantity">
+                                Quantity
+                                <span class="required">*</span>
+                            </label>
+                            <input
+                                type="number"
+                                id="transactionQuantity"
+                                name="quantity"
+                                min="1"
+                                step="1"
+                                placeholder="0"
+                                required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionReference">Reference</label>
+                            <input
+                                type="text"
+                                id="transactionReference"
+                                name="reference"
+                                maxlength="100"
+                                placeholder="Purchase order, invoice, etc."
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionDate">Transaction Date</label>
+                            <input
+                                type="datetime-local"
+                                id="transactionDate"
+                                name="transaction_date"
+                            >
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label for="transactionReason">Reason / Notes</label>
+                            <textarea
+                                id="transactionReason"
+                                name="reason"
+                                rows="4"
+                                maxlength="500"
+                                placeholder="Explain this inventory transaction..."
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- CURRENT STOCK PREVIEW -->
+                <div
+                    class="stock-preview"
+                    id="stockPreview"
+                >
+                    <div>
+                        <span>Current Stock</span>
+                        <strong id="transactionCurrentStock">0</strong>
+                    </div>
+                    <span
+                        class="stock-preview-arrow"
+                        aria-hidden="true"
+                    >
+                        →
+                    </span>
+                    <div>
+                        <span>New Stock</span>
+                        <strong id="transactionNewStock">0</strong>
+                    </div>
+                </div>
             </div>
-
-
             <div class="modal-footer">
-
                 <button
                     type="button"
                     class="btn btn-secondary"
-                    data-close-inventory-modal
+                    data-close-stock-transaction
                 >
                     Cancel
                 </button>
-
-
                 <button
                     type="submit"
                     class="btn btn-primary"
+                    id="saveStockTransactionButton"
                 >
-                    Save Inventory
+                    Save Transaction
                 </button>
-
             </div>
-
         </form>
-
     </div>
-
 </div>
-
-
-<!-- =========================================================
-     INVENTORY DETAILS MODAL
-========================================================== -->
-
+<!-- INVENTORY DETAILS MODAL -->
 <div
     class="modal"
     id="inventoryDetailsModal"
     role="dialog"
     aria-modal="true"
     aria-labelledby="inventoryDetailsTitle"
+    hidden
 >
-
-    <div class="modal-dialog">
-
-
+    <div class="modal-dialog modal-lg">
         <div class="modal-header">
-
             <div>
-
-                <h2 id="inventoryDetailsTitle">
-                    Inventory Details
-                </h2>
-
-                <p>
-                    View current inventory information.
-                </p>
-
+                <h2 id="inventoryDetailsTitle">Inventory Details</h2>
+                <p>View stock and inventory information.</p>
             </div>
-
-
             <button
                 type="button"
                 class="modal-close"
                 data-close-inventory-details
-                aria-label="Close"
+                aria-label="Close inventory details"
             >
                 ×
             </button>
-
         </div>
-
-
         <div class="modal-body">
-
-            <div class="inventory-details">
-
-
-                <div class="inventory-details-header">
-
-                    <div class="inventory-details-icon">
-                        📦
-                    </div>
-
-
-                    <div>
-
-                        <h3 id="inventoryDetailsProduct">
-                            —
-                        </h3>
-
-                        <span>
-                            SKU:
-                            <strong id="inventoryDetailsSku">
-                                —
-                            </strong>
-                        </span>
-
-                    </div>
-
+            <!-- PRODUCT HEADER -->
+            <div class="inventory-details-header">
+                <div
+                    class="inventory-details-icon"
+                    aria-hidden="true"
+                >
+                    📦
                 </div>
-
-
-                <div class="details-grid">
-
-
-                    <div class="detail-item">
-
-                        <span>
-                            Category
-                        </span>
-
-                        <strong id="inventoryDetailsCategory">
-                            —
-                        </strong>
-
+                <div class="inventory-details-main">
+                    <h3 id="inventoryDetailsProduct">—</h3>
+                    <p id="inventoryDetailsSku">SKU: —</p>
+                    <span class="status-badge" id="inventoryDetailsStockStatus"> — </span>
+                </div>
+            </div>
+            <!-- STOCK SUMMARY -->
+            <div class="details-section">
+                <h3>Stock Summary</h3>
+                <div class="inventory-summary-grid">
+                    <div class="inventory-summary-item">
+                        <span>Current Stock</span>
+                        <strong id="inventoryDetailsStock">0</strong>
                     </div>
-
-
-                    <div class="detail-item">
-
-                        <span>
-                            Current Stock
-                        </span>
-
-                        <strong id="inventoryDetailsStock">
-                            0
-                        </strong>
-
+                    <div class="inventory-summary-item">
+                        <span>Reorder Level</span>
+                        <strong id="inventoryDetailsMinimum">0</strong>
                     </div>
-
-
-                    <div class="detail-item">
-
-                        <span>
-                            Minimum Stock
-                        </span>
-
-                        <strong id="inventoryDetailsMinimum">
-                            0
-                        </strong>
-
+                    <div class="inventory-summary-item">
+                        <span>Maximum Stock</span>
+                        <strong id="inventoryDetailsMaximum"> — </strong>
                     </div>
-
-
-                    <div class="detail-item">
-
-                        <span>
-                            Inventory Value
-                        </span>
-
+                    <div class="inventory-summary-item">
+                        <span>Inventory Value</span>
                         <strong id="inventoryDetailsValue">
                             $0.00
                         </strong>
-
                     </div>
-
-
+                </div></div>
+            <!-- PRODUCT INFORMATION -->
+            <div class="details-section">
+                <h3>Product Information</h3>
+                <div class="details-grid">
                     <div class="detail-item">
-
-                        <span>
-                            Stock Status
-                        </span>
-
-                        <strong id="inventoryDetailsStatus">
+                        <span>Category</span>
+                        <strong id="inventoryDetailsCategory">—</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Location</span>
+                        <strong id="inventoryDetailsLocation"> — </strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Cost Price</span>
+                        <strong id="inventoryDetailsCost">
+                            $0.00
+                        </strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Product Status</span>
+                        <strong id="inventoryDetailsProductStatus">
                             —
                         </strong>
-
                     </div>
-
-
-                    <div class="detail-item">
-
-                        <span>
-                            Location
-                        </span>
-
-                        <strong id="inventoryDetailsLocation">
-                            —
-                        </strong>
-
-                    </div>
-
                 </div>
-
-
-                <div class="detail-description">
-
-                    <span>
-                        Notes
-                    </span>
-
-                    <p id="inventoryDetailsNotes">
-                        No notes available.
-                    </p>
-
-                </div>
-
             </div>
-
+            <!-- STOCK LEVEL -->
+            <div class="details-section">
+                <div class="stock-level-header">
+                    <h3>Stock Level</h3>
+                    <span id="inventoryDetailsStockPercentage">
+                        0%
+                    </span>
+                </div>
+                <div class="stock-progress">
+                    <div
+                        class="stock-progress-bar"
+                        id="inventoryDetailsStockProgress"
+                        style="width: 0%;"
+                    ></div>
+                </div>
+            </div>
+            <!-- NOTES -->
+            <div class="detail-description">
+                <span>Notes</span>
+                <p id="inventoryDetailsNotes">
+                    No notes available.
+                </p>
+            </div>
         </div>
-
-
         <div class="modal-footer">
-
             <button
                 type="button"
                 class="btn btn-secondary"
@@ -1241,200 +813,129 @@
             >
                 Close
             </button>
-
+            <button
+                type="button"
+                class="btn btn-success"
+                id="detailsStockInButton"
+            >
+                + Stock In
+            </button>
+            <button
+                type="button"
+                class="btn btn-primary"
+                id="detailsStockOutButton"
+            >
+                − Stock Out
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                id="detailsAdjustmentButton"
+            >
+                Adjust
+            </button>
         </div>
-
     </div>
-
 </div>
-
-
-<!-- =========================================================
-     STOCK ADJUSTMENT MODAL
-========================================================== -->
-
+<!-- INVENTORY MOVEMENTS MODAL -->
 <div
     class="modal"
-    id="stockAdjustmentModal"
+    id="movementsModal"
     role="dialog"
     aria-modal="true"
-    aria-labelledby="stockAdjustmentTitle"
+    aria-labelledby="movementsTitle"
+    hidden
 >
-
-    <div class="modal-dialog">
-
-
+    <div class="modal-dialog modal-xl">
         <div class="modal-header">
-
             <div>
-
-                <h2 id="stockAdjustmentTitle">
-                    Adjust Stock
-                </h2>
-
-                <p>
-                    Increase, decrease, or adjust the current stock.
-                </p>
-
+                <h2 id="movementsTitle">Inventory Movement History</h2>
+                <p>Review all stock transactions and adjustments.</p>
             </div>
-
-
             <button
                 type="button"
                 class="modal-close"
-                data-close-stock-adjustment
-                aria-label="Close"
+                data-close-movements
+                aria-label="Close movement history"
             >
                 ×
             </button>
-
         </div>
-
-
-        <form
-            id="stockAdjustmentForm"
-            novalidate
-        >
-
-            <div class="modal-body">
-
-
-                <div class="adjustment-product">
-
-                    <div class="adjustment-product-icon">
-                        📦
-                    </div>
-
-
-                    <div>
-
-                        <strong id="adjustmentProductName">
-                            —
-                        </strong>
-
-                        <span>
-                            Current stock:
-                            <strong id="adjustmentCurrentStock">
-                                0
-                            </strong>
-                        </span>
-
-                    </div>
-
+        <div class="modal-body">
+            <!-- MOVEMENT FILTERS -->
+            <div class="movement-filters">
+                <div class="filter-control">
+                    <label for="movementTypeFilter">Type</label>
+                    <select id="movementTypeFilter">
+                        <option value="">All Types</option>
+                        <option value="stock_in">Stock In</option>
+                        <option value="stock_out">Stock Out</option>
+                        <option value="adjustment">Adjustment</option>
+                        <option value="sale">Sale</option>
+                        <option value="purchase">Purchase</option>
+                        <option value="return">Return</option>
+                    </select>
                 </div>
-
-
-                <div class="form-grid">
-
-
-                    <div class="form-group">
-
-                        <label
-                            for="adjustmentType"
-                        >
-                            Adjustment Type
-                        </label>
-
-                        <select
-                            id="adjustmentType"
-                            name="adjustment_type"
-                        >
-
-                            <option value="increase">
-                                Increase Stock
-                            </option>
-
-                            <option value="decrease">
-                                Decrease Stock
-                            </option>
-
-                            <option value="adjustment">
-                                Direct Adjustment
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label
-                            for="adjustmentQuantity"
-                        >
-                            Quantity
-                            <span class="required">
-                                *
-                            </span>
-                        </label>
-
-                        <input
-                            type="number"
-                            id="adjustmentQuantity"
-                            name="quantity"
-                            min="1"
-                            step="1"
-                            placeholder="Enter quantity"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group form-group-full">
-
-                        <label
-                            for="adjustmentReason"
-                        >
-                            Reason
-                        </label>
-
-                        <textarea
-                            id="adjustmentReason"
-                            name="reason"
-                            rows="3"
-                            maxlength="500"
-                            placeholder="Reason for stock adjustment..."
-                        ></textarea>
-
-                    </div>
-
+                <div class="filter-control">
+                    <label for="movementFromDate">From</label>
+                    <input type="date" id="movementFromDate">
                 </div>
-
-            </div>
-
-
-            <div class="modal-footer">
+                <div class="filter-control">
+                    <label for="movementToDate">To</label>
+                    <input type="date" id="movementToDate">
+                </div>
 
                 <button
                     type="button"
                     class="btn btn-secondary"
-                    data-close-stock-adjustment
+                    id="filterMovementsButton"
                 >
-                    Cancel
+                    Apply
                 </button>
-
-
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
-                    Apply Adjustment
-                </button>
-
             </div>
-
-        </form>
-
+            <!-- MOVEMENTS TABLE -->
+            <div class="table-container">
+                <table
+                    class="data-table movements-history-table"
+                    id="movementsTable"
+                >
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Before</th>
+                            <th scope="col">After</th>
+                            <th scope="col">Reference</th>
+                            <th scope="col">User</th>
+                        </tr>
+                    </thead>
+                    <tbody id="movementsTableBody">
+                        <tr>
+                            <td colspan="8" class="table-loading-state">
+                                <div class="loading-spinner">
+                                    <span></span>
+                                </div>
+                                <p>Loading movement history...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button
+                type="button"
+                class="btn btn-secondary"
+                data-close-movements
+            >
+                Close
+            </button>
+        </div>
     </div>
-
 </div>
-
-
-<!-- =========================================================
-     TOAST CONTAINER
-========================================================== -->
-
+<!-- TOAST CONTAINER -->
 <div
     id="toastContainer"
     class="toast-container"
@@ -1443,14 +944,31 @@
 ></div>
 
 
-<!-- =========================================================
-     JAVASCRIPT
-========================================================== -->
+<!-- PAGE LOADER -->
+<div
+    class="page-loader"
+    id="pageLoader"
+    hidden
+    aria-hidden="true"
+>
+    <div class="loading-spinner">
+        <span></span>
+    </div>
+</div>
+<!-- JAVASCRIPT -->
 
-<script
-    src="../js/inventory.js"
-    defer
-></script>
+<script src="../js/config.js" defer></script>
+<script src="../js/api.js" defer></script>
+<script src="../js/auth.js" defer></script>
+<script src="../js/utils.js" defer></script>
+<script src="../js/validation.js" defer></script>
+<script src="../js/components/modal.js"defer></script>
+<script src="../js/components/table.js" defer></script>
+<script src="../js/components/pagination.js" defer></script>
+<script src="../js/components/toast.js" defer></script>
+<script src="../js/components/loader.js" defer></script>
+<script src="../js/modules/inventory.js" defer></script>
+<script src="../js/app.js"defer></script>
 
 </body>
 </html>

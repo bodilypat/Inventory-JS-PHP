@@ -1,1296 +1,1054 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="Inventory Management System - Product Management"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inventory Management System - Manage products, pricing and inventory">
     <title>Products | Inventory Management System</title>
-
-    <!-- Main stylesheet -->
-    <link
-        rel="stylesheet"
-        href="../css/style.css"
-    >
-
-    <!-- Product page stylesheet -->
-    <link
-        rel="stylesheet"
-        href="../css/products.css"
-    >
-
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/products.css">
+    <link rel="stylesheet" href="../css/responsive.css">
 </head>
 
 <body>
 
-    <!-- =====================================================
-         APPLICATION LAYOUT
-    ====================================================== -->
+<div class="app-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="../index.html" class="brand">
+                <span class="brand-icon" aria-hidden="true">📦</span>
+                <span class="brand-text">Inventory</span>
+            </a>
+            <button
+                type="button"
+                class="sidebar-close"
+                id="sidebarClose"
+                aria-label="Close sidebar"
+            >
+                ×
+            </button>
+        </div>
+        <nav class="sidebar-navigation" aria-label="Main navigation">
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a
+                href="products.html"
+                class="nav-item active"
+                aria-current="page"
+            >
+                <span class="nav-icon" aria-hidden="true">📦</span>
+                <span>Products</span>
+            </a>
 
-    <div class="app-layout">
+            <a href="categories.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">🗂️</span>
+                <span>Categories</span>
+            </a>
+
+            <a href="inventory.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">🏬</span>
+                <span>Inventory</span>
+            </a>
+
+            <div class="nav-section-title">Transactions</div>
+
+            <a href="purchases.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">🛒</span>
+                <span>Purchases</span>
+            </a>
+
+            <a href="sales.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">💰</span>
+                <span>Sales</span>
+            </a>
+
+            <div class="nav-section-title">Contacts</div>
+
+            <a href="suppliers.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">🚚</span>
+                <span>Suppliers</span>
+            </a>
+
+            <a href="customers.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">👥</span>
+                <span>Customers</span>
+            </a>
+
+            <div class="nav-section-title">Administration</div>
+
+            <a href="reports.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">📈</span>
+                <span>Reports</span>
+            </a>
+
+            <a href="users.html" class="nav-item">
+                <span class="nav-icon" aria-hidden="true">👤</span>
+                <span>Users</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="login.html" class="nav-item logout-link">
+                <span class="nav-icon" aria-hidden="true">🚪</span>
+                <span>Logout</span>
+            </a>
+        </div>
+
+    </aside>
 
 
-        <!-- =================================================
-             SIDEBAR
-        ================================================== -->
-
-        <aside class="sidebar" id="sidebar">
-
-            <div class="sidebar-header">
-
-                <a
-                    href="../index.html"
-                    class="brand"
-                >
-
-                    <span class="brand-icon">
-                        📦
-                    </span>
-
-                    <span class="brand-text">
-                        Inventory
-                    </span>
-
-                </a>
-
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="topbar-left">
                 <button
                     type="button"
-                    class="sidebar-close"
-                    id="sidebarClose"
-                    aria-label="Close sidebar"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
                 >
-                    ×
+                    ☰
                 </button>
 
-            </div>
-
-
-            <nav
-                class="sidebar-navigation"
-                aria-label="Main navigation"
-            >
-
-                <a
-                    href="dashboard.html"
-                    class="nav-item"
-                >
-                    <span class="nav-icon">📊</span>
-                    <span>Dashboard</span>
-                </a>
-
-
-                <a
-                    href="products.html"
-                    class="nav-item active"
-                    aria-current="page"
-                >
-                    <span class="nav-icon">📦</span>
-                    <span>Products</span>
-                </a>
-
-
-                <a
-                    href="categories.html"
-                    class="nav-item"
-                >
-                    <span class="nav-icon">🗂️</span>
-                    <span>Categories</span>
-                </a>
-
-
-                <a
-                    href="inventory.html"
-                    class="nav-item"
-                >
-                    <span class="nav-icon">🏬</span>
-                    <span>Inventory</span>
-                </a>
-
-
-                <div class="nav-section-title">
-                    Transactions
-                </div>
-
-
-                <a
-                    href="purchases.html"
-                    class="nav-item"
-                >
-                    <span class="nav-icon">🛒</span>
-                    <span>Purchases</span>
-                </a>
-
-
-                <a
-                    href="sales.html"
-                    class="nav-item"
-                >
-                    <span class="nav-icon">💰</span>
-                    <span>Sales</span>
-                </a>
-
-
-                <div class="nav-section-title">
-                    Contacts
-                </div>
-
-
-                <a
-                    href="suppliers.html"
-                    class="nav-item"
-                >
-                    <span class="nav-icon">🚚</span>
-                    <span>Suppliers</span>
-                </a>
-
-
-                <a
-                    href="customers.html"
-                    class="nav-item"
-                >
-                    <span class="nav-icon">👥</span>
-                    <span>Customers</span>
-                </a>
-
-
-                <div class="nav-section-title">
-                    Administration
-                </div>
-
-
-                <a
-                    href="reports.html"
-                    class="nav-item"
-                >
-                    <span class="nav-icon">📈</span>
-                    <span>Reports</span>
-                </a>
-
-
-                <a
-                    href="users.html"
-                    class="nav-item"
-                >
-                    <span class="nav-icon">👤</span>
-                    <span>Users</span>
-                </a>
-
-            </nav>
-
-
-            <div class="sidebar-footer">
-
-                <a
-                    href="login.html"
-                    class="nav-item logout-link"
-                >
-                    <span class="nav-icon">🚪</span>
-                    <span>Logout</span>
-                </a>
-
-            </div>
-
-        </aside>
-
-
-        <!-- =================================================
-             MAIN CONTENT
-        ================================================== -->
-
-        <main class="main-content">
-
-
-            <!-- =============================================
-                 TOP HEADER
-            ============================================== -->
-
-            <header class="topbar">
-
-                <div class="topbar-left">
-
-                    <button
-                        type="button"
-                        class="menu-toggle"
-                        id="menuToggle"
-                        aria-label="Open navigation"
-                    >
-                        ☰
-                    </button>
-
-
-                    <div class="page-heading">
-
-                        <h1>
-                            Products
-                        </h1>
-
-                        <p>
-                            Manage your products and stock information.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="topbar-right">
-
-                    <button
-                        type="button"
-                        class="icon-button"
-                        id="notificationsButton"
-                        aria-label="Notifications"
-                    >
-                        🔔
-                    </button>
-
-
-                    <div class="user-menu">
-
-                        <div class="user-avatar">
-                            A
-                        </div>
-
-                        <div class="user-information">
-
-                            <strong>
-                                Administrator
-                            </strong>
-
-                            <span>
-                                Admin
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </header>
-
-
-            <!-- =============================================
-                 PAGE CONTENT
-            ============================================== -->
-
-            <section class="page-content">
-
-
-                <!-- =========================================
-                     PAGE TOOLBAR
-                ========================================== -->
-
-                <div class="page-toolbar">
-
-                    <div>
-
-                        <h2>
-                            Product Management
-                        </h2>
-
-                        <p>
-                            Add, update, search and manage products.
-                        </p>
-
-                    </div>
-
-
-                    <div class="toolbar-actions">
-
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            id="refreshProductsButton"
-                        >
-                            <span>↻</span>
-                            Refresh
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            id="addProductButton"
-                            data-action="add-product"
-                        >
-                            <span>＋</span>
-                            Add Product
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =========================================
-                     PRODUCT STATISTICS
-                ========================================== -->
-
-                <div class="stats-grid">
-
-
-                    <article class="stat-card">
-
-                        <div class="stat-icon stat-icon-blue">
-                            📦
-                        </div>
-
-                        <div class="stat-content">
-
-                            <span>
-                                Total Products
-                            </span>
-
-                            <strong id="totalProducts">
-                                0
-                            </strong>
-
-                        </div>
-
-                    </article>
-
-
-                    <article class="stat-card">
-
-                        <div class="stat-icon stat-icon-green">
-                            ✓
-                        </div>
-
-                        <div class="stat-content">
-
-                            <span>
-                                Active Products
-                            </span>
-
-                            <strong id="activeProducts">
-                                0
-                            </strong>
-
-                        </div>
-
-                    </article>
-
-
-                    <article class="stat-card">
-
-                        <div class="stat-icon stat-icon-orange">
-                            ⚠
-                        </div>
-
-                        <div class="stat-content">
-
-                            <span>
-                                Low Stock
-                            </span>
-
-                            <strong id="lowStockProducts">
-                                0
-                            </strong>
-
-                        </div>
-
-                    </article>
-
-
-                    <article class="stat-card">
-
-                        <div class="stat-icon stat-icon-red">
-                            !
-                        </div>
-
-                        <div class="stat-content">
-
-                            <span>
-                                Out of Stock
-                            </span>
-
-                            <strong id="outOfStockProducts">
-                                0
-                            </strong>
-
-                        </div>
-
-                    </article>
-
-                </div>
-
-
-                <!-- =========================================
-                     PRODUCT TABLE CARD
-                ========================================== -->
-
-                <section class="card products-card">
-
-
-                    <!-- TABLE HEADER -->
-
-                    <div class="card-header">
-
-                        <div>
-
-                            <h2>
-                                Products
-                            </h2>
-
-                            <p>
-                                All products registered in the system.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =====================================
-                         FILTERS
-                    ====================================== -->
-
-                    <div class="product-filters">
-
-
-                        <div class="search-box">
-
-                            <span
-                                class="search-icon"
-                                aria-hidden="true"
-                            >
-                                🔍
-                            </span>
-
-                            <input
-                                type="search"
-                                id="productSearch"
-                                name="product_search"
-                                placeholder="Search by product, SKU or barcode..."
-                                autocomplete="off"
-                                aria-label="Search products"
-                            >
-
-                        </div>
-
-
-                        <div class="filter-control">
-
-                            <label
-                                for="categoryFilter"
-                            >
-                                Category
-                            </label>
-
-                            <select
-                                id="categoryFilter"
-                                name="category"
-                                data-product-category
-                            >
-
-                                <option value="">
-                                    All Categories
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <div class="filter-control">
-
-                            <label
-                                for="statusFilter"
-                            >
-                                Status
-                            </label>
-
-                            <select
-                                id="statusFilter"
-                                name="status"
-                            >
-
-                                <option value="">
-                                    All Status
-                                </option>
-
-                                <option value="active">
-                                    Active
-                                </option>
-
-                                <option value="inactive">
-                                    Inactive
-                                </option>
-
-                                <option value="low_stock">
-                                    Low Stock
-                                </option>
-
-                                <option value="out_of_stock">
-                                    Out of Stock
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <div class="filter-control">
-
-                            <label
-                                for="perPage"
-                            >
-                                Show
-                            </label>
-
-                            <select
-                                id="perPage"
-                                name="per_page"
-                            >
-
-                                <option value="10">
-                                    10
-                                </option>
-
-                                <option value="25">
-                                    25
-                                </option>
-
-                                <option value="50">
-                                    50
-                                </option>
-
-                                <option value="100">
-                                    100
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =====================================
-                         TABLE
-                    ====================================== -->
-
-                    <div class="table-container">
-
-                        <table
-                            class="data-table products-table"
-                            id="productsTable"
-                        >
-
-                            <thead>
-
-                                <tr>
-
-                                    <th
-                                        scope="col"
-                                        data-sort-product="name"
-                                        class="sortable"
-                                    >
-                                        Product
-                                    </th>
-
-
-                                    <th
-                                        scope="col"
-                                        data-sort-product="category"
-                                        class="sortable"
-                                    >
-                                        Category
-                                    </th>
-
-
-                                    <th
-                                        scope="col"
-                                        data-sort-product="price"
-                                        class="sortable"
-                                    >
-                                        Price
-                                    </th>
-
-
-                                    <th
-                                        scope="col"
-                                        data-sort-product="stock"
-                                        class="sortable"
-                                    >
-                                        Stock
-                                    </th>
-
-
-                                    <th
-                                        scope="col"
-                                    >
-                                        Status
-                                    </th>
-
-
-                                    <th
-                                        scope="col"
-                                        class="actions-column"
-                                    >
-                                        Actions
-                                    </th>
-
-                                </tr>
-
-                            </thead>
-
-
-                            <tbody id="productsTableBody">
-
-                                <!--
-                                    Products are loaded from
-                                    the PHP API by products.js.
-
-                                    No mock data is included.
-                                -->
-
-                                <tr>
-
-                                    <td
-                                        colspan="6"
-                                        class="table-loading-state"
-                                    >
-
-                                        <div class="loading-spinner">
-                                            <span></span>
-                                        </div>
-
-                                        <p>
-                                            Loading products...
-                                        </p>
-
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-
-                    <!-- =====================================
-                         PAGINATION
-                    ====================================== -->
-
-                    <div class="pagination-container">
-
-                        <div
-                            id="paginationInfo"
-                            class="pagination-info"
-                        >
-                            No products
-                        </div>
-
-
-                        <div class="pagination-controls">
-
-                            <button
-                                type="button"
-                                class="pagination-button"
-                                id="previousPage"
-                                disabled
-                            >
-                                ←
-                                Previous
-                            </button>
-
-
-                            <div class="page-number">
-
-                                <span
-                                    id="currentPage"
-                                >
-                                    1
-                                </span>
-
-                                <span>
-                                    /
-                                </span>
-
-                                <span
-                                    id="totalPages"
-                                >
-                                    1
-                                </span>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                class="pagination-button"
-                                id="nextPage"
-                                disabled
-                            >
-                                Next
-                                →
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-            </section>
-
-        </main>
-
-    </div>
-
-
-    <!-- =====================================================
-         PRODUCT MODAL
-    ====================================================== -->
-
-    <div
-        class="modal"
-        id="productModal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="productModalTitle"
-    >
-
-        <div class="modal-dialog modal-lg">
-
-
-            <div class="modal-header">
-
-                <div>
-
-                    <h2 id="productModalTitle">
-                        Add Product
-                    </h2>
-
+                <div class="page-heading">
+                    <h1>Products</h1>
                     <p>
-                        Enter the product information below.
+                        Manage products, pricing and inventory levels.
                     </p>
-
                 </div>
-
-
-                <button
-                    type="button"
-                    class="modal-close"
-                    data-close-product-modal
-                    aria-label="Close"
-                >
-                    ×
-                </button>
-
             </div>
 
+            <div class="topbar-right">
+                <button
+                    type="button"
+                    class="icon-button"
+                    id="notificationsButton"
+                    aria-label="View notifications"
+                >
+                    🔔
+                    <span
+                        class="notification-badge"
+                        id="notificationBadge"
+                        hidden
+                    >
+                        0
+                    </span>
+                </button>
 
-            <form
-                id="productForm"
-                novalidate
-            >
-
-                <div class="modal-body">
-
-
-                    <!-- PRODUCT INFORMATION -->
-
-                    <div class="form-section">
-
-                        <div class="form-section-title">
-
-                            <h3>
-                                Product Information
-                            </h3>
-
-                        </div>
-
-
-                        <div class="form-grid">
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="productName"
-                                >
-                                    Product Name
-                                    <span class="required">
-                                        *
-                                    </span>
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="productName"
-                                    name="name"
-                                    placeholder="Enter product name"
-                                    maxlength="150"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="productSku"
-                                >
-                                    SKU
-                                    <span class="required">
-                                        *
-                                    </span>
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="productSku"
-                                    name="sku"
-                                    placeholder="Enter SKU"
-                                    maxlength="100"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="productBarcode"
-                                >
-                                    Barcode
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="productBarcode"
-                                    name="barcode"
-                                    placeholder="Enter barcode"
-                                    maxlength="100"
-                                >
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="productCategory"
-                                >
-                                    Category
-                                </label>
-
-                                <select
-                                    id="productCategory"
-                                    name="category_id"
-                                    data-product-category
-                                >
-
-                                    <option value="">
-                                        Select Category
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-
-                            <div class="form-group form-group-full">
-
-                                <label
-                                    for="productDescription"
-                                >
-                                    Description
-                                </label>
-
-                                <textarea
-                                    id="productDescription"
-                                    name="description"
-                                    rows="4"
-                                    maxlength="1000"
-                                    placeholder="Enter product description"
-                                ></textarea>
-
-                            </div>
-
-                        </div>
-
+                <div class="user-menu">
+                    <div
+                        class="user-avatar"
+                        aria-hidden="true"
+                    >
+                        A
                     </div>
-
-
-                    <!-- PRICING -->
-
-                    <div class="form-section">
-
-                        <div class="form-section-title">
-
-                            <h3>
-                                Pricing
-                            </h3>
-
-                        </div>
-
-
-                        <div class="form-grid">
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="costPrice"
-                                >
-                                    Cost Price
-                                </label>
-
-                                <div class="input-with-prefix">
-
-                                    <span>
-                                        $
-                                    </span>
-
-                                    <input
-                                        type="number"
-                                        id="costPrice"
-                                        name="cost_price"
-                                        min="0"
-                                        step="0.01"
-                                        placeholder="0.00"
-                                    >
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="sellingPrice"
-                                >
-                                    Selling Price
-                                    <span class="required">
-                                        *
-                                    </span>
-                                </label>
-
-                                <div class="input-with-prefix">
-
-                                    <span>
-                                        $
-                                    </span>
-
-                                    <input
-                                        type="number"
-                                        id="sellingPrice"
-                                        name="selling_price"
-                                        min="0"
-                                        step="0.01"
-                                        placeholder="0.00"
-                                        required
-                                    >
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
+                    <div class="user-information">
+                        <strong>Administrator</strong>
+                        <span>Admin</span>
                     </div>
-
-
-                    <!-- INVENTORY -->
-
-                    <div class="form-section">
-
-                        <div class="form-section-title">
-
-                            <h3>
-                                Inventory
-                            </h3>
-
-                        </div>
-
-
-                        <div class="form-grid">
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="productStock"
-                                >
-                                    Current Stock
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="productStock"
-                                    name="stock"
-                                    min="0"
-                                    step="1"
-                                    placeholder="0"
-                                >
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="minimumStock"
-                                >
-                                    Minimum Stock
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="minimumStock"
-                                    name="minimum_stock"
-                                    min="0"
-                                    step="1"
-                                    placeholder="0"
-                                >
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
+                </div>
+            </div>
+        </header>
+        <!-- PAGE CONTENT -->
+        <section class="page-content">
+            <!-- PAGE HEADER -->
+            <div class="page-toolbar">
+                <div>
+                    <h2>Product Management</h2>
+                    <p>Create products, monitor stock and manage pricing.</p>
                 </div>
 
-
-                <div class="modal-footer">
+                <div class="toolbar-actions">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="exportProductsButton"
+                    >
+                        <span aria-hidden="true">⇩</span>
+                        Export
+                    </button>
 
                     <button
                         type="button"
                         class="btn btn-secondary"
-                        data-close-product-modal
+                        id="refreshProductsButton"
                     >
-                        Cancel
+                        <span aria-hidden="true">↻</span>
+                        Refresh
                     </button>
-
 
                     <button
-                        type="submit"
+                        type="button"
                         class="btn btn-primary"
+                        id="addProductButton"
+                        data-action="add-product"
                     >
-                        Save Product
+                        <span aria-hidden="true">＋</span>
+                        Add Product
                     </button>
 
                 </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         PRODUCT DETAILS MODAL
-    ====================================================== -->
-
-    <div
-        class="modal"
-        id="productDetailsModal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="productDetailsTitle"
-    >
-
-        <div class="modal-dialog">
-
-
-            <div class="modal-header">
-
-                <div>
-
-                    <h2 id="productDetailsTitle">
-                        Product Details
-                    </h2>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="modal-close"
-                    data-close-product-details
-                    aria-label="Close"
-                >
-                    ×
-                </button>
-
             </div>
 
+            <!-- PRODUCT STATISTICS -->
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <div class="stat-icon stat-icon-blue">
+                        📦
+                    </div>
+                    <div class="stat-content">
+                        <span>Total Products</span>
+                        <strong id="totalProducts">0</strong>
+                    </div>
+                </article>
 
-            <div class="modal-body">
+                <article class="stat-card">
+                    <div class="stat-icon stat-icon-green">
+                        ✓
+                    </div>
+                    <div class="stat-content">
+                        <span>Active Products</span>
+                        <strong id="activeProducts">0</strong>
+                    </div>
+                </article>
 
+                <article class="stat-card">
+                    <div class="stat-icon stat-icon-orange">
+                        ⚠
+                    </div>
 
-                <div class="product-details">
+                    <div class="stat-content">
+                        <span>Low Stock</span>
+                        <strong id="lowStockProducts">0</strong>
+                    </div>
+                </article>
 
+                <article class="stat-card">
+                    <div class="stat-icon stat-icon-red">
+                        !
+                    </div>
 
-                    <div class="product-details-header">
+                    <div class="stat-content">
+                        <span>Out of Stock</span>
+                        <strong id="outOfStockProducts">0</strong>
+                    </div>
+                </article>
+            </div>
+            <!-- PRODUCTS CARD -->
+            <section class="card products-card">
+                <!-- CARD HEADER -->
+                <div class="card-header">
+                    <div>
+                        <h2>Products</h2>
+                        <p>Search and manage all products in your inventory.</p>
+                    </div>
 
-                        <div
-                            class="product-details-image"
+                    <div class="card-header-actions">
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-secondary"
+                            id="clearFiltersButton"
+                        >
+                            Clear Filters
+                        </button>
+                    </div>
+
+                </div>
+                <!-- FILTER BAR -->
+                <div class="product-filters">
+                    <!-- SEARCH -->
+                    <div class="search-box search-box-large">
+                        <span
+                            class="search-icon"
                             aria-hidden="true"
                         >
-                            📦
-                        </div>
-
-                        <div>
-
-                            <h3
-                                id="productDetailsName"
-                            >
-                                —
-                            </h3>
-
-                            <p
-                                id="productDetailsSku"
-                            >
-                                —
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="details-grid">
-
-
-                        <div class="detail-item">
-
-                            <span>
-                                Category
-                            </span>
-
-                            <strong
-                                id="productDetailsCategory"
-                            >
-                                —
-                            </strong>
-
-                        </div>
-
-
-                        <div class="detail-item">
-
-                            <span>
-                                Price
-                            </span>
-
-                            <strong
-                                id="productDetailsPrice"
-                            >
-                                —
-                            </strong>
-
-                        </div>
-
-
-                        <div class="detail-item">
-
-                            <span>
-                                Stock
-                            </span>
-
-                            <strong
-                                id="productDetailsStock"
-                            >
-                                —
-                            </strong>
-
-                        </div>
-
-
-                        <div class="detail-item">
-
-                            <span>
-                                Status
-                            </span>
-
-                            <strong
-                                id="productDetailsStatus"
-                            >
-                                —
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="detail-description">
-
-                        <span>
-                            Description
+                            🔍
                         </span>
-
-                        <p
-                            id="productDetailsDescription"
+                        <input
+                            type="search"
+                            id="productSearch"
+                            name="product_search"
+                            placeholder="Search product, SKU or barcode..."
+                            autocomplete="off"
+                            aria-label="Search products"
                         >
-                            No description available.
-                        </p>
+                        <button
+                            type="button"
+                            class="search-clear"
+                            id="clearSearchButton"
+                            aria-label="Clear search"
+                            hidden
+                        >
+                            ×
+                        </button>
+                    </div>
+                    <!-- CATEGORY -->
+                    <div class="filter-control">
+                        <label for="categoryFilter">Category</label>
+                        <select
+                            id="categoryFilter"
+                            name="category"
+                            data-product-category
+                        >
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+                    <!-- STATUS -->
+                    <div class="filter-control">
+                        <label for="statusFilter">Stock Status</label>
+                        <select
+                            id="statusFilter"
+                            name="status"
+                        >
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="in_stock">In Stock</option>
+                            <option value="low_stock">Low Stock</option>
+                            <option value="out_of_stock">Out of Stock</option>
+                        </select>
+                    </div>
+                    <!-- SORT -->
+                    <div class="filter-control">
+                        <label for="sortFilter">Sort By</label>
+                        <select id="sortFilter" name="sort">
+                            <option value="name_asc">Name: A–Z</option>
+                            <option value="name_desc">Name: Z–A</option>
+                            <option value="stock_asc">Stock: Low–High</option>
+                            <option value="stock_desc">Stock: High–Low</option>
+                            <option value="price_asc">Price: Low–High</option>
+                            <option value="price_desc">Price: High–Low</option>
+                        </select>
+                    </div>
+                    <!-- PER PAGE -->
+                    <div class="filter-control">
+                        <label for="perPage">Show</label>
+                        <select id="perPage" name="per_page">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- BULK ACTION BAR -->
+                <div class="bulk-actions" id="bulkActions" hidden>
+                    <div class="bulk-selection">
+                        <strong id="selectedProductsCount">
+                            0
+                        </strong>
+                        <span>products selected</span>
+                    </div>
+                    <div class="bulk-action-buttons">
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-secondary"
+                            id="bulkActivateButton"
+                        >
+                            Activate
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-secondary"
+                            id="bulkDeactivateButton"
+                        >
+                            Deactivate
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-danger"
+                            id="bulkDeleteButton"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+                <!-- TABLE -->
+                <div class="table-container">
+                    <table
+                        class="data-table products-table"
+                        id="productsTable"
+                    >
+                        <thead>
+                            <tr>
+                                <thscope="col"
+                                    class="checkbox-column">
+                                    <input
+                                        type="checkbox"
+                                        id="selectAllProducts"
+                                        aria-label="Select all products"
+                                    >
+                                </th>
+                                <th
+                                    scope="col"
+                                    data-sort-product="name"
+                                    class="sortable"
+                                >
+                                    Product
+                                </th>
+                                <th
+                                    scope="col"
+                                    data-sort-product="sku"
+                                    class="sortable"
+                                >
+                                    SKU
+                                </th>
+                                <th
+                                    scope="col"
+                                    data-sort-product="category"
+                                    class="sortable"
+                                >
+                                    Category
+                                </th>
+                                <th
+                                    scope="col"
+                                    data-sort-product="price"
+                                    class="sortable"
+                                >
+                                    Selling Price
+                                </th>
+                                <th
+                                    scope="col"
+                                    data-sort-product="stock"
+                                    class="sortable"
+                                >
+                                    Stock
+                                </th>
+                                <th scope="col">
+                                    Status
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="actions-column"
+                                >
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <tr>
+                                <td
+                                    colspan="8"
+                                    class="table-loading-state"
+                                >
+                                    <div class="loading-spinner">
+                                        <span></span>
+                                    </div>
+                                    <p>
+                                        Loading products...
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- EMPTY STATE -->
+                <div
+                    class="empty-state"
+                    id="productsEmptyState"
+                    hidden
+                >
+                    <div
+                        class="empty-state-icon"
+                        aria-hidden="true"
+                    >
+                        📦
+                    </div>
+                    <h3>No products found</h3>
+                    <p>
+                        Try changing your search or filters,
+                        or create your first product.
+                    </p>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="emptyStateAddProduct"
+                    >
+                        Add Product
+                    </button>
+                </div>
+                <!-- PAGINATION -->
+                <div class="pagination-container">
+                    <div
+                        id="paginationInfo"
+                        class="pagination-info"
+                    >
+                        Showing 0 of 0 products
+                    </div>
+                    <div class="pagination-controls">
+                        <button
+                            type="button"
+                            class="pagination-button"
+                            id="previousPage"
+                            disabled
+                        >
+                            ← Previous
+                        </button>
+                        <div class="page-number">
+                            <span id="currentPage">1</span>
+                            <span>/</span>
+                            <span id="totalPages">1</span>
+                        </div>
+                        <button
+                            type="button"
+                            class="pagination-button"
+                            id="nextPage"
+                            disabled
+                        >
+                            Next →
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+<!-- ADD / EDIT PRODUCT MODAL -->
+<div
+    class="modal"
+    id="productModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="productModalTitle"
+    hidden
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-header">
+            <div>
+                <h2 id="productModalTitle">Add Product</h2>
+                <p id="productModalDescription">Enter the product information below.</p>
+            </div>
+            <button
+                type="button"
+                class="modal-close"
+                data-close-product-modal
+                aria-label="Close product form"
+            >
+                ×
+            </button>
+        </div>
 
+        <form id="productForm" novalidate>
+            <div class="modal-body">
+                <!-- BASIC INFORMATION -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <div>
+                            <h3>Product Information</h3>
+                            <p>Basic information used to identify the product.</p>
+                        </div>
                     </div>
 
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="productName">Product Name
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="productName"
+                                name="name"
+                                placeholder="e.g. Wireless Keyboard"
+                                maxlength="150"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productSku">
+                                SKU
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="productSku"
+                                name="sku"
+                                placeholder="e.g. KB-WL-001"
+                                maxlength="100"
+                                required
+                            >
+
+                            <small class="form-help">SKU must be unique.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productBarcode">Barcode</label>
+
+                            <input
+                                type="text"
+                                id="productBarcode"
+                                name="barcode"
+                                placeholder="Enter barcode"
+                                maxlength="100"
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productCategory">Category</label>
+                            <select
+                                id="productCategory"
+                                name="category_id"
+                                data-product-category
+                            >
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group form-group-full">
+                            <label for="productDescription">Description</label>
+                            <textarea
+                                id="productDescription"
+                                name="description"
+                                rows="4"
+                                maxlength="1000"
+                                placeholder="Describe the product..."
+                            ></textarea>
+                        </div>
+                    </div>
                 </div>
+                <!-- PRICING -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <div>
+                            <h3>Pricing</h3>
+                            <p>Define product cost and selling price.</p>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="costPrice">Cost Price</label>
+                            <div class="input-with-prefix">
+                                <span aria-hidden="true">$</span>
+                                <input
+                                    type="number"
+                                    id="costPrice"
+                                    name="cost_price"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0.00"
+                                >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sellingPrice">Selling Price
+                                <span class="required">*</span>
+                            </label>
+                            <div class="input-with-prefix">
+                                <span aria-hidden="true">$</span>
+                                <input
+                                    type="number"
+                                    id="sellingPrice"
+                                    name="selling_price"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0.00"
+                                    required
+                                >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="productTax">
+                                Tax Rate
+                            </label>
+                            <div class="input-with-suffix">
+                                <input
+                                    type="number"
+                                    id="productTax"
+                                    name="tax_rate"
+                                    min="0"
+                                    max="100"
+                                    step="0.01"
+                                    placeholder="0"
+                                >
+                                <span aria-hidden="true">%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- INVENTORY SETTINGS -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <div>
+                            <h3>Inventory Settings</h3>
+                            <p>Configure stock monitoring for this product.</p>
+                        </div>
+                    </div>
 
+                    <div class="inventory-form-notice">
+                        <span aria-hidden="true">ℹ️</span>
+                        <p>
+                            Stock quantities should normally be changed
+                            through Stock In, Stock Out or Adjustment
+                            transactions.
+                        </p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="minimumStock">Minimum Stock / Reorder Level</label>
+                            <input
+                                type="number"
+                                id="minimumStock"
+                                name="minimum_stock"
+                                min="0"
+                                step="1"
+                                value="0"
+                                placeholder="0"
+                            >
+                            <small class="form-help">
+                                A low-stock warning appears when inventory
+                                reaches this level.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="maximumStock">Maximum Stock</label>
+                            <input
+                                type="number"
+                                id="maximumStock"
+                                name="maximum_stock"
+                                min="0"
+                                step="1"
+                                placeholder="Optional"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label for="productUnit">Unit</label>
+                            <select id="productUnit" name="unit"
+                            >
+                                <option value="pcs">Pieces</option>
+                                <option value="box">Box</option>
+                                <option value="pack">Pack</option>
+                                <option value="kg">Kilogram</option>
+                                <option value="g">Gram</option>
+                                <option value="l">Liter</option>
+                                <option value="ml">Milliliter</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- STATUS -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <div>
+                            <h3>Product Status</h3>
+                            <p>
+                                Control whether this product is available
+                                in the system.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label" for="productActive">
+                            <input
+                                type="checkbox"
+                                id="productActive"
+                                name="is_active"
+                                value="1"
+                                checked
+                            >
+                            <span>Product is active</span>
+                        </label>
+                    </div>
+                </div>
             </div>
-
-
+            <!-- MODAL FOOTER -->
             <div class="modal-footer">
-
                 <button
                     type="button"
                     class="btn btn-secondary"
-                    data-close-product-details
-                >
-                    Close
+                    data-close-product-modal
+                >Cancel
                 </button>
-
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="saveProductButton"
+                >
+                    Save Product
+                </button>
             </div>
-
-        </div>
-
+        </form>
     </div>
+</div>
+<!-- PRODUCT DETAILS MODAL -->
+<div
+    class="modal"
+    id="productDetailsModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="productDetailsTitle"
+    hidden
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-header">
+            <div>
+                <h2 id="productDetailsTitle">Product Details</h2>
+                <p>View product and inventory information.</p>
+            </div>
+            <button
+                type="button"
+                class="modal-close"
+                data-close-product-details
+                aria-label="Close product details"
+            >
+                ×
+            </button>
+        </div>
+        <div class="modal-body">
+            <!-- PRODUCT HEADER -->
+            <div class="product-details-header">
+                <div
+                    class="product-details-image"
+                    id="productDetailsImage"
+                    aria-hidden="true"
+                >
+                    📦
+                </div>
+                <div class="product-details-main">
+                    <h3 id="productDetailsName"> — </h3>
+                    <p id="productDetailsSku"> SKU: —</p>
+                    <span
+                        class="status-badge"
+                        id="productDetailsStatus"
+                    >
+                        —
+                    </span>
+                </div>
+            </div>
+            <!-- PRODUCT INFORMATION -->
+            <div class="details-section">
+                <h3>Product Information</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span>Category</span>
+                        <strong id="productDetailsCategory">
+                            —
+                        </strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Barcode</span>
+                        <strong id="productDetailsBarcode">
+                            —
+                        </strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Cost Price</span>
+                        <strong id="productDetailsCost">
+                            —
+                        </strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Selling Price</span>
+                        <strong id="productDetailsPrice">
+                            —
+                        </strong>
+                    </div>
+                </div>
+            </div>
+            <!-- INVENTORY INFORMATION -->
+            <div class="details-section">
+                <h3>Inventory</h3>
+                <div class="inventory-summary">
+                    <div class="inventory-summary-item">
+                        <span>Current Stock</span>
+                        <strong
+                            id="productDetailsStock"
+                            class="inventory-value"
+                        >
+                            0
+                        </strong>
+                    </div>
+                    <div class="inventory-summary-item">
+                        <span>Minimum Stock</span>
+                        <strong id="productDetailsMinimumStock">
+                            0
+                        </strong>
+                    </div>
+                    <div class="inventory-summary-item">
+                        <span>Available</span>
+                        <strong id="productDetailsAvailable">
+                            0
+                        </strong>
+                    </div>
+                </div>
+            </div>
+            <!-- DESCRIPTION -->
+            <div class="detail-description">
+                <span>Description</span>
+                <p id="productDetailsDescription">No description available.</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button
+                type="button"
+                class="btn btn-secondary"
+                data-close-product-details
+            >
+                Close
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                id="detailsStockInButton"
+            >
+                + Stock In
+            </button>
+            <button
+                type="button"
+                class="btn btn-primary"
+                id="detailsEditButton"
+            >
+                Edit Product
+            </button>
+        </div>
+    </div>
+</div>
 
+<!-- STOCK TRANSACTION MODAL -->
+<div
+    class="modal"
+    id="stockTransactionModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="stockTransactionTitle"
+    hidden
+>
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <div>
+                <h2 id="stockTransactionTitle">Stock Adjustment</h2>
+                <p id="stockTransactionDescription">Update inventory quantity.</p>
+            </div>
+            <button
+                type="button"
+                class="modal-close"
+                data-close-stock-modal
+                aria-label="Close"
+            >
+                ×
+            </button>
+        </div>
+        <form id="stockTransactionForm">
+            <div class="modal-body">
+                <input
+                    type="hidden"
+                    id="stockProductId"
+                    name="product_id"
+                >
+                <div class="stock-product-preview">
+                    <div
+                        class="product-mini-icon"
+                        aria-hidden="true"
+                    >
+                        📦
+                    </div>
+                    <div>
+                        <strong id="stockProductName">—</strong>
+                        <span id="stockProductSku">SKU: —</span>
+                    </div>
+                </div>
+                <div class="current-stock-display">
+                    <span>Current Stock</span>
+                    <strong id="stockCurrentQuantity">
+                        0
+                    </strong>
+                </div>
+                <div class="form-group">
+                    <label for="stockTransactionType">Transaction Type</label>
+                    <select
+                        id="stockTransactionType"
+                        name="type"
+                        required
+                    >
+                        <option value="stock_in">Stock In</option>
+                        <option value="stock_out">Stock Out</option>
+                        <option value="adjustment">Adjustment</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="stockQuantity">Quantity
+                        <span class="required">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="stockQuantity"
+                        name="quantity"
+                        min="1"
+                        step="1"
+                        required
+                        placeholder="Enter quantity"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="stockReason">Reason / Note</label>
+                    <textarea
+                        id="stockReason"
+                        name="reason"
+                        rows="3"
+                        maxlength="500"
+                        placeholder="Enter a reason for this inventory transaction..."
+                    ></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-close-stock-modal
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="saveStockTransactionButton"
+                >
+                    Save Transaction
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- TOAST -->
+<div
+    id="toastContainer"
+    class="toast-container"
+    aria-live="polite"
+    aria-atomic="true"
+>
+</div>
+<!-- LOADER -->
+<div
+    class="page-loader"
+    id="pageLoader"
+    hidden
+    aria-hidden="true"
+>
+    <div class="loading-spinner">
+        <span></span>
+    </div>
+</div>
+<!-- SCRIPTS -->
 
-    <!-- =====================================================
-         TOAST CONTAINER
-    ====================================================== -->
-
-    <div
-        id="toastContainer"
-        class="toast-container"
-        aria-live="polite"
-        aria-atomic="true"
-    ></div>
-
-
-    <!-- =====================================================
-         SCRIPTS
-    ====================================================== -->
-
-    <script
-        src="../products.js"
-        defer
-    ></script>
-
+<script src="../js/config.js" defer></script>
+<script src="../js/api.js" defer></script>
+<script src="../js/auth.js" defer></script>
+<script src="../js/utils.js" defer></script>
+<script src="../js/validation.js" defer></script>
+<script src="../js/components/modal.js" defer></script>
+<script src="../js/components/table.js" defer></script>
+<script src="../js/components/pagination.js" defer></script>
+<script src="../js/components/toast.js" defer></script>
+<script src="../js/components/loader.js" defer></script>
+<script src="../js/modules/products.js" defer></script>
+<script src="../js/app.js" defer></script>
 </body>
 </html>
