@@ -1,107 +1,64 @@
-/**
- * ============================================================
- * INVENTORY MANAGEMENT SYSTEM
+t/** 
+ * INVENTORY MANAGEMENT SYSTEm
  * Product Operations
- *
- * File:
- * frontend/products.js
- *
+ * 
+ * File: Frontend/products.js 
  * Backend expected:
+ * 
  * PHP REST-style API
- *
- * Example:
- * frontend/products.js
- *            ↓
- * backend/api/products.php
- *            ↓
- * MySQL Database
- * ============================================================
- */
+ * Backend/api/products.php
+ * 
+ * MySQL Database 
+ * 
+ * */
 
-"use strict";
+"use strict"
 
-
-/* ============================================================
-   CONFIGURATION
-============================================================ */
-
+/* CONFIGURATION */
 const PRODUCT_API = "../backend/api/products.php";
 
+/**
+ * Change PHP API 
+ * 
+ * GET  products.php
+ * GET  products.php?id=1
+ * POST products.php
+ * PUT  products.php?id=?
+ * DELETE products.php?id=?
+ * 
+ **/
 
-/*
- * Change this if your PHP API is located elsewhere.
- *
- * Expected endpoints:
- *
- * GET    products.php
- * GET    products.php?id=1
- * POST   products.php
- * PUT    products.php?id=1
- * DELETE products.php?id=1
- */
-
-
-/* ============================================================
-   APPLICATION STATE
-============================================================ */
-
+/* APPLICATION */
 const ProductState = {
-
     products: [],
-
     filteredProducts: [],
-
     categories: [],
-
     currentProductId: null,
-
     isLoading: false,
-
     currentPage: 1,
-
     perPage: 10,
-
     search: "",
-
     category: "",
-
     status: "",
-
     sortBy: "name",
-
     sortDirection: "asc"
-
 };
 
-
-/* ============================================================
-   DOM HELPERS
-============================================================ */
-
+/* DOM HELPERS */
 function $(selector) {
     return document.querySelector(selector);
 }
 
-
 function $$(selector) {
-    return document.querySelectorAll(selector);
+    return document.querySelector(selector);
 }
-
 
 function getElement(id) {
     return document.getElementById(id);
 }
 
-
-/* ============================================================
-   API REQUEST
-============================================================ */
-
-async function productRequest(
-    url,
-    options = {}
-) {
-
+/* API REQUEST */
+async function productRequest(url, options = {}) {
     const config = {
         credentials: "same-origin",
 
@@ -112,12 +69,8 @@ async function productRequest(
         ...options
     };
 
-
-    /*
-     * Add JSON content type automatically when
-     * sending a request body.
-     */
-    if (config.body && typeof config.body === "object") {
+    /* Add JSON content type automatically , send a request body */
+    if (config.body && typeof config.body  === "obkect") {
 
         config.headers = {
             ...config.headers,
@@ -125,134 +78,72 @@ async function productRequest(
             "Content-Type": "application/json"
         };
 
-        config.body =
-            JSON.stringify(config.body);
+        config.body = JSON.stringify(config.body);
     }
 
+    const response = await fetch(url, config);
 
-    const response =
-        await fetch(url, config);
-
-
-    /*
-     * Try to parse JSON even for error responses.
-     */
+    /* Parse JSON even for error response. */
     let data = null;
 
     try {
-
         data = await response.json();
-
-    } catch (error) {
-
+    } catch(error) {
         data = null;
-
     }
 
-
     if (!response.ok) {
-
-        const message =
+        const message = 
             data?.message ||
             `Request failed with status ${response.status}`;
 
         throw new Error(message);
     }
 
-
-    /*
-     * Support APIs that return:
-     *
-     * {
-     *   success: true,
-     *   data: [...]
-     * }
-     *
-     * or:
-     *
-     * [...]
-     */
+    /* support API that return */
     return data;
 }
 
-
-/* ============================================================
-   RESPONSE NORMALIZATION
-============================================================ */
-
+/* RESPONSE NORMALIZATION */
 function normalizeProducts(response) {
-
     if (!response) {
         return [];
     }
 
-
-    /*
-     * Common PHP API response:
-     *
-     * {
-     *   success: true,
-     *   data: [...]
-     * }
-     */
+    /* Common PHP API response */
     if (Array.isArray(response.data)) {
         return response.data;
     }
 
-
-    /*
-     * Alternative:
-     *
-     * {
-     *   products: [...]
-     * }
-     */
+    /* alternative */
     if (Array.isArray(response.products)) {
         return response.products;
     }
 
-
-    /*
-     * Direct array response.
-     */
+    /* Direct array response. */
     if (Array.isArray(response)) {
         return response;
     }
 
-
     return [];
 }
 
-
-/* ============================================================
-   LOAD PRODUCTS
-============================================================ */
-
+/* LOAD PRODUCTS */
 async function loadProducts() {
-
     setLoading(true);
 
     showTableLoading();
 
-
     try {
+        const response = await productRequest(PRODUCT_API);
 
-        const response =
-            await productRequest(PRODUCT_API);
-
-
-        ProductState.products =
-            normalizeProducts(response);
-
+        ProductState.products = normalizeProducts(response);
 
         ProductState.currentPage = 1;
 
-
         applyProductFilters();
 
-
         updateProductStatistics();
-
 
     } catch (error) {
 
@@ -261,174 +152,104 @@ async function loadProducts() {
             error
         );
 
-
         showProductError(
-            error.message ||
+            error.message || 
             "Unable to load products."
         );
-
     } finally {
-
         setLoading(false);
-
     }
-
 }
 
-
-/* ============================================================
-   LOAD SINGLE PRODUCT
-============================================================ */
-
+/* LOAD SINGLE PRODUCT */
 async function getProduct(productId) {
 
     if (!productId) {
-        throw new Error("Product ID is required.");
+        throw new Error("product ID is required.");
     }
 
+    const url = `${PRODUCT_API}?=ID=${encodeURIComponent(productId)}`;
+    const response = await productRequest(url);
 
-    const url =
-        `${PRODUCT_API}?id=${encodeURIComponent(productId)}`;
-
-
-    const response =
-        await productRequest(url);
-
-
-    /*
-     * Support:
-     *
-     * { success: true, data: {...} }
-     *
-     * or:
-     *
-     * { product: {...} }
-     */
+    /* Support */
     if (response?.data && !Array.isArray(response.data)) {
         return response.data;
     }
 
-
-    if (
-        response?.product &&
-        !Array.isArray(response.product)
-    ) {
+    if (response?.product && !Array.isArray(response.product)) {
         return response.product;
     }
-
 
     return response;
 }
 
-
-/* ============================================================
-   CREATE PRODUCT
-============================================================ */
-
+/* CREATE PRODUCT */
 async function createProduct(productData) {
-
-    const product =
-        validateProduct(productData);
-
-
-    const response =
+    
+    const product = validateProduct(productData);
+    
+    const response = 
         await productRequest(
             PRODUCT_API,
             {
                 method: "POST",
 
-                body: product
+                body: product 
+
             }
         );
 
-
-    /*
-     * Reload from server rather than manually
-     * inserting a potentially incomplete object.
-     */
+    /* Reload from server rather than manually, inserting a potentially incomplete object. */
     await loadProducts();
 
-
     return response;
-
 }
 
-
-/* ============================================================
-   UPDATE PRODUCT
-============================================================ */
-
-async function updateProduct(
-    productId,
-    productData
-) {
+/* UPDATE PRODUCT */
+async function updateProduct(productId, productData) {
 
     if (!productId) {
         throw new Error("Product ID is required.");
     }
 
+    const product = validateProduct(productData);
 
-    const product =
-        validateProduct(productData);
+    const url = `${PRODUCT_API}?ID=${encodeURIComponent(productId)}`;
 
+    const response = await productRequest(
+        url,
+        {
+            method: "PUT",
 
-    const url =
-        `${PRODUCT_API}?id=${encodeURIComponent(productId)}`;
-
-
-    const response =
-        await productRequest(
-            url,
-            {
-                method: "PUT",
-
-                body: product
-            }
-        );
-
+            body: product
+        }
+    );
 
     await loadProducts();
-
 
     return response;
 
 }
 
-
-/* ============================================================
-   DELETE PRODUCT
-============================================================ */
-
+/* DELETE PRODUCT */
 async function deleteProduct(productId) {
 
     if (!productId) {
-
-        throw new Error(
-            "Product ID is required."
-        );
-
+        throw new Error("Product ID is required.");
     }
 
-
-    const confirmed =
-        window.confirm(
-            "Are you sure you want to delete this product?"
-        );
-
+    const confirmed = window.confirm(
+        "Are you sure you want to delete this product?"
+    );
 
     if (!confirmed) {
         return false;
     }
 
-
-    const url =
-        `${PRODUCT_API}?id=${encodeURIComponent(productId)}`;
-
+    const url = `${PRODUCT_API}$id=${encodeURIComponent(productId)}`;
 
     try {
-
         setLoading(true);
-
 
         await productRequest(
             url,
@@ -437,114 +258,81 @@ async function deleteProduct(productId) {
             }
         );
 
-
         await loadProducts();
-
 
         showToast(
             "Product deleted successfully.",
             "success"
         );
 
-
         return true;
 
-
     } catch (error) {
-
         console.error(
             "Unable to delete product:",
-            error
+            error 
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to delete product.",
             "error"
         );
 
-
         return false;
-
-
     } finally {
-
         setLoading(false);
-
     }
-
 }
 
-
-/* ============================================================
-   VALIDATE PRODUCT
-============================================================ */
-
+/* VALIDATE PRODUCT */
 function validateProduct(data) {
 
     if (!data || typeof data !== "object") {
-
         throw new Error(
             "Invalid product data."
         );
-
     }
 
-
-    const name =
+    const name = 
         String(
-            data.name ??
-            data.product_name ??
+            data.name ?? 
+            data.product_name ?? 
             ""
         ).trim();
 
-
     if (!name) {
-
         throw new Error(
             "Product name is required."
         );
 
     }
 
-
-    const sku =
+    const sku = 
         String(
             data.sku ??
-            data.product_code ??
+            data.product_code ?? 
             ""
-        ).trim();
-
+        ).trim(); 
 
     if (!sku) {
-
         throw new Error(
             "SKU is required."
         );
-
     }
 
-
-    const price =
+    const price = 
         Number(
             data.price ??
             data.selling_price ??
             0
         );
 
-
-    if (
-        Number.isNaN(price) ||
-        price < 0
-    ) {
-
+    if (Number.isNaN(price) || price <0) {
         throw new Error(
             "Selling price must be a valid positive number."
         );
-
     }
-
 
     return {
         ...data,
@@ -553,166 +341,98 @@ function validateProduct(data) {
 
         sku,
 
-        price
-    };
-
+        price 
+    }; 
 }
 
-
-/* ============================================================
-   SEARCH / FILTER
-============================================================ */
-
+/* SEARCH / FILER */
 function applyProductFilters() {
 
-    let products =
-        [...ProductState.products];
+    let products = [...ProductState.products];
 
-
-    /*
-     * Search
-     */
-    const search =
+    /* Search */
+    const search = 
         ProductState.search
             .toLowerCase()
             .trim();
 
-
     if (search) {
-
-        products =
-            products.filter(
+        products = 
+            filters.filter(
                 product => {
-
                     const searchable = [
-
                         product.name,
-
                         product.product_name,
-
                         product.sku,
-
                         product.product_code,
-
                         product.barcode,
-
                         product.category_name
-
                     ]
                         .filter(Boolean)
                         .join(" ")
-                        .toLowerCase();
-
+                        toLowerCase();
 
                     return searchable.includes(search);
-
                 }
             );
-
     }
 
-
-    /*
-     * Category filter
-     */
+    /* Category filter */
     if (ProductState.category) {
 
-        products =
+        products = 
             products.filter(
                 product => {
 
-                    const categoryId =
+                    const categoryId = 
                         String(
-                            product.category_id ??
-                            product.categoryId ??
+                            product.category-id ?? 
+                            product.categoryId ?? 
                             ""
                         );
-
-
+                    
                     return (
-                        categoryId ===
-                        String(ProductState.category)
+                        categoryId === String(Product.category)
                     );
-
                 }
             );
-
     }
 
-
-    /*
-     * Status filter
-     */
+    /* Status filter */
     if (ProductState.status) {
-
-        products =
+        products = 
             products.filter(
                 product => {
 
                     return getProductStatus(
-                        product
+                        product 
                     ) === ProductState.status;
-
                 }
             );
-
     }
 
-
-    /*
-     * Sort
-     */
+    /* Sort */
     products.sort(
         compareProducts
     );
 
-
-    ProductState.filteredProducts =
-        products;
-
+    ProductState.filteredProducts = products;
 
     renderProducts();
-
 }
 
-
-/* ============================================================
-   PRODUCT SORTING
-============================================================ */
-
+/* PRODUCT SORTING */
 function compareProducts(a, b) {
 
-    const field =
-        ProductState.sortBy;
+    const field = ProductState.sortBy;
 
+    let valueA = getSortableValue(a, field);
+    let valueB = getSortableValue(b, field);
 
-    let valueA =
-        getSortableValue(
-            a,
-            field
-        );
-
-
-    let valueB =
-        getSortableValue(
-            b,
-            field
-        );
-
-
-    if (
-        typeof valueA === "string" &&
-        typeof valueB === "string"
-    ) {
-
-        valueA =
-            valueA.toLowerCase();
-
-        valueB =
-            valueB.toLowerCase();
-
+    if (typeof valueA === "string" && typeof valueB === "string") {
+        valueA.toLowerCase();
+        valueB.toLowerCase();
     }
-
 
     if (valueA < valueB) {
         return ProductState.sortDirection === "asc"
@@ -720,105 +440,82 @@ function compareProducts(a, b) {
             : 1;
     }
 
-
     if (valueA > valueB) {
         return ProductState.sortDirection === "asc"
             ? 1
             : -1;
     }
 
-
     return 0;
-
 }
 
-
-function getSortableValue(
-    product,
-    field
-) {
-
-    switch (field) {
-
+function getSortableValue(product, field) {
+    
+    switch(field) {
         case "price":
             return Number(
-                product.price ??
+                product.price ?? 
                 product.selling_price ??
-                0
+                0 
             );
-
 
         case "stock":
             return Number(
                 product.stock ??
                 product.quantity ??
                 product.stock_quantity ??
-                0
+                0 
             );
 
-
-        case "sku":
+        case 'sku':
             return (
-                product.sku ??
-                product.product_code ??
+                product.sku ?? 
+                product.product_code ?? 
                 ""
             );
-
 
         case "category":
             return (
-                product.category_name ??
+                product.category_name ?? 
                 ""
             );
-
 
         case "name":
-        default:
+        default: 
             return (
                 product.name ??
-                product.product_name ??
-                ""
-            );
-
+                product.product_name ?? 
+                "" 
+            ); 
     }
-
 }
 
-
-/* ============================================================
-   PRODUCT STATUS
-============================================================ */
-
+/* PRODUCT STATUS */
 function getProductStatus(product) {
 
     const stock =
         Number(
             product.stock ??
-            product.quantity ??
-            product.stock_quantity ??
+            product.quantity ?? 
+            product,stock_quantity ??
             0
         );
 
-
-    const minimumStock =
+    const minimumStock = 
         Number(
             product.minimum_stock ??
-            product.min_stock ??
+            product.min_stock ?? 
             product.reorder_level ??
             0
         );
 
-
-    /*
-     * Explicit backend status takes priority.
-     */
+    /* explicit backend status takes priority. */
     if (product.status) {
 
-        const status =
-            String(
+        const status = 
+            String (
                 product.status
             ).toLowerCase();
-
 
         if (
             [
@@ -830,548 +527,350 @@ function getProductStatus(product) {
         ) {
             return status;
         }
-
     }
-
 
     if (stock <= 0) {
         return "out_of_stock";
     }
 
-
-    if (
-        minimumStock > 0 &&
-        stock <= minimumStock
-    ) {
+    if (minimumStock > 0 && stock <= minimumStock) {
         return "low_stock";
     }
-
 
     return "active";
 
 }
 
-
-/* ============================================================
-   RENDER PRODUCTS
-============================================================ */
-
+/* RENDER PRODUCTS */
 function renderProducts() {
 
-    const tbody =
-        getElement(
-            "productsTableBody"
-        );
-
+    const tbody = getElement(
+        "productTableBody"
+    );
 
     if (!tbody) {
         return;
     }
 
-
-    const products =
-        getPaginatedProducts();
-
-
+    const products = getPaginatedProducts();
     tbody.innerHTML = "";
 
-
-    if (
-        ProductState.filteredProducts.length === 0
-    ) {
-
+    if (ProductState.filteredProducts.length === 0) {
         tbody.innerHTML = `
-
-            <tr>
+            tr>
                 <td
                     colspan="100"
                     class="table-empty-state"
                 >
-                    <div class="products-empty">
-
+                    <div class="product-empty">
                         <div class="empty-icon">
                             📦
                         </div>
+                    
+                        <h3>No product found</h3>
 
-                        <h3>
-                            No products found
-                        </h3>
-
-                        <p>
-                            There are no products
-                            matching your search
-                            or filter.
-                        </p>
-
+                        <p>There are no products matching your search or filter.</p>
                     </div>
                 </td>
             </tr>
-
         `;
-
 
         updatePagination();
 
         return;
     }
 
-
     products.forEach(
         product => {
-
             tbody.appendChild(
                 createProductRow(
                     product
                 )
             );
-
         }
     );
 
-
     updatePagination();
-
 }
 
-
-/* ============================================================
-   CREATE PRODUCT TABLE ROW
-============================================================ */
-
+/* CREATE PRODUCT TABLE ROW  */
 function createProductRow(product) {
 
-    const tr =
-        document.createElement("tr");
+    const tr = document.createElement("tr");
 
-
-    const id =
-        product.id ??
+    const id = 
+        product.id ?? 
         product.product_id;
 
-
-    const name =
+    const name = 
         escapeHTML(
             product.name ??
             product.product_name ??
             "Unnamed Product"
         );
 
-
-    const sku =
+    const sku = 
         escapeHTML(
             product.sku ??
             product.product_code ??
-            "—"
+            "-"
         );
 
-
-    const category =
+    const category = 
         escapeHTML(
             product.category_name ??
-            "—"
+            "-"
         );
 
-
-    const price =
+    const price = 
         formatCurrency(
             product.price ??
             product.selling_price
         );
 
-
-    const stock =
+    const stock = 
         Number(
             product.stock ??
-            product.quantity ??
-            product.stock_quantity ??
-            0
+            product.quantity ?? 
+            product.stock_quantity ?? 
+            0 
         );
 
-
-    const status =
+    const status = 
         getProductStatus(
-            product
+            product 
         );
 
-
-    const statusLabel =
+    const statusLabel = 
         getStatusLabel(
-            status
+            statusbar
         );
-
 
     tr.innerHTML = `
-
         <td>
-
             <div class="product-table-name">
-
                 <div class="product-table-image">
                     ${getProductImage(product)}
                 </div>
-
+                
                 <div>
-
-                    <strong>
-                        ${name}
-                    </strong>
-
-                    <small>
-                        ${sku}
-                    </small>
-
+                    <strong>${name}</strong>
+                    
+                    <small>${sku}</small>
                 </div>
-
             </div>
-
         </td>
-
-
+        
+        <td>${category}</td>
+        
         <td>
-            ${category}
-        </td>
-
-
-        <td>
-            ${price}
-        </td>
-
-
-        <td>
-
-            <span
-                class="stock-value
-                ${getStockClass(product)}"
-            >
+            <span class="stock-value ${getStockClass(product)}">
                 ${formatNumber(stock)}
             </span>
-
         </td>
-
+        
 
         <td>
-
-            <span
-                class="status-badge
-                ${getStatusClass(status)}"
-            >
+            <span class="status-badge ${getStatusClass(status)}">
                 ${statusLabel}
             </span>
-
         </td>
 
-
         <td>
-
             <div class="product-actions">
-
                 <button
                     type="button"
-                    class="action-button view-product"
-                    data-id="${escapeAttribute(id)}"
-                    title="View product"
+                    class="action-button vie-product"
+                    data-in="${escapeAttribute(id)}"
+                    title="View Product"
                 >
                     👁️
                 </button>
 
-
-                <button
+                <button 
                     type="button"
                     class="action-button edit-product"
                     data-id="${escapeAttribute(id)}"
-                    title="Edit product"
+                    title="Edit Product"
                 >
-                    ✏️
+                     ✏️
                 </button>
 
-
-                <button
+                <button 
                     type="button"
                     class="action-button delete-product"
-                    data-id="${escapeAttribute(id)}"
+                    data-in="${escapeAttribute(id)}"
                     title="Delete product"
                 >
                     🗑️
                 </button>
-
             </div>
-
         </td>
-
     `;
 
-
     return tr;
-
 }
 
-
-/* ============================================================
-   PRODUCT IMAGE
-============================================================ */
-
+/* PRODUCT IMAGE */
 function getProductImage(product) {
-
-    const image =
+    const image = 
         product.image ??
-        product.image_url ??
+        product.image_ur ??
         product.photo ??
         "";
-
 
     if (image) {
 
         return `
-            <img
+            <img 
                 src="${escapeAttribute(image)}"
                 alt=""
                 loading="lazy"
             >
         `;
-
     }
 
-
     return "📦";
-
 }
 
-
-/* ============================================================
-   PAGINATION
-============================================================ */
-
+/* PAGINATION */
 function getPaginatedProducts() {
+    const start = (ProductState.currentPage - 1) * ProductState.perPage;
 
-    const start =
-        (
-            ProductState.currentPage -
-            1
-        ) *
-        ProductState.perPage;
+    const end = start + ProductState.perPage;
 
-
-    const end =
-        start +
-        ProductState.perPage;
-
-
-    return ProductState
-        .filteredProducts
-        .slice(start, end);
-
+    return ProductState.filteredProducts.slice(start, end);
 }
-
 
 function updatePagination() {
+    const total = ProductState.filteredProducts.length;
 
-    const total =
-        ProductState.filteredProducts.length;
-
-
-    const totalPages =
+    const totalPages = 
         Math.max(
             1,
             Math.ceil(
                 total /
-                ProductState.perPage
+                ProductState.perPage 
             )
         );
 
-
-    if (
-        ProductState.currentPage >
-        totalPages
-    ) {
-
-        ProductState.currentPage =
-            totalPages;
-
+    if (ProductState.currentPage > totalPages) {
+        ProductState.currentPage = totalPages;
     }
 
-
-    const currentPageElement =
+    const currentPageElement = 
         getElement(
             "currentPage"
         );
 
-
-    const totalPagesElement =
+    const totalPagesElement = 
         getElement(
             "totalPages"
         );
-
-
-    const previousButton =
+    
+    const previousButton = 
         getElement(
             "previousPage"
         );
 
-
-    const nextButton =
+    const nextButton = 
         getElement(
             "nextPage"
         );
 
-
     if (currentPageElement) {
-
-        currentPageElement.textContent =
-            ProductState.currentPage;
-
+        currentPageElement.textContent = ProductState.currentPage;
     }
-
 
     if (totalPagesElement) {
-
-        totalPagesElement.textContent =
-            totalPages;
-
+        totalPagesElement.textContent = totalPages;
     }
-
 
     if (previousButton) {
-
-        previousButton.disabled =
-            ProductState.currentPage <= 1;
-
+        previousButton.disabled = ProductState.currentPage <= 1;
     }
-
 
     if (nextButton) {
-
-        nextButton.disabled =
-            ProductState.currentPage >= totalPages;
-
+        nextButton.disabled = ProductState.currentPage >= totalPages;
     }
 
-
-    const paginationInfo =
+    const paginationInfo = 
         getElement(
             "paginationInfo"
         );
 
-
     if (paginationInfo) {
-
+        
         if (total === 0) {
-
-            paginationInfo.textContent =
+            paginationInfo.textContent = 
                 "No products";
-
         } else {
 
-            const start =
+            const start = 
                 (
-                    ProductState.currentPage -
-                    1
-                ) *
-                ProductState.perPage +
-                1;
+                    ProductState.currentPage - 1
+                ) * ProductState.perPage + 1;
 
-
-            const end =
+            const end = 
                 Math.min(
                     ProductState.currentPage *
                     ProductState.perPage,
                     total
                 );
 
-
-            paginationInfo.textContent =
+            paginationInfo.textContent = 
                 `Showing ${start}-${end} of ${total}`;
-
         }
-
     }
-
 }
 
-
-/* ============================================================
-   NEXT PAGE
-============================================================ */
-
+/* NEXT PAGE */
 function nextPage() {
 
-    const totalPages =
+    const totalPages = 
         Math.max(
             1,
             Math.ceil(
-                ProductState.filteredProducts.length /
-                ProductState.perPage
+                ProductState.filteredProducts.length / 
+                ProductState.perPage 
             )
         );
 
-
-    if (
-        ProductState.currentPage <
-        totalPages
-    ) {
-
+    if (PRODUCT_API.currentPage < totalPages ) {
         ProductState.currentPage++;
 
         renderProducts();
-
     }
-
 }
 
-
-/* ============================================================
-   PREVIOUS PAGE
-============================================================ */
-
+/* PREVIOUS PAGE */
 function previousPage() {
 
-    if (
-        ProductState.currentPage >
-        1
-    ) {
-
+    if (ProductState.currentPage > 1) {
         ProductState.currentPage--;
-
         renderProducts();
-
     }
-
 }
 
-
-/* ============================================================
-   PRODUCT FORM
-============================================================ */
-
+/* PRODUCT FORM */
 function getProductFormData() {
+    const form = getElement(
+        "productForm"
+    );
 
-    const form =
-        getElement(
-            "productForm"
-        );
-
-
-    if (!form) {
-
+    if(!form) {
         throw new Error(
-            "Product form was not found."
+            "product form was not found."
         );
-
     }
 
+    const formData = new FormData(form);
 
-    const formData =
-        new FormData(form);
+    const data = Object.fromEntries(
+        formData.entries()
+    );
 
-
-    const data =
-        Object.fromEntries(
-            formData.entries()
-        );
-
-
-    /*
-     * Convert numeric values.
-     */
+    /* Convert numeric values. */
     [
         "price",
         "cost_price",
@@ -1384,261 +883,159 @@ function getProductFormData() {
         "category_id"
     ].forEach(
         field => {
-
-            if (
-                data[field] !== undefined &&
-                data[field] !== ""
-            ) {
-
-                const value =
+            if (data[field] !== undefined && data[field] !== "") {
+                const value = 
                     Number(
                         data[field]
                     );
 
-
                 if (!Number.isNaN(value)) {
                     data[field] = value;
                 }
-
             }
-
         }
     );
 
-
     return data;
-
 }
 
-
-/* ============================================================
-   SUBMIT PRODUCT FORM
-============================================================ */
-
+/* SUBMIT PRODUCT FORM */ 
 async function handleProductSubmit(event) {
-
     event.preventDefault();
 
+    const form = event.currentTarget;
 
-    const form =
-        event.currentTarget;
-
-
-    const submitButton =
+    const submitButton = 
         form.querySelector(
-            "[type='submit']"
+            "[type='submit]"
         );
 
-
     try {
-
-        const data =
-            getProductFormData();
-
+        const data = getProductFormData();
 
         if (submitButton) {
-
             submitButton.disabled = true;
 
-            submitButton.dataset.originalText =
-                submitButton.textContent;
-
-            submitButton.textContent =
-                ProductState.currentProductId
+            submitButton.dataset.originalText = 
+                submitButton.currentProductId 
                     ? "Updating..."
                     : "Saving...";
-
         }
 
-
-        if (
-            ProductState.currentProductId
-        ) {
-
+        if (ProductState.currentProductId) {
             await updateProduct(
                 ProductState.currentProductId,
-                data
+                data 
             );
-
 
             showToast(
-                "Product updated successfully.",
+                "product update successfully.",
                 "success"
             );
-
         } else {
-
             await createProduct(
                 data
             );
-
-
-            showToast(
-                "Product created successfully.",
-                "success"
-            );
-
         }
 
-
-        ProductState.currentProductId =
-            null;
-
-
-        closeProductModal();
-
+        ProductState.currentProductId = null;
+        clearProductModal();
 
         form.reset();
-
-
     } catch (error) {
-
         console.error(
             "Product save error:",
-            error
+            error 
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to save product.",
             "error"
         );
-
-
     } finally {
-
+        
         if (submitButton) {
+            submitButton.disabled = false;
 
-            submitButton.disabled =
-                false;
-
-            submitButton.textContent =
-                submitButton.dataset.originalText ||
-                "Save Product";
-
+            submitButton.textContent = submitButton.dataset.originalText || "Save Product";
         }
-
     }
-
 }
 
-
-/* ============================================================
-   OPEN CREATE PRODUCT
-============================================================ */
-
+/* OPEN CREATE PRODUCT */
 function openCreateProduct() {
+    ProductState.currentProductId = null;
 
-    ProductState.currentProductId =
-        null;
-
-
-    const form =
-        getElement(
-            "productForm"
-        );
-
+    const form = getElement(
+        "productForm"
+    );
 
     if (form) {
         form.reset();
     }
 
-
     setProductModalTitle(
         "Add Product"
     );
 
-
     openProductModal();
-
 }
 
-
-/* ============================================================
-   OPEN EDIT PRODUCT
-============================================================ */
-
+/* OPEN EDIT PRODUCT */
 async function openEditProduct(productId) {
-
     try {
-
-        ProductState.currentProductId =
-            productId;
-
+        ProductState.currentProductId = productId;
 
         openProductModal();
-
 
         setProductModalTitle(
             "Edit Product"
         );
 
-
         setProductFormLoading(
-            true
+            true 
         );
 
-
-        const product =
+        const product = 
             await getProduct(
-                productId
+                productId 
             );
 
-
         populateProductForm(
-            product
+            product 
         );
-
-
     } catch (error) {
-
         console.error(
             "Unable to load product:",
-            error
+            error 
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to load product.",
             "error"
         );
 
-
         closeProductModal();
-
-
     } finally {
-
         setProductFormLoading(
-            false
+            false 
         );
-
     }
-
 }
 
-
-/* ============================================================
-   POPULATE PRODUCT FORM
-============================================================ */
-
+/* POPULATE PRODUCT FORM */
 function populateProductForm(product) {
-
-    const form =
-        getElement(
-            "productForm"
-        );
-
+    const form = getElement(
+        "productForm"
+    );
 
     if (!form || !product) {
         return;
     }
 
-
-    const values = {
-
+    const value = {
         name:
             product.name ??
             product.product_name,
@@ -1648,10 +1045,10 @@ function populateProductForm(product) {
             product.name,
 
         sku:
-            product.sku ??
+            product.sku ?? 
             product.product_code,
 
-        product_code:
+        product_code: 
             product.product_code ??
             product.sku,
 
@@ -1661,14 +1058,8 @@ function populateProductForm(product) {
         category_id:
             product.category_id,
 
-        description:
-            product.description,
-
-        cost_price:
-            product.cost_price,
-
         selling_price:
-            product.selling_price ??
+            product.selling_price ?? 
             product.price,
 
         price:
@@ -1682,743 +1073,481 @@ function populateProductForm(product) {
 
         quantity:
             product.quantity ??
-            product.stock ??
+            product.stock ?? 
             product.stock_quantity,
 
         minimum_stock:
-            product.minimum_stock ??
-            product.min_stock ??
+            product.minimum_stock ?? 
+            product.min_stock ?? 
             product.reorder_level,
 
         min_stock:
-            product.min_stock ??
+            product.min_stock ?? 
             product.minimum_stock ??
             product.reorder_level,
 
         reorder_level:
-            product.reorder_level ??
-            product.minimum_stock ??
-            product.min_stock
-
+            product.reorder_level ?? 
+            product.minimum_stock ?? 
+            product.min_stock 
     };
-
 
     Object.entries(values)
         .forEach(
             ([name, value]) => {
+                const field = form.element[name];
 
-                const field =
-                    form.elements[name];
-
-
-                if (
-                    field &&
-                    value !== undefined &&
-                    value !== null
-                ) {
-
-                    field.value =
-                        value;
-
+                if (field && value !== undefined && value !== null){
+                    field.value = value;
                 }
-
             }
         );
-
 }
 
-
-/* ============================================================
-   VIEW PRODUCT
-============================================================ */
-
+/* VIEW PRODUCT */
 async function openViewProduct(productId) {
-
     try {
+        const product = await getProduct(productId);
 
-        const product =
-            await getProduct(
-                productId
-            );
-
-
-        showProductDetails(
-            product
-        );
-
-
+        showProductDetails(product);
     } catch (error) {
-
         console.error(
             "Unable to load product:",
-            error
+            error 
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to load product.",
             "error"
         );
-
     }
-
 }
 
-
-/* ============================================================
-   PRODUCT DETAILS
-============================================================ */
-
+/* PRODUCT DETAILS */
 function showProductDetails(product) {
-
-    const modal =
+    const modal = 
         getElement(
             "productDetailsModal"
         );
 
-
     if (!modal) {
-
-        /*
-         * If no details modal exists,
-         * use the edit screen instead.
-         */
         openEditProduct(
-            product.id ??
-            product.product_id
+            product.id ?? 
+            product.product_id 
         );
 
-        return;
-
+        return ;
     }
 
-
     const fields = {
-
         productDetailsName:
-            product.name ??
-            product.product_name ??
-            "—",
+            product.name ?? 
+            product.product_name ?? 
+            "-",
 
         productDetailsSku:
-            product.sku ??
-            product.product_code ??
-            "—",
+            product.sku ?? 
+            product.product_code ?? 
+            "-",
 
         productDetailsCategory:
             product.category_name ??
-            "—",
+            "-",
 
-        productDetailsPrice:
+        productDetailsCategory:
+            product.category_name ??
+            "-",
+
+        productDetailsPrice: 
             formatCurrency(
-                product.price ??
+                product.price ?? 
                 product.selling_price
             ),
 
         productDetailsStock:
             formatNumber(
                 product.stock ??
-                product.quantity ??
-                product.stock_quantity ??
+                product.quantity ?? 
+                product.stock_quantity ?? 
                 0
             ),
-
+        
         productDetailsStatus:
             getStatusLabel(
                 getProductStatus(product)
             ),
 
-        productDetailsDescription:
-            product.description ??
+        productDetailsDescription: 
+            product.description ?? 
             "No description available."
-
     };
 
-
-    Object.entries(fields)
+    Object.entries(fields) 
         .forEach(
             ([id, value]) => {
-
-                const element =
-                    getElement(id);
-
+                const element = getElement(id);
 
                 if (element) {
-                    element.textContent =
-                        value;
+                    element.textContent = value;
                 }
-
             }
         );
 
-
     modal.classList.add("active");
-
 }
 
-
-/* ============================================================
-   MODAL
-============================================================ */
-
+/* MODAL */
 function openProductModal() {
-
-    const modal =
-        getElement(
-            "productModal"
-        );
-
+    const modal = getElement(
+        "productModal"
+    );
 
     if (!modal) {
         return;
     }
 
-
     modal.classList.add("active");
-
 
     document.body.classList.add(
         "modal-open"
     );
-
 }
 
-
 function closeProductModal() {
-
-    const modal =
-        getElement(
-            "productModal"
-        );
-
+    const modal = getElement(
+        "productModal"
+    );
 
     if (modal) {
         modal.classList.remove("active");
     }
-
 
     document.body.classList.remove(
         "modal-open"
     );
-
 }
 
-
 function closeProductDetailsModal() {
-
-    const modal =
-        getElement(
-            "productDetailsModal"
-        );
-
+    const modal = getElement(
+        "productDetailsModal"
+    );
 
     if (modal) {
         modal.classList.remove("active");
     }
-
 }
-
 
 function setProductModalTitle(title) {
-
-    const element =
-        getElement(
-            "productModalTitle"
-        );
-
-
-    if (element) {
-        element.textContent =
-            title;
-    }
-
-}
-
-
-function setProductFormLoading(isLoading) {
-
-    const form =
-        getElement(
-            "productForm"
-        );
-
-
-    if (!form) {
-        return;
-    }
-
-
-    form.classList.toggle(
-        "is-loading",
-        isLoading
+    const element = getElement(
+        "productModalTitle"
     );
 
+    if (eleemnt) {
+        element.textContent = title;
+    }
+}
 
-    Array.from(
+function setProductFormLoading(isLoading) {
+    const form = getElement(
+        "productForm"
+    );
+
+    if (!form) {
+        return
+    }
+    
+    Array.form(
         form.elements
     ).forEach(
         element => {
-
-            element.disabled =
-                isLoading;
-
+            element.disabled = isLoading;
         }
     );
-
 }
 
-
-/* ============================================================
-   STATISTICS
-============================================================ */
-
+/* STATISTICS */
 function updateProductStatistics() {
+    const products = ProductState.products;
 
-    const products =
-        ProductState.products;
+    const total = products.filter(
+        product => getProductStatus(product) === "active"
+    ).length;
 
+    const lowStock = products.filter(
+        product => 
+            getProductStatus(product) === "low_stock"
+    ).length;
 
-    const total =
-        products.length;
-
-
-    const active =
-        products.filter(
-            product =>
-                getProductStatus(product) ===
-                "active"
-        ).length;
-
-
-    const lowStock =
-        products.filter(
-            product =>
-                getProductStatus(product) ===
-                "low_stock"
-        ).length;
-
-
-    const outOfStock =
-        products.filter(
-            product =>
-                getProductStatus(product) ===
-                "out_of_stock"
-        ).length;
-
+    const outOfStock = products.filter(
+        product => 
+            getProductStatus(product) === 
+            "out_of_stock"
+    ).length;
 
     setText(
         "totalProducts",
         formatNumber(total)
     );
 
+    setText(
+        "totalProduct",
+        formatNumber(total)
+    );
 
     setText(
         "activeProducts",
         formatNumber(active)
     );
 
-
-    setText(
-        "lowStockProducts",
-        formatNumber(lowStock)
-    );
-
-
     setText(
         "outOfStockProducts",
         formatNumber(outOfStock)
     );
-
 }
 
-
-/* ============================================================
-   CATEGORIES
-============================================================ */
-
+/* CATEGORIES */
 async function loadProductCategories() {
-
-    const categoryApi =
-        "../backend/api/categories.php";
-
+    const categoryApi = "../backend/api/categories.php"
 
     try {
+        const response = await productRequest(categoryApi);
 
-        const response =
-            await productRequest(
-                categoryApi
-            );
-
-
-        ProductState.categories =
-            normalizeProducts(response);
-
+        ProductState.categories = normalizeProducts(response);
 
         populateCategorySelects();
-
-
     } catch (error) {
-
         console.error(
             "Unable to load categories:",
-            error
+            error 
         );
-
     }
-
 }
 
-
 function populateCategorySelects() {
-
-    const selects =
-        document.querySelectorAll(
-            "[data-product-category]"
-        );
-
+    const selects = document.querySelectorAll(
+        "[data-product-category"
+    );
 
     selects.forEach(
         select => {
-
-            /*
-             * Keep existing placeholder.
-             */
-            const firstOption =
-                select.querySelector(
-                    "option"
-                );
-
+            /* Keep existing placeholder */
+            const firstOption = select.querySelector(
+                "option"
+            );
 
             select.innerHTML = "";
 
-
             if (firstOption) {
-
                 select.appendChild(
                     firstOption
                 );
-
             }
-
 
             ProductState.categories
                 .forEach(
                     category => {
 
-                        const option =
-                            document.createElement(
-                                "option"
-                            );
+                        const option = document.createElement(
+                            "option"
+                        );
 
-
-                        option.value =
-                            category.id ??
+                        option.value = 
+                            category.iid ?? 
                             category.category_id;
 
-
-                        option.textContent =
-                            category.name ??
+                        option.textContent = 
+                            category.name ?? 
                             category.category_name;
-
 
                         select.appendChild(
                             option
                         );
-
                     }
                 );
-
         }
     );
-
 }
 
-
-/* ============================================================
-   EVENT HANDLERS
-============================================================ */
-
+/* EVENT HANDLERS */
 function initializeProductEvents() {
-
-    /*
-     * Product form.
-     */
-    const form =
+    /* Product form. */
+    const form = 
         getElement(
             "productForm"
         );
 
-
     if (form) {
-
         form.addEventListener(
             "submit",
             handleProductSubmit
         );
-
     }
 
-
-    /*
-     * Add product buttons.
-     */
+    /* Add Product button. */
     $$(
         "[data-action='add-product'], #addProductButton"
     ).forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                openCreateProduct
-            );
-
-        }
+            button => {
+                button.addEventListener(
+                    "click",
+                    openCreateProduct 
+                );
+            }
     );
 
-
-    /*
-     * Search.
-     */
-    const search =
+    /* Search */
+    const search = 
         getElement(
             "productSearch"
         );
 
-
     if (search) {
-
         search.addEventListener(
             "input",
             function () {
+                ProductState.search = this.value;
 
-                ProductState.search =
-                    this.value;
-
-                ProductState.currentPage =
-                    1;
+                ProductState.currentPage = 1;
 
                 applyProductFilters();
-
             }
         );
-
     }
 
-
-    /*
-     * Category filter.
-     */
-    const category =
+    /* Category filter. */
+    const category = 
         getElement(
             "categoryFilter"
         );
 
-
     if (category) {
-
         category.addEventListener(
             "change",
             function () {
+                ProductState.category = this.value;
 
-                ProductState.category =
-                    this.value;
+                ProductState.currentPage = 1;
 
-                ProductState.currentPage =
-                    1;
-
-                applyProductFilters();
+                applyProductFilers();
 
             }
         );
-
     }
 
-
-    /*
-     * Status filter.
-     */
-    const status =
+    /* Status filter */
+    const status = 
         getElement(
             "statusFilter"
         );
 
-
     if (status) {
-
+        
         status.addEventListener(
             "change",
             function () {
 
-                ProductState.status =
-                    this.value;
+                ProductState = this.value;
 
-                ProductState.currentPage =
-                    1;
+                ProductState.currentPage = 1;
 
                 applyProductFilters();
-
             }
         );
-
     }
 
-
-    /*
-     * Per-page selection.
-     */
-    const perPage =
-        getElement(
-            "perPage"
-        );
-
+    /* Per-page selector */
+    const perPage = getElement(
+        "perPage"
+    );
 
     if (perPage) {
-
         perPage.addEventListener(
             "change",
             function () {
-
-                ProductState.perPage =
+                ProductState.perPage = 
                     Number(this.value) || 10;
-
-                ProductState.currentPage =
-                    1;
+                
+                ProductState.currentPage = 1;
 
                 renderProducts();
-
             }
         );
-
     }
 
-
-    /*
-     * Previous page.
-     */
-    const previous =
-        getElement(
-            "previousPage"
-        );
-
+    /* Previous page. */
+    const previous = getElement("previousPage");
 
     if (previous) {
-
         previous.addEventListener(
             "click",
-            previousPage
+            previousPage 
         );
-
     }
 
-
-    /*
-     * Next page.
-     */
-    const next =
-        getElement(
-            "nextPage"
-        );
-
+    /* Next page */
+    const next = getElement("nextPage");
 
     if (next) {
-
         next.addEventListener(
             "click",
             nextPage
         );
-
     }
 
-
-    /*
-     * Table actions.
-     */
-    const table =
-        getElement(
-            "productsTableBody"
-        );
-
+    /* Table actions. */
+    const table = getElement("productsTableBody");
 
     if (table) {
-
         table.addEventListener(
             "click",
             handleProductTableAction
         );
-
     }
 
-
-    /*
-     * Close product modal.
-     */
+    /* Close product modal. */
     $$(
-        "[data-close-product-modal]"
+        "[data-close-product-modal"
     ).forEach(
         button => {
-
             button.addEventListener(
                 "click",
                 closeProductModal
             );
-
         }
     );
 
-
-    /*
-     * Close details modal.
-     */
+    /* Close details modal. */
     $$(
         "[data-close-product-details]"
     ).forEach(
         button => {
-
             button.addEventListener(
                 "click",
                 closeProductDetailsModal
             );
-
         }
     );
 
-
-    /*
-     * Close modal when clicking outside.
-     */
+    /* Close modal when clicking outside */
     $$(".modal").forEach(
         modal => {
-
             modal.addEventListener(
                 "click",
                 function (event) {
-
-                    if (
-                        event.target ===
-                        modal
-                    ) {
-
+                    if (event.target === modal) {
                         modal.classList.remove(
                             "active"
                         );
 
-                        document.body.classList.remove(
-                            "modal-open"
-                        );
-
+                        document.body.classList.remove("modal-open");
                     }
-
                 }
             );
-
         }
     );
 
-
-    /*
-     * Escape key closes modals.
-     */
+    /* Escape key closes modals. */
     document.addEventListener(
         "keydown",
         function (event) {
@@ -2427,330 +1556,190 @@ function initializeProductEvents() {
                 return;
             }
 
-
             closeProductModal();
 
             closeProductDetailsModal();
-
         }
     );
-
 }
 
-
-/* ============================================================
-   TABLE ACTION HANDLER
-============================================================ */
-
+/* TABLE ACTION HANDLER */
 async function handleProductTableAction(event) {
-
-    const button =
+    const button = 
         event.target.closest(
-            "button[data-id]"
+            "button[data-id"
         );
 
-
     if (!button) {
-        return;
+        return ;
     }
 
-
-    const productId =
-        button.dataset.id;
-
-
+    const productId = button.dataset.id;
     if (!productId) {
         return;
     }
 
-
-    if (
-        button.classList.contains(
-            "edit-product"
-        )
-    ) {
-
-        await openEditProduct(
-            productId
-        );
+    if (button.classList.contains("edit-product")) {
+        await openEditProduct(productId);
 
         return;
-
     }
 
-
-    if (
-        button.classList.contains(
-            "view-product"
-        )
-    ) {
-
-        await openViewProduct(
-            productId
-        );
-
+    if (button.classList.contains("view-product")) {
+        await openViewProduct(productId);
+        
         return;
-
     }
 
-
-    if (
-        button.classList.contains(
-            "delete-product"
-        )
-    ) {
-
-        await deleteProduct(
-            productId
-        );
-
+    if (button.classList.contains("delete-product")) {
+        await deleteProduct(productId);
     }
-
 }
 
-
-/* ============================================================
-   SORT HANDLER
-============================================================ */
-
+/* SORT HANDLER */
 function sortProducts(field) {
+    
+    if (ProductState.sortBy === field) {
 
-    if (
-        ProductState.sortBy ===
-        field
-    ) {
-
-        ProductState.sortDirection =
-            ProductState.sortDirection ===
-            "asc"
-                ? "desc"
-                : "asc";
+        ProductState.sortDirection = ProductState.sortDirection === 
+        "asc"
+            ? "desc"
+            : "asc";
 
     } else {
+        ProductState.sortBy = field;
 
-        ProductState.sortBy =
-            field;
-
-        ProductState.sortDirection =
-            "asc";
-
+        ProductState.sortDirection = "asc";
     }
 
-
-    applyProductFilters();
-
+    applyProductFilers();
 }
 
-
-/* ============================================================
-   TABLE HEADER SORT
-============================================================ */
-
+/* TABLE HANDLER SORT */
 function initializeSorting() {
+    $$("[data-sort-product]").forEach(
 
-    $$(
-        "[data-sort-product]"
-    ).forEach(
         header => {
-
             header.addEventListener(
                 "click",
-                function () {
-
+                function() {
+                    
                     sortProducts(
-                        this.dataset.sortProduct
+                        this.dataset.sortProduct 
                     );
-
                 }
             );
-
         }
     );
-
 }
 
-
-/* ============================================================
-   LOADING UI
-============================================================ */
-
+/* LOADING UI */
 function setLoading(isLoading) {
 
-    ProductState.isLoading =
-        isLoading;
-
+    ProductState.isLoading = isLoading;
 
     document.body.classList.toggle(
         "products-loading",
         isLoading
     );
 
-
-    const refreshButton =
-        getElement(
-            "refreshProductsButton"
-        );
-
+    const refreshButton = getElement(
+        "refreshProductsButton"
+    );
 
     if (refreshButton) {
-
-        refreshButton.disabled =
-            isLoading;
-
+        refreshButton.disabled = isLoading;
     }
-
 }
-
 
 function showTableLoading() {
 
-    const tbody =
-        getElement(
-            "productsTableBody"
-        );
-
+    const tbody = getElement(
+        "productsTableBody"
+    );
 
     if (!tbody) {
         return;
     }
 
-
     tbody.innerHTML = `
-
         <tr>
-
-            <td
-                colspan="100"
-                class="table-loading-state"
-            >
-
+            <td colspan="100" class="table-loading-start">
                 <div class="loading-spinner">
                     <span></span>
                 </div>
-
-                <p>
-                    Loading products...
-                </p>
-
+                
+                <p>Loading products...</p>
             </td>
-
         </tr>
-
     `;
 
 }
 
-
-/* ============================================================
-   ERROR UI
-============================================================ */
-
+/* ERROR UI */
 function showProductError(message) {
 
-    const tbody =
-        getElement(
-            "productsTableBody"
-        );
-
+    const tbody = getElement(
+        "productsTableBody"
+    );
 
     if (!tbody) {
         return;
     }
 
-
     tbody.innerHTML = `
-
         <tr>
-
-            <td
-                colspan="100"
-                class="table-error-state"
-            >
-
+            <td colspan="100" class="table-error-state">
                 <div class="error-icon">
                     ⚠️
                 </div>
-
-                <h3>
-                    Unable to load products
-                </h3>
-
-                <p>
-                    ${escapeHTML(message)}
-                </p>
-
+                
+                <h3>Unable to load products</h3>
+                
+                <p>${escapeHTML(message)}</p>
+                
                 <button
                     type="button"
                     class="btn btn-primary"
-                    onclick="loadProducts()"
+                    onclick="loadingProducts()"
                 >
                     Try Again
                 </button>
-
             </td>
-
         </tr>
-
     `;
-
 }
 
-
-/* ============================================================
-   TOAST NOTIFICATIONS
-============================================================ */
-
+/* TOAST NOTIFICATIONS */
 function showToast(
     message,
-    type = "info"
+    type="info"
 ) {
-
-    let container =
-        getElement(
-            "toastContainer"
-        );
-
+    let container = getElement(
+        "totalContainer"
+    );
 
     if (!container) {
 
-        container =
-            document.createElement(
-                "div"
-            );
+        container = document.createElement("div");
 
-        container.id =
-            "toastContainer";
+        container.className = "toast-container";
 
-        container.className =
-            "toast-container";
-
-        document.body.appendChild(
-            container
-        );
-
+        document.body.appendChild(container);
     }
 
+    const toast = document.createElement("div");
 
-    const toast =
-        document.createElement(
-            "div"
-        );
+    toast.className = `toast toast-${type}`;
 
-
-    toast.className =
-        `toast toast-${type}`;
-
-
-    const icon =
-        type === "success"
+    const icon = 
+        type === "success" 
             ? "✓"
             : type === "error"
-                ? "!"
+                ? "|"
                 : "i";
 
-
     toast.innerHTML = `
-
         <span class="toast-icon">
             ${icon}
         </span>
@@ -2759,53 +1748,36 @@ function showToast(
             ${escapeHTML(message)}
         </span>
 
-        <button
+        <button 
             type="button"
             class="toast-close"
-            aria-label="Close"
+            aria-babel="Close"
         >
-            ×
+            x
         </button>
-
     `;
 
+    container.appendChild(toast);
 
-    container.appendChild(
-        toast
+    const close = toast.querySelector(
+        ".toast-close"
     );
-
-
-    const close =
-        toast.querySelector(
-            ".toast-close"
-        );
-
 
     close.addEventListener(
         "click",
         function () {
 
-            removeToast(
-                toast
-            );
-
+            removeToast(toast)
         }
     );
 
-
     setTimeout(
         () => {
-
-            removeToast(
-                toast
-            );
-
+            removeToast(toast);
         },
         5000
     );
-
 }
-
 
 function removeToast(toast) {
 
@@ -2813,38 +1785,24 @@ function removeToast(toast) {
         return;
     }
 
-
     toast.classList.add(
         "toast-removing"
     );
 
-
     setTimeout(
         () => {
-
             toast.remove();
-
-        },
-        200
+        }, 200
     );
-
 }
 
-
-/* ============================================================
-   FORMATTERS
-============================================================ */
-
+/* FORMATTERS */
 function formatNumber(value) {
-
-    const number =
-        Number(value);
-
+    const number = Number(value);
 
     if (Number.isNaN(number)) {
         return "0";
     }
-
 
     return new Intl.NumberFormat(
         undefined,
@@ -2852,80 +1810,55 @@ function formatNumber(value) {
             maximumFractionDigits: 2
         }
     ).format(number);
-
 }
 
-
 function formatCurrency(value) {
-
-    const number =
-        Number(value);
-
+    const number = Number(value);
 
     if (
-        Number.isNaN(number) ||
-        value === null ||
-        value === undefined ||
+        Number.isNaN(number) || 
+        value === null || 
+        value === undefined || 
         value === ""
     ) {
-
-        return "—";
-
+        return "-";
     }
 
-
-    /*
-     * Change currency here if required.
-     *
-     * Example:
-     * currency: "USD"
-     */
+    /* Change currency here if required. */
     return new Intl.NumberFormat(
         undefined,
         {
             style: "currency",
 
             currency: "USD",
-
-            minimumFractionDigits: 2
+            minimumFractionDigits: 2 
         }
     ).format(number);
-
 }
 
-
-/* ============================================================
-   STATUS HELPERS
-============================================================ */
-
-function getStatusLabel(status) {
-
+/* STATUS HELPERS */
+function setStatusLabel(status) {
+    
     switch (status) {
-
         case "active":
             return "Active";
 
         case "inactive":
-            return "Inactive";
-
-        case "low_stock":
+            return "Inactive"
+        
+        case "low-stock":
             return "Low Stock";
 
-        case "out_of_stock":
+        case "out-of-stock":
             return "Out of Stock";
 
         default:
-            return "Unknown";
-
+            return "Unknow";
     }
-
 }
 
-
 function getStatusClass(status) {
-
     switch (status) {
-
         case "active":
             return "status-active";
 
@@ -2940,160 +1873,95 @@ function getStatusClass(status) {
 
         default:
             return "status-neutral";
-
     }
-
 }
-
 
 function getStockClass(product) {
 
-    const status =
-        getProductStatus(
-            product
-        );
+    const status = getProductStatus(product);
 
-
-    if (
-        status === "out_of_stock"
-    ) {
-
+    if (status === "out_of_stock") {
         return "stock-danger";
-
     }
 
-
-    if (
-        status === "low_stock"
-    ) {
-
+    if (status === "low_stock") {
         return "stock-warning";
-
     }
-
 
     return "stock-normal";
-
 }
 
-
-/* ============================================================
-   DOM TEXT HELPER
-============================================================ */
-
+/* DOM TEXT HELPER */
 function setText(
     id,
-    value
+    value,
 ) {
-
-    const element =
-        getElement(id);
-
+    const element = getElement(id);
 
     if (element) {
-
-        element.textContent =
-            value;
-
+        element.textContent = value;
     }
-
 }
 
-
-/* ============================================================
-   HTML ESCAPING
-============================================================ */
-
+/* HTML ESCAPING */
 function escapeHTML(value) {
-
-    return String(
-        value ?? ""
-    )
+    return String(value ?? "")
         .replace(
-            /&/g,
+            /&/g, 
             "&amp;"
         )
         .replace(
             /</g,
-            "&lt;"
+            "&lt;" 
         )
         .replace(
             />/g,
             "&gt;"
         )
         .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
             /'/g,
             "&#039;"
         );
-
 }
-
 
 function escapeAttribute(value) {
-
     return escapeHTML(
-        value
+        value 
     );
-
 }
 
-
-/* ============================================================
-   INITIALIZATION
-============================================================ */
-
+/* INITIALIZATION */
 async function initializeProducts() {
-
     initializeProductEvents();
 
     initializeSorting();
 
-
-    /*
-     * Load categories and products independently.
-     * A category API failure should not prevent
-     * products from loading.
-     */
+    /* Load categories and products independently.
+    * A category API failure should not prevent 
+    * products from loading
+    */
     await Promise.allSettled([
         loadProductCategories(),
         loadProducts()
     ]);
-
 }
 
-
-/* ============================================================
-   REFRESH BUTTON
-============================================================ */
-
-const refreshProductsButton =
+/* REFRESH BUTTON */
+const refreshProductsButton = 
     getElement(
         "refreshProductsButton"
     );
 
-
 if (refreshProductsButton) {
-
     refreshProductsButton.addEventListener(
         "click",
         function () {
-
             loadProducts();
-
         }
     );
-
 }
 
-
-/* ============================================================
-   GLOBAL EXPORTS
-============================================================ */
-
+/* GLOBAL EXPORTS */
 window.ProductOperations = {
 
     loadProducts,
@@ -3110,57 +1978,28 @@ window.ProductOperations = {
 
     openEditProduct,
 
-    openViewProduct,
-
     applyProductFilters,
 
     sortProducts,
-
-    nextPage,
-
     previousPage,
-
     showToast
-
 };
 
+/* expose commonly used functions directly. */
+window.loadProducts = loadProducts;
 
-/*
- * Also expose commonly used functions directly.
- * This makes integration with HTML buttons easier.
- */
-window.loadProducts =
-    loadProducts;
+window.openCreateProduct = openCreateProduct;
 
-window.openCreateProduct =
-    openCreateProduct;
+window.openEditProduct = openViewProduct;
 
-window.openEditProduct =
-    openEditProduct;
+window.deleteProduct = deleteProduct;
 
-window.openViewProduct =
-    openViewProduct;
-
-window.deleteProduct =
-    deleteProduct;
-
-
-/* ============================================================
-   START APPLICATION
-============================================================ */
-
-if (
-    document.readyState ===
-    "loading"
-) {
-
+/* START APPLICATION */
+if (document.readyState === "loading") {
     document.addEventListener(
         "DOMContentLoaded",
         initializeProducts
     );
-
 } else {
-
     initializeProducts();
-
 }
