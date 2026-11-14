@@ -1,39 +1,26 @@
 /**
- * ============================================================
- * INVENTORY MANAGEMENT SYSTEM
- * Category Operations
- *
- * File:
- * frontend/js/categories.js
- *
- * Expected backend:
- * backend/api/categories.php
- *
- * Supported operations:
- *
- * GET    categories.php
- * GET    categories.php?id=1
- * POST   categories.php
- * PUT    categories.php?id=1
- * DELETE categories.php?id=1
- * ============================================================
- */
+ *  INVENTORY MANAGEMENT SYSTEM
+ *  Category Operations  
+ * 
+ *  File: Frontend/js/categories.js 
+ * 
+ * Expected Backend:
+ *  File: Backend/api/categories.php
+ * Support operations:
+ * GET  categories.
+ * GET  categories.php?id=?
+ * POST categories.php 
+ * PUT  categories.php?id=?
+ * DELETE categories.php?id=? 
+ * 
+ **/
 
 "use strict";
 
+/* CONFIGURATION */
+const CATEGORY_API = "../../backend/api/categories.php";
 
-/* ============================================================
-   CONFIGURATION
-============================================================ */
-
-const CATEGORY_API =
-    "../../backend/api/categories.php";
-
-
-/* ============================================================
-   STATE
-============================================================ */
-
+/* STATE */
 const CategoryState = {
 
     categories: [],
@@ -54,39 +41,27 @@ const CategoryState = {
 
     sortDirection: "asc",
 
-    isLoading: false
-
+    isLoading: false 
 };
 
-
-/* ============================================================
-   DOM HELPERS
-============================================================ */
-
+/* DOM HELPERS */
 function $(selector) {
     return document.querySelector(selector);
 }
-
 
 function $$(selector) {
     return document.querySelectorAll(selector);
 }
 
-
 function getElement(id) {
     return document.getElementById(id);
 }
 
-
-/* ============================================================
-   API REQUEST
-============================================================ */
-
+/* API REQUEST */
 async function categoryRequest(
     url,
     options = {}
 ) {
-
     const config = {
 
         credentials: "same-origin",
@@ -96,458 +71,273 @@ async function categoryRequest(
         },
 
         ...options
-
     };
 
-
-    /*
-     * Automatically convert JavaScript objects
-     * into JSON for POST / PUT requests.
-     */
-    if (
-        config.body &&
-        typeof config.body === "object"
-    ) {
-
+    /* Automatically convert JavaScript objects */
+    if (config.body && typeof config.body === "object") {
         config.headers = {
-
             ...config.headers,
 
-            "Content-Type":
-                "application/json"
-
+            "Content-Type": "application/json"
         };
 
-
-        config.body =
+        config.body = 
             JSON.stringify(
-                config.body
+                config.body 
             );
-
     }
 
-
-    const response =
-        await fetch(
-            url,
-            config
-        );
-
+    const response = await fetch(
+        url,
+        config
+    );
 
     let data = null;
 
-
     try {
-
-        data =
-            await response.json();
-
+        data = await response.json();
     } catch (error) {
-
         data = null;
-
     }
-
 
     if (!response.ok) {
 
         throw new Error(
-            data?.message ||
+            data?.message || 
             `Request failed with status ${response.status}`
         );
-
     }
 
-
-    /*
-     * Support APIs returning:
-     *
-     * {
-     *   success: true,
-     *   data: [...]
-     * }
-     *
-     * or direct arrays/objects.
-     */
+    /* Support APIs returning */
     return data;
-
 }
 
-
-/* ============================================================
-   RESPONSE NORMALIZATION
-============================================================ */
-
+/* RESPONSE NORMALIZATION */
 function normalizeCategories(response) {
-
     if (!response) {
         return [];
     }
 
-
-    if (
-        Array.isArray(
-            response.data
-        )
-    ) {
-
+    if (Array.isArray(response.data)) {
         return response.data;
-
     }
 
+    if (Array.isArray(response.categories)) {
+        return response.categories
+    } 
 
-    if (
-        Array.isArray(
-            response.categories
-        )
-    ) {
-
-        return response.categories;
-
-    }
-
-
-    if (
-        Array.isArray(response)
-    ) {
-
+    if (Array.isArray(response)) {
         return response;
-
     }
-
 
     return [];
-
 }
 
-
-/* ============================================================
-   LOAD CATEGORIES
-============================================================ */
-
+/* LOAD CATEGORIES */
 async function loadCategories() {
-
     setLoading(true);
 
     showCategoriesLoading();
 
-
     try {
+        const response = await categoryRequest(
+            CATEGORY_API
+        );
 
-        const response =
-            await categoryRequest(
-                CATEGORY_API
-            );
-
-
-        CategoryState.categories =
+        CategoryState.categories = 
             normalizeCategories(
-                response
+                response 
             );
 
-
-        CategoryState.currentPage =
-            1;
-
+        CategoryState.currentPage = 1;
 
         applyCategoryFilters();
 
-
         updateCategoryStatistics();
-
-
     } catch (error) {
-
         console.error(
             "Unable to load categories:",
-            error
+            error 
         );
-
 
         showCategoryError(
-            error.message ||
+            error.message || 
             "Unable to load categories."
         );
-
-
     } finally {
-
         setLoading(false);
-
     }
-
 }
 
-
-/* ============================================================
-   GET SINGLE CATEGORY
-============================================================ */
-
+/* GET SINGLE CATEGORY */
 async function getCategory(categoryId) {
 
     if (!categoryId) {
-
         throw new Error(
             "Category ID is required."
         );
-
     }
 
+    const url = `${CATEGORY_API}?id=${encodeURIComponent(categoryId)}`;
 
-    const url =
-        `${CATEGORY_API}?id=${encodeURIComponent(categoryId)}`;
+    const response = await categoryRequest(url);
 
-
-    const response =
-        await categoryRequest(
-            url
-        );
-
-
-    if (
-        response?.data &&
-        !Array.isArray(response.data)
-    ) {
-
+    if (response?.data && !Array.isArray(response.data)) {
         return response.data;
-
     }
 
-
-    if (
-        response?.category &&
-        !Array.isArray(response.category)
-    ) {
-
+    if (response?.category && !Array.isArray(response.category)) {
         return response.category;
-
     }
-
 
     return response;
-
 }
 
-
-/* ============================================================
-   CREATE CATEGORY
-============================================================ */
-
+/* CREATE CATEGORY */
 async function createCategory(categoryData) {
-
-    const category =
+    const category = 
         validateCategory(
             categoryData
         );
 
+    const response = await categoryRequest(
+        CATEGORY_API,
+        {
+            method: "POST",
 
-    const response =
-        await categoryRequest(
-            CATEGORY_API,
-            {
-                method: "POST",
-
-                body: category
-            }
-        );
-
+            body: category
+        }
+    );
 
     await loadCategories();
 
-
     return response;
-
 }
 
-
-/* ============================================================
-   UPDATE CATEGORY
-============================================================ */
-
+/* UPDATE CATEGORY */
 async function updateCategory(
     categoryId,
-    categoryData
+    categoryData 
 ) {
-
     if (!categoryId) {
-
         throw new Error(
             "Category ID is required."
         );
-
     }
 
-
-    const category =
+    const category = 
         validateCategory(
             categoryData
-        );
+    );
 
+    const url = `${CATEGORY_API}?id=${encodeURIComponent(categoryId)}`;
+    
+    const response = await categoryRequest(
+        url,
+        {
+            method: "PUT",
 
-    const url =
-        `${CATEGORY_API}?id=${encodeURIComponent(categoryId)}`;
-
-
-    const response =
-        await categoryRequest(
-            url,
-            {
-                method: "PUT",
-
-                body: category
-            }
-        );
-
-
+            body: category
+        }
+    );
     await loadCategories();
 
-
     return response;
-
 }
 
-
-/* ============================================================
-   DELETE CATEGORY
-============================================================ */
-
+/* DELETE CATEGORY */
 async function deleteCategory(categoryId) {
 
     if (!categoryId) {
-
         throw new Error(
             "Category ID is required."
         );
-
     }
 
-
-    /*
-     * Ask for confirmation before deleting.
-     */
-    const confirmed =
-        window.confirm(
-            "Are you sure you want to delete this category?"
-        );
-
+    /* Ask for confirmation before deleting. */
+    const confirmed = window.confirm(
+        "Are you sure you want to delete this category?"
+    );
 
     if (!confirmed) {
-        return false;
+        return false 
     }
 
-
-    const url =
-        `${CATEGORY_API}?id=${encodeURIComponent(categoryId)}`;
-
+    const url = `${CATEGORY_API}?id=${encodeURIComponent(categoryId)}`;
 
     try {
-
         setLoading(true);
-
 
         await categoryRequest(
             url,
             {
-                method: "DELETE"
+                emthod: "DELETE"
             }
         );
 
-
         await loadCategories();
-
 
         showToast(
             "Category deleted successfully.",
             "success"
         );
 
-
         return true;
-
-
     } catch (error) {
-
         console.error(
             "Unable to delete category:",
-            error
+            error 
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to delete category.",
             "error"
         );
 
-
         return false;
 
-
     } finally {
-
         setLoading(false);
-
     }
-
 }
 
-
-/* ============================================================
-   VALIDATE CATEGORY
-============================================================ */
-
+/* VALIDATE CATEGORY */
 function validateCategory(data) {
 
-    if (
-        !data ||
-        typeof data !== "object"
-    ) {
-
+    if (!data || typeof data !== "object") {
         throw new Error(
             "Invalid category data."
         );
-
     }
 
-
-    const name =
-        String(
-            data.name ??
-            data.category_name ??
-            ""
-        ).trim();
-
+    const name = String(
+        data.name ?? 
+        data.category_name ?? 
+        ""
+    ).trim();
 
     if (!name) {
-
         throw new Error(
             "Category name is required."
         );
-
     }
 
-
     if (name.length > 150) {
-
         throw new Error(
             "Category name cannot exceed 150 characters."
         );
-
     }
 
+    const description = String(
+        data.description ?? ""
+    ).trim();
 
-    const description =
-        String(
-            data.description ?? ""
-        ).trim();
-
-
-    const status =
-        data.status
+    const status = 
+        data.status 
             ? String(data.status)
                 .toLowerCase()
             : "active";
-
 
     if (
         ![
@@ -555,13 +345,10 @@ function validateCategory(data) {
             "inactive"
         ].includes(status)
     ) {
-
         throw new Error(
-            "Invalid category status."
+            "invalid category status."
         );
-
     }
-
 
     return {
 
@@ -571,243 +358,142 @@ function validateCategory(data) {
 
         description,
 
-        status
-
+        status,
     };
-
 }
 
-
-/* ============================================================
-   FILTER CATEGORIES
-============================================================ */
-
+/* FILTER CATEGORIES */
 function applyCategoryFilters() {
-
-    let categories =
+    let categories = 
         [
             ...CategoryState.categories
         ];
 
-
-    /*
-     * Search
-     */
-    const search =
-        CategoryState.search
+    /* Search */
+    const search = 
+        CategoryState.search 
             .toLowerCase()
             .trim();
 
-
     if (search) {
-
-        categories =
-            categories.filter(
+        categories = categories.filter(
                 category => {
-
                     const searchable = [
-
                         category.name,
-
                         category.category_name,
-
                         category.description
-
                     ]
                         .filter(Boolean)
                         .join(" ")
                         .toLowerCase();
 
-
                     return searchable.includes(
                         search
                     );
-
                 }
-            );
-
+        );
     }
 
-
-    /*
-     * Status
-     */
-    if (
-        CategoryState.status
-    ) {
-
-        categories =
-            categories.filter(
-                category => {
-
-                    return getCategoryStatus(
-                        category
-                    ) ===
-                    CategoryState.status;
-
-                }
-            );
-
+    /* Status */
+    if (CategoryState.status) {
+        categories = categories.filter(
+            category => {
+                return getCategoryStatus(
+                    category 
+                ) === 
+                CategoryState.status;
+            }
+        );
     }
 
+    /* Sort */
+    categories.sort(compareCategories);
 
-    /*
-     * Sort
-     */
-    categories.sort(
-        compareCategories
-    );
-
-
-    CategoryState.filteredCategories =
-        categories;
-
+    CategoryState.filteredCategories = categories;
 
     renderCategories();
-
 }
 
+/* SORT CATEGORIES */
+function compareCategories(a, b) {
 
-/* ============================================================
-   SORT CATEGORIES
-============================================================ */
+    let valueA = getCategorySortValue(
+        a,
+        CategoryState.sortBy
+    );
 
-function compareCategories(
-    a,
-    b
-) {
+    let valueB = getCategorySortValue(
+        b,
+        CategoryState.sortBy
+    );
 
-    let valueA =
-        getCategorySortValue(
-            a,
-            CategoryState.sortBy
-        );
-
-
-    let valueB =
-        getCategorySortValue(
-            b,
-            CategoryState.sortBy
-        );
-
-
-    if (
-        typeof valueA === "string"
-    ) {
-
-        valueA =
-            valueA.toLowerCase();
-
+    if (typeof valueA === "string") {
+        valueA = valueA.toLowerCase();
     }
 
-
-    if (
-        typeof valueB === "string"
-    ) {
-
-        valueB =
-            valueB.toLowerCase();
-
+    if (typeof valueB === "string") {
+        valueB = valueB.toLowerCase();
     }
-
 
     if (valueA < valueB) {
-
-        return CategoryState.sortDirection ===
-            "asc"
-            ? -1
-            : 1;
-
+        return CategoryState.sortDirection === "asc"
+                ? -1
+                : 1;
     }
-
 
     if (valueA > valueB) {
-
-        return CategoryState.sortDirection ===
-            "asc"
-            ? 1
-            : -1;
-
+        return CategoryState.sortDirection === "asc"
+                ? 1
+                : -1;
     }
 
-
     return 0;
-
 }
-
 
 function getCategorySortValue(
     category,
     field
 ) {
-
     switch (field) {
 
         case "products":
-
             return Number(
-                category.product_count ??
-                category.products_count ??
-                category.total_products ??
-                0
-            );
-
+                category.product_count ?? 
+                category.products_count ?? 
+                category.total_products ?? 
+                0 
+            ); 
 
         case "status":
-
-            return getCategoryStatus(
-                category
-            );
-
+            return getCategoryStatus(category);
 
         case "name":
 
         default:
-
             return (
-                category.name ??
-                category.category_name ??
+                category.name ?? 
+                category.category_name ?? 
                 ""
             );
-
     }
-
 }
 
+/* CATEGORY STATUS */
+function getCategoryStatus(category) {
+    const status = String(
+        category.status ??
+        "active"
+    ).toLowerCase();
 
-/* ============================================================
-   CATEGORY STATUS
-============================================================ */
-
-function getCategoryStatus(
-    category
-) {
-
-    const status =
-        String(
-            category.status ??
-            "active"
-        ).toLowerCase();
-
-
-    if (
-        status === "inactive"
-    ) {
-
+    if (status === "inactive") {
         return "inactive";
-
     }
 
-
-    return "active";
-
+    return "active"
 }
-
 
 function getStatusLabel(status) {
-
     switch (status) {
-
         case "active":
             return "Active";
 
@@ -816,16 +502,11 @@ function getStatusLabel(status) {
 
         default:
             return "Unknown";
-
     }
-
 }
 
-
 function getStatusClass(status) {
-
     switch (status) {
-
         case "active":
             return "status-active";
 
@@ -834,211 +515,122 @@ function getStatusClass(status) {
 
         default:
             return "status-neutral";
-
     }
-
 }
 
-
-/* ============================================================
-   RENDER CATEGORIES
-============================================================ */
-
+/* RENDER CATEGORY */
 function renderCategories() {
-
-    const tbody =
-        getElement(
-            "categoriesTableBody"
-        );
-
+    const tbody = getElement(
+        "categoriesTableBody"
+    );
 
     if (!tbody) {
         return;
     }
 
-
-    const categories =
-        getPaginatedCategories();
-
+    const categories = getPaginatedCategories();
 
     tbody.innerHTML = "";
 
-
-    if (
-        CategoryState.filteredCategories
-            .length === 0
-    ) {
-
+    if (CategoryState.filteredCategories.length === 0) {
         tbody.innerHTML = `
-
             <tr>
-
-                <td
-                    colspan="100"
-                    class="table-empty-state"
-                >
-
+                <td colspan="100" class="table-empty-state">
                     <div class="categories-empty">
-
                         <div class="empty-icon">
                             🗂️
                         </div>
-
-                        <h3>
-                            No categories found
-                        </h3>
-
-                        <p>
-                            There are no categories
-                            matching your search
-                            or filter.
-                        </p>
-
+                        
+                        <h3>No categories found</h3>
+                        
+                        <p>There are no categories matching your search or filter.</p>
+                        
                     </div>
-
                 </td>
-
             </tr>
-
         `;
-
 
         updatePagination();
 
         return;
-
     }
-
 
     categories.forEach(
         category => {
-
             tbody.appendChild(
                 createCategoryRow(
-                    category
+                    category 
                 )
             );
-
         }
     );
 
-
     updatePagination();
-
 }
 
+/* CREATE TABLE ROW */
+function createCategoryRow(category) {
 
-/* ============================================================
-   CREATE TABLE ROW
-============================================================ */
-
-function createCategoryRow(
-    category
-) {
-
-    const tr =
-        document.createElement(
-            "tr"
-        );
-
-
-    const id =
-        category.id ??
+    const tr = document.createElement("tr");
+    
+    const id = 
+        category.id ?? 
         category.category_id;
 
 
-    const name =
-        escapeHTML(
-            category.name ??
-            category.category_name ??
-            "Unnamed Category"
-        );
+    const name = escapeHTML(
+        category.id ?? 
+        category.category_id ??
+        "Unnamed Category"
+    );
 
-
-    const description =
-        escapeHTML(
-            category.description ??
-            "—"
-        );
-
+    const description = escapeHTML(
+        category.description ?? 
+        "-"
+    );
 
     const productCount =
         Number(
-            category.product_count ??
-            category.products_count ??
-            category.total_products ??
+            category.product_count ?? 
+            category.product_count ?? 
+            category.total_product ?? 
             0
         );
 
-
-    const status =
-        getCategoryStatus(
-            category
-        );
-
+    const status = getCategoryStatus(category);
 
     tr.innerHTML = `
-
         <td>
-
-            <div class="category-name-cell">
-
+            <div class="category-name-call">
                 <div class="category-icon">
                     🗂️
                 </div>
-
+                
                 <div>
-
-                    <strong>
-                        ${name}
-                    </strong>
-
-                    <small>
-                        ID: ${escapeHTML(id)}
-                    </small>
-
+                    <strong>${name}</strong>
+                    
+                    <small>ID: ${escapeHTML(id)}</small>
                 </div>
-
             </div>
-
         </td>
 
-
         <td>
-
-            <span class="category-description">
-                ${description}
-            </span>
-
+            <span class="category-description">${description}</span>
         </td>
 
-
         <td>
-
-            <span class="product-count">
-                ${formatNumber(productCount)}
-            </span>
-
+            <span class="product-count">${formatNumber(productCount)}</span>
         </td>
 
-
         <td>
-
-            <span
-                class="status-badge
-                ${getStatusClass(status)}"
-            >
+            <span class="status-badge ${getStatusClass(status)}">
                 ${getStatusLabel(status)}
             </span>
-
         </td>
 
-
         <td>
-
             <div class="category-actions">
-
-                <button
+                <button 
                     type="button"
                     class="action-button view-category"
                     data-id="${escapeAttribute(id)}"
@@ -1047,20 +639,18 @@ function createCategoryRow(
                     👁️
                 </button>
 
-
-                <button
+                <button 
                     type="button"
                     class="action-button edit-category"
-                    data-id="${escapeAttribute(id)}"
-                    title="Edit category"
+                    data-idd="${escapeAttribute(id)}"
+                    title="edit category"
                 >
                     ✏️
                 </button>
 
-
                 <button
                     type="button"
-                    class="action-button delete-category"
+                    class="action-button deleted-category"
                     data-id="${escapeAttribute(id)}"
                     title="Delete category"
                 >
@@ -1068,329 +658,190 @@ function createCategoryRow(
                 </button>
 
             </div>
-
         </td>
-
     `;
 
-
     return tr;
-
 }
 
+/* PAGINATION */
+function getPaginationCategories() {
+    const start = (CategoryState.currentPage - 1) * CategoryState.perPage;
 
-/* ============================================================
-   PAGINATION
-============================================================ */
-
-function getPaginatedCategories() {
-
-    const start =
-        (
-            CategoryState.currentPage -
-            1
-        ) *
-        CategoryState.perPage;
-
-
-    const end =
-        start +
-        CategoryState.perPage;
-
+    const end = start + CategoryState.perPage;
 
     return CategoryState
-        .filteredCategories
-        .slice(
-            start,
-            end
-        );
-
+            .filteredCategories
+            .slice(
+                start,
+                end 
+            );
 }
 
-
 function updatePagination() {
+    const total = CategoryState
+                    .filteredCategories
+                    .length;
 
-    const total =
-        CategoryState
-            .filteredCategories
-            .length;
-
-
-    const totalPages =
+    const totalPages = 
         Math.max(
             1,
             Math.ceil(
-                total /
-                CategoryState.perPage
+                total / 
+                CategoryState.perPage 
             )
         );
 
-
-    if (
-        CategoryState.currentPage >
-        totalPages
-    ) {
-
-        CategoryState.currentPage =
-            totalPages;
-
+    if (CategoryState.currentPage > totalPages) {
+        CategoryState.currentPage = totalPages;
     }
-
 
     setText(
         "currentPage",
         CategoryState.currentPage
     );
 
-
     setText(
         "totalPages",
-        totalPages
+        totalPages 
     );
 
+    const previousButton = getElement(
+        "previousPage"
+    );
 
-    const previousButton =
-        getElement(
-            "previousPage"
-        );
-
-
-    const nextButton =
-        getElement(
-            "nextPage"
-        );
-
+    const nextButton = getElement(
+        "nextPage"
+    );
 
     if (previousButton) {
-
-        previousButton.disabled =
+        previousButton.disabled = 
             CategoryState.currentPage <= 1;
-
     }
-
 
     if (nextButton) {
-
-        nextButton.disabled =
-            CategoryState.currentPage >=
-            totalPages;
-
+        nextButton.disabled = 
+            CategoryState.currentPage >= totalPages;
     }
 
-
-    const info =
-        getElement(
-            "paginationInfo"
-        );
-
+    const info = getElement(
+        "paginationInfo"
+    );
 
     if (!info) {
         return;
     }
 
-
     if (total === 0) {
-
-        info.textContent =
-            "No categories";
+        info.textContent = "No categories";
 
         return;
-
     }
 
+    const start = (CategoryState.currentPage - 1) * CategoryState.perPage + 1;
 
-    const start =
-        (
-            CategoryState.currentPage -
-            1
-        ) *
-        CategoryState.perPage +
-        1;
+    const end = Math.min(
+        CategoryState.currentPage * CategoryState.perPage,
+            total 
+    );
 
-
-    const end =
-        Math.min(
-            CategoryState.currentPage *
-            CategoryState.perPage,
-            total
-        );
-
-
-    info.textContent =
-        `Showing ${start}-${end} of ${total}`;
-
+    info.textContent = `Showing ${start}-${end} of ${total}`;
+    
 }
-
-
-/* ============================================================
-   PAGINATION CONTROLS
-============================================================ */
-
+/* PAGINATION CONTROLS */
 function nextPage() {
-
-    const totalPages =
-        Math.max(
+    const totalPages = Math.max(
             1,
             Math.ceil(
                 CategoryState
                     .filteredCategories
-                    .length /
-                CategoryState.perPage
-            )
+                    .length / CategoryState.perPage 
+                )
         );
-
-
-    if (
-        CategoryState.currentPage <
-        totalPages
-    ) {
-
+    
+    if (CategoryState.currentPage < totalPages) {
         CategoryState.currentPage++;
-
         renderCategories();
-
     }
-
 }
-
 
 function previousPage() {
-
-    if (
-        CategoryState.currentPage >
-        1
-    ) {
-
+    if (CategoryState.currentPage > 1) {
         CategoryState.currentPage--;
-
         renderCategories();
-
     }
-
 }
 
-
-/* ============================================================
-   CATEGORY FORM
-============================================================ */
-
-function getCategoryFormData() {
-
-    const form =
-        getElement(
-            "categoryForm"
-        );
-
+/* CATEGORY FORM */
+function getCategoryFprData() {
+    const form = getElement(
+        "categoryForm"
+    );
 
     if (!form) {
-
         throw new Error(
             "Category form was not found."
         );
-
     }
 
+    const formData = new FormData(form);
 
-    const formData =
-        new FormData(form);
-
-
-    const data =
-        Object.fromEntries(
-            formData.entries()
-        );
-
+    const data = Object.fromEntries(
+        formData.entries()
+    );
 
     return data;
-
 }
 
-
-/* ============================================================
-   SUBMIT CATEGORY FORM
-============================================================ */
-
-async function handleCategorySubmit(
-    event
-) {
-
+/* SUBMIT CATEGORY FORM */
+async function handleCategorySubmit(event) {
     event.preventDefault();
 
+    const form = event.currentTarget;
 
-    const form =
-        event.currentTarget;
-
-
-    const submitButton =
-        form.querySelector(
-            "[type='submit']"
-        );
-
+    const submitButton = form.querySelector(
+        "[type='submit']"
+    );
 
     try {
-
-        const data =
-            getCategoryFormData();
-
+        const data = getCategoryFormData();
 
         if (submitButton) {
+            submitButton.disabled = true;
 
-            submitButton.disabled =
-                true;
+            submitButton.dataset.originalText = submitButton.textContent;
 
-
-            submitButton.dataset.originalText =
-                submitButton.textContent;
-
-
-            submitButton.textContent =
-                CategoryState.currentCategoryId
-                    ? "Updating..."
-                    : "Saving...";
-
+            submitButton.textButton = CategoryState.currentCategoryId
+                ? "Updating..."
+                : "Saving...";
         }
 
-
-        if (
-            CategoryState.currentCategoryId
-        ) {
-
+        if (CategoryState.currentCategoryId) {
             await updateCategory(
                 CategoryState.currentCategoryId,
                 data
             );
 
-
             showToast(
                 "Category updated successfully.",
                 "success"
             );
-
         } else {
-
             await createCategory(
-                data
+                data 
             );
-
 
             showToast(
                 "Category created successfully.",
                 "success"
             );
-
         }
 
-
-        CategoryState.currentCategoryId =
-            null;
-
+        CategoryState.currentCategoryId = null;
 
         form.reset();
 
-
         closeCategoryModal();
-
-
     } catch (error) {
 
         console.error(
@@ -1398,1075 +849,580 @@ async function handleCategorySubmit(
             error
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to save category.",
             "error"
         );
-
-
     } finally {
 
         if (submitButton) {
+            submitButton.disabled = false;
 
-            submitButton.disabled =
-                false;
-
-
-            submitButton.textContent =
-                submitButton.dataset.originalText ||
-                "Save Category";
-
+            submitButton.textContent = 
+                submitButton.dataset.originalText || 
+                "Save category";
         }
-
     }
-
 }
 
-
-/* ============================================================
-   CREATE CATEGORY MODAL
-============================================================ */
-
+/* CREATE CATEGORY MODAL */
 function openCreateCategory() {
 
-    CategoryState.currentCategoryId =
-        null;
+    CategoryState.currentCategoryId = null;
 
-
-    const form =
-        getElement(
-            "categoryForm"
-        );
-
+    const form = getElement("categoryForm");
 
     if (form) {
         form.reset();
     }
 
-
     setCategoryModalTitle(
-        "Add Category"
+        "Add category"
     );
-
 
     openCategoryModal();
 
 }
 
-
-/* ============================================================
-   EDIT CATEGORY
-============================================================ */
-
+/* EDIT CATEGORY */
 async function openEditCategory(
-    categoryId
+    categoryId 
 ) {
-
     try {
+        CategoryState.currentCategoryId = categoryId;
 
-        CategoryState.currentCategoryId =
-            categoryId;
-
-
-        setCategoryModalTitle(
-            "Edit Category"
-        );
-
+        setCategoryModalTitle("Edit Category");
 
         openCategoryModal();
 
+        setCategoryFormLoading(true);
 
-        setCategoryFormLoading(
-            true
-        );
+        const category = await getCategory(categoryId);
 
-
-        const category =
-            await getCategory(
-                categoryId
-            );
-
-
-        populateCategoryForm(
-            category
-        );
-
+        populateCategoryForm(category);
 
     } catch (error) {
-
         console.error(
             "Unable to load category:",
-            error
+            error 
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to load category.",
             "error"
         );
 
-
         closeCategoryModal();
-
-
     } finally {
-
+        
         setCategoryFormLoading(
-            false
+            false 
         );
-
     }
-
 }
 
+/* POPULATE CATEGORY FORM */
+function populateCategoryForm(category) {
+    const form = getElement(
+        "categoryForm"
+    );
 
-/* ============================================================
-   POPULATE CATEGORY FORM
-============================================================ */
-
-function populateCategoryForm(
-    category
-) {
-
-    const form =
-        getElement(
-            "categoryForm"
-        );
-
-
-    if (
-        !form ||
-        !category
-    ) {
+    if (!form || !category) {
         return;
     }
 
-
-    const name =
+    const name = 
         category.name ??
-        category.category_name ??
+        category.category_name ?? 
         "";
 
-
-    const description =
+    const description = 
         category.description ??
         "";
 
-
-    const status =
+    const status = 
         getCategoryStatus(
-            category
+            category 
         );
 
-
-    const nameField =
-        form.elements.name ??
-        form.elements.category_name;
-
-
     if (nameField) {
-
-        nameField.value =
-            name;
-
+        nameField.value = name;
     }
 
-
-    const descriptionField =
-        form.elements.description;
-
+    const descriptionField = form.nextElementSibling.description;
 
     if (descriptionField) {
-
-        descriptionField.value =
-            description;
-
+        descriptionField.value = description;
     }
 
-
-    const statusField =
-        form.elements.status;
-
+    const statusField = form.nextElementSibling.status;
 
     if (statusField) {
-
-        statusField.value =
-            status;
-
+        statusField.value = status;
     }
 
 }
 
-
-/* ============================================================
-   VIEW CATEGORY
-============================================================ */
-
-async function openViewCategory(
-    categoryId
-) {
-
+/* VIEW CATEGORY */
+async function openViewCategory(categoryId) {
     try {
+        const category = await getCategory(categoryId);
 
-        const category =
-            await getCategory(
-                categoryId
-            );
+        showCategoryDetail(category);
 
-
-        showCategoryDetails(
-            category
-        );
-
-
-    } catch (error) {
+    } catch (error){
 
         console.error(
             "Unable to load category:",
-            error
+            error 
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to load category.",
             "error"
         );
-
     }
-
 }
 
+/* CATEGORY DETAILS */
+function showCategoryDetails(category) {
+    const modal = getElement("categoryDetailsModal");
 
-/* ============================================================
-   CATEGORY DETAILS
-============================================================ */
-
-function showCategoryDetails(
-    category
-) {
-
-    const modal =
-        getElement(
-            "categoryDetailsModal"
-        );
-
-
-    /*
-     * If the page does not provide a details modal,
-     * fall back to the edit screen.
-     */
+    /* page does not provide a details modal , fall back to the edit screen. */
     if (!modal) {
-
-        const id =
+        const id = 
             category.id ??
             category.category_id;
 
-
-        openEditCategory(
-            id
-        );
-
+        openEditCategory(id);
 
         return;
-
     }
-
 
     setText(
         "categoryDetailsName",
         category.name ??
-        category.category_name ??
-        "—"
+        category.category_name ?? 
+        "-"
     );
-
 
     setText(
         "categoryDetailsDescription",
-        category.description ??
+        category.description ?? 
         "No description available."
     );
-
 
     setText(
         "categoryDetailsProducts",
         formatNumber(
             category.product_count ??
-            category.products_count ??
+            category.products_count ?? 
             category.total_products ??
             0
         )
     );
 
-
     setText(
         "categoryDetailsStatus",
         getStatusLabel(
-            getCategoryStatus(
-                category
-            )
+            getCategoryStatus(category)
         )
     );
 
+    modal.classList.add("active");
 
-    modal.classList.add(
-        "active"
-    );
-
-
-    document.body.classList.add(
-        "modal-open"
-    );
-
+    document.body.classList.add("modal-open");
 }
 
-
-/* ============================================================
-   MODAL FUNCTIONS
-============================================================ */
-
+/* MODAL FUNCTIONS */
 function openCategoryModal() {
-
-    const modal =
-        getElement(
-            "categoryModal"
-        );
-
+    const modal = getElement("categoryModal");
 
     if (!modal) {
         return;
     }
 
+    modal.classList.add("active");
 
-    modal.classList.add(
-        "active"
-    );
-
-
-    document.body.classList.add(
-        "modal-open"
-    );
-
+    document.body.classList.add("modal-open");
 }
-
 
 function closeCategoryModal() {
 
-    const modal =
-        getElement(
-            "categoryModal"
-        );
-
+    const modal = getElement("categoryModal");
 
     if (modal) {
-
-        modal.classList.remove(
-            "active"
-        );
-
+        modal.classList.remove("active");
     }
 
-
-    document.body.classList.remove(
-        "modal-open"
-    );
-
+    document.body.classList.remove("modal-open");
 }
-
 
 function closeCategoryDetailsModal() {
-
-    const modal =
-        getElement(
-            "categoryDetailsModal"
-        );
-
+    const modal = getElement("categoryDetailsModal");
 
     if (modal) {
-
-        modal.classList.remove(
-            "active"
-        );
-
+        modal.classList.remove("active");
     }
 
-
-    document.body.classList.remove(
-        "modal-open"
-    );
-
+    document.body.classList.remove("modal-open");
 }
 
-
-function setCategoryModalTitle(
-    title
-) {
-
-    const element =
-        getElement(
-            "categoryModalTitle"
-        );
-
+function getCategoryModalTitle(title) {
+    const element = getElement("categoryModalTitle");
 
     if (element) {
-
-        element.textContent =
-            title;
-
+        element.textContent = title;
     }
-
 }
 
-
-function setCategoryFormLoading(
-    isLoading
-) {
-
-    const form =
-        getElement(
-            "categoryForm"
-        );
-
+function setCategoryFormLoading(isLoading) {
+    const form = getElement("categoryform");
 
     if (!form) {
         return;
     }
-
 
     form.classList.toggle(
         "is-loading",
         isLoading
     );
 
-
-    Array.from(
-        form.elements
-    ).forEach(
+    Array.form(form.elements).forEach(
         element => {
-
-            element.disabled =
-                isLoading;
-
+            element.disabled = isLoading;
         }
     );
-
 }
 
-
-/* ============================================================
-   STATISTICS
-============================================================ */
-
+/* STATISTICS */
 function updateCategoryStatistics() {
+    const categories = CategoryState.categories;
 
-    const categories =
-        CategoryState.categories;
+    const total = categories.length;
 
+    const active = categories.filter(
+        category => getCategoryStatus(
+            category 
+        ) === "active"
+    ).length;
 
-    const total =
-        categories.length;
+    const inactive= categories.filter(
+        category => 
+            getCategoryStatus(
+                category 
+            ) === "inactive"
+    ).length;
 
-
-    const active =
-        categories.filter(
-            category =>
-                getCategoryStatus(
-                    category
-                ) === "active"
-        ).length;
-
-
-    const inactive =
-        categories.filter(
-            category =>
-                getCategoryStatus(
-                    category
-                ) === "inactive"
-        ).length;
-
-
-    const products =
+    const products = 
         categories.reduce(
             (
                 totalProducts,
-                category
+                category 
             ) => {
-
-                return totalProducts +
+                return totalProducts + 
                     Number(
                         category.product_count ??
-                        category.products_count ??
+                        category.products_count ?? 
                         category.total_products ??
                         0
                     );
-
             },
             0
         );
-
 
     setText(
         "totalCategories",
         formatNumber(total)
     );
 
-
     setText(
         "activeCategories",
         formatNumber(active)
     );
-
 
     setText(
         "inactiveCategories",
         formatNumber(inactive)
     );
 
-
     setText(
         "categoryProductCount",
         formatNumber(products)
     );
-
 }
-
-
-/* ============================================================
-   EVENT INITIALIZATION
-============================================================ */
-
+/* EVENT INITIALIZATION */
 function initializeCategoryEvents() {
-
-    /*
-     * Category form.
-     */
-    const form =
-        getElement(
-            "categoryForm"
-        );
-
+    /* Category form. */
+    const form = getElement("categoryForm");
 
     if (form) {
-
         form.addEventListener(
             "submit",
-            handleCategorySubmit
+            handleCategorySubmit 
         );
-
     }
 
-
-    /*
-     * Add category buttons.
-     */
-    $$(
-        "[data-action='add-category'], #addCategoryButton"
-    ).forEach(
+    /* Add category buttons. */
+    $$("[data-action='add-category'], #addCategoryButton").forEach(
         button => {
-
             button.addEventListener(
                 "click",
                 openCreateCategory
             );
-
         }
     );
 
-
-    /*
-     * Search.
-     */
-    const search =
-        getElement(
-            "categorySearch"
-        );
-
+    /* Search */
+    const search = getElement("categorySearch");
 
     if (search) {
-
         search.addEventListener(
             "input",
             function () {
+                CategoryState.search = this.value;
 
-                CategoryState.search =
-                    this.value;
-
-
-                CategoryState.currentPage =
-                    1;
-
+                CategoryState.currentPage = 1;
 
                 applyCategoryFilters();
-
             }
         );
-
     }
 
-
-    /*
-     * Status filter.
-     */
-    const status =
-        getElement(
-            "categoryStatusFilter"
-        );
-
+    /* Status filter. */
+    const status = getElement("categoryFilter");
 
     if (status) {
-
         status.addEventListener(
             "change",
             function () {
+                CategoryState.status = this.value;
 
-                CategoryState.status =
-                    this.value;
-
-
-                CategoryState.currentPage =
-                    1;
-
+                CategoryState.currentPage = 1;
 
                 applyCategoryFilters();
-
             }
         );
-
     }
 
-
-    /*
-     * Pagination page size.
-     */
-    const perPage =
-        getElement(
-            "perPage"
-        );
-
+    /* Pagination page size. */
+    const perPage = getElement("perPage");
 
     if (perPage) {
-
         perPage.addEventListener(
             "change",
             function () {
+                CategoryState.perPage = Number(this.value) || 10;
 
-                CategoryState.perPage =
-                    Number(
-                        this.value
-                    ) || 10;
-
-
-                CategoryState.currentPage =
-                    1;
-
+                CategoryState.currentPage = 1;
 
                 renderCategories();
-
             }
         );
-
     }
 
-
-    /*
-     * Previous page.
-     */
-    const previous =
-        getElement(
-            "previousPage"
-        );
-
+    /* Previous page. */
+    const previous = getElement("previousPage");
 
     if (previous) {
-
         previous.addEventListener(
             "click",
             previousPage
         );
-
     }
 
-
-    /*
-     * Next page.
-     */
-    const next =
-        getElement(
-            "nextPage"
-        );
-
+    /* Next page. */
+    const next = getElement("nextPage");
 
     if (next) {
-
         next.addEventListener(
             "click",
             nextPage
         );
-
     }
 
-
-    /*
-     * Table actions.
-     */
-    const table =
-        getElement(
-            "categoriesTableBody"
-        );
-
+    /* Table actions */
+    const table = getElement("categoriesTableBody");
 
     if (table) {
-
         table.addEventListener(
             "click",
             handleCategoryTableAction
         );
-
     }
 
-
-    /*
-     * Close category modal.
-     */
+    /* Close category modal. */
     $$(
         "[data-close-category-modal]"
     ).forEach(
         button => {
-
             button.addEventListener(
                 "click",
                 closeCategoryModal
             );
-
         }
     );
 
-
-    /*
-     * Close details modal.
-     */
-    $$(
+    /* Close details modal. */
+    $4(
         "[data-close-category-details]"
     ).forEach(
         button => {
-
             button.addEventListener(
                 "click",
                 closeCategoryDetailsModal
             );
-
         }
     );
 
-
-    /*
-     * Close modal when clicking outside.
-     */
+    /* Close modal when clicking outside. */
     $$(".modal").forEach(
         modal => {
-
             modal.addEventListener(
                 "click",
                 function (event) {
+                    if (event.target === modal) {
+                        modal.classList.remove("active");
 
-                    if (
-                        event.target ===
-                        modal
-                    ) {
-
-                        modal.classList.remove(
-                            "active"
-                        );
-
-
-                        document.body.classList.remove(
-                            "modal-open"
-                        );
-
+                        document.body.classList.remove("modal-open");
                     }
-
                 }
             );
-
         }
     );
 
-
-    /*
-     * Escape key.
-     */
+    /* Escape key. */
     document.addEventListener(
         "keydown",
         function (event) {
-
-            if (
-                event.key !==
-                "Escape"
-            ) {
+            if (event.key !== "Escape") {
                 return;
             }
-
-
             closeCategoryModal();
 
             closeCategoryDetailsModal();
-
         }
     );
-
 }
 
-
-/* ============================================================
-   TABLE ACTION HANDLER
-============================================================ */
-
-async function handleCategoryTableAction(
-    event
-) {
-
-    const button =
-        event.target.closest(
-            "button[data-id]"
-        );
-
+/* TABLE ACTION HANDLER */
+async function handleCategoryTableAction(event) {
+    const button = event.target.closest(
+        "button[data-id"
+    );
 
     if (!button) {
         return;
     }
 
-
-    const categoryId =
-        button.dataset.id;
-
+    const categoryId = button.dataset.id;
 
     if (!categoryId) {
         return;
     }
 
-
-    if (
-        button.classList.contains(
-            "view-category"
-        )
-    ) {
-
-        await openViewCategory(
-            categoryId
-        );
-
-
+    if (button.classList.contains("view-category")) {
+        await openViewCategory(categoryId);
         return;
-
     }
 
-
-    if (
-        button.classList.contains(
-            "edit-category"
-        )
-    ) {
-
-        await openEditCategory(
-            categoryId
-        );
-
-
+    if (button.classList.contains("edit-category")) {
+        await openEditCategory(categoryId);
         return;
-
     }
 
-
-    if (
-        button.classList.contains(
-            "delete-category"
-        )
-    ) {
-
-        await deleteCategory(
-            categoryId
-        );
-
+    if (button.classList.contains("delete-category")) {
+        await deleteCategory(categoryId);
     }
 
 }
 
-
-/* ============================================================
-   SORTING INITIALIZATION
-============================================================ */
-
+/* SORTING INITIALIZATION */
 function initializeCategorySorting() {
-
-    $$(
-        "[data-sort-category]"
-    ).forEach(
+    $$("[data-sort-category]").forEach(
         header => {
-
             header.addEventListener(
                 "click",
                 function () {
-
-                    sortCategories(
-                        this.dataset.sortCategory
-                    );
-
+                    sortCategories(this.dataset.sortCategory);
                 }
             );
-
         }
     );
-
 }
-
-
 function sortCategories(field) {
-
-    if (
-        CategoryState.sortBy ===
-        field
-    ) {
-
-        CategoryState.sortDirection =
-            CategoryState.sortDirection ===
+    if (CategoryState.sortBy === field) {
+        CategoryState.sortDirection === 
             "asc"
                 ? "desc"
                 : "asc";
-
     } else {
+        CategoryState.srotBy = field;
 
-        CategoryState.sortBy =
-            field;
-
-        CategoryState.sortDirection =
-            "asc";
-
+        CategoryState.sortDirection = "asc";
     }
 
-
     applyCategoryFilters();
-
 }
 
-
-/* ============================================================
-   LOADING UI
-============================================================ */
-
-function setLoading(
-    isLoading
-) {
-
-    CategoryState.isLoading =
-        isLoading;
-
+/* LOAD UI */
+function setLoading(isLoading) {
+    CategoryState.isLoading = isLoading;
 
     document.body.classList.toggle(
         "categories-loading",
-        isLoading
+        isLoading 
     );
 
-
-    const refreshButton =
-        getElement(
-            "refreshCategoriesButton"
-        );
-
+    const refreshButton = getElement("refreshCategoriesButton");
 
     if (refreshButton) {
-
-        refreshButton.disabled =
-            isLoading;
-
+        refreshButton.disabled = isLoading;
     }
-
 }
-
 
 function showCategoriesLoading() {
-
-    const tbody =
-        getElement(
-            "categoriesTableBody"
-        );
-
+    const tbody = getElement("categoriesTableBody");
 
     if (!tbody) {
         return;
     }
 
-
     tbody.innerHTML = `
-
         <tr>
-
-            <td
-                colspan="100"
-                class="table-loading-state"
-            >
-
+            <td colspan="100" class="table-loading-state">
                 <div class="loading-spinner">
-
                     <span></span>
-
                 </div>
 
-                <p>
-                    Loading categories...
-                </p>
-
+                <p>Loading categories...</p>
             </td>
-
         </tr>
-
     `;
-
 }
 
-
-/* ============================================================
-   ERROR UI
-============================================================ */
-
-function showCategoryError(
-    message
-) {
-
-    const tbody =
-        getElement(
-            "categoriesTableBody"
-        );
-
+/* ERROR UI */
+function showCategoryError(message) {
+    const tbody = getElement("categoryTableBody");
 
     if (!tbody) {
         return;
     }
 
-
     tbody.innerHTML = `
-
         <tr>
-
-            <td
-                colspan="100"
-                class="table-error-state"
-            >
-
+            <td colspan="100" class="table-error-state">
                 <div class="error-icon">
                     ⚠️
                 </div>
-
-                <h3>
-                    Unable to load categories
-                </h3>
-
-                <p>
-                    ${escapeHTML(message)}
-                </p>
-
+                
+                <h3>Unable to load categories</h3>
+                
+                <p>${escapeHTML(message)}</p>
+                
                 <button
                     type="button"
                     class="btn btn-primary"
@@ -2474,143 +1430,83 @@ function showCategoryError(
                 >
                     Try Again
                 </button>
-
             </td>
-
         </tr>
-
     `;
 
-
-    const retry =
-        getElement(
-            "retryCategoriesButton"
-        );
-
+    const retry = getElement("retryCategoriesButton");
 
     if (retry) {
-
         retry.addEventListener(
             "click",
             loadCategories
         );
-
     }
-
 }
 
-
-/* ============================================================
-   TOAST
-============================================================ */
-
+/* TOAST */
 function showToast(
     message,
-    type = "info"
+    type="info"
 ) {
-
-    let container =
-        getElement(
-            "toastContainer"
-        );
-
+    let container =  getElement(
+        "toastContainer"
+    );
 
     if (!container) {
+        container = document.createElement("div");
 
-        container =
-            document.createElement(
-                "div"
-            );
+        container.id = "toastContainer";
 
+        container.className = "toast-container";
 
-        container.id =
-            "toastContainer";
-
-
-        container.className =
-            "toast-container";
-
-
-        document.body.appendChild(
-            container
-        );
-
+        document.body.appendChild(container);
     }
 
+    const toast = document.createElement("div");
 
-    const toast =
-        document.createElement(
-            "div"
-        );
+    toast.className = `toast toast-${type}`;
 
-
-    toast.className =
-        `toast toast-${type}`;
-
-
-    const icon =
-        type === "success"
-            ? "✓"
-            : type === "error"
-                ? "!"
-                : "i";
-
+    const icon = type === "success"
+        ? "✓"
+        : type === "error"
+            ? "!"
+            : "i";
 
     toast.innerHTML = `
-
-        <span class="toast-icon">
-            ${icon}
-        </span>
-
-        <span class="toast-message">
-            ${escapeHTML(message)}
-        </span>
-
+        <span class="toast-icon">${icon}</span>
+            
+        <span class="toast-message">${escapeHTML(message)}</span>
+        
         <button
             type="button"
             class="toast-close"
             aria-label="Close notification"
         >
-            ×
+            x 
         </button>
-
     `;
 
+    container.appendChild(toast);
 
-    container.appendChild(
-        toast
-    );
-
-
-    const closeButton =
-        toast.querySelector(
-            ".toast-close"
-        );
-
+    const closeButton = toast.querySelector(".toast-close");
 
     if (closeButton) {
-
         closeButton.addEventListener(
             "click",
             () => removeToast(toast)
         );
-
     }
-
 
     setTimeout(
         () => {
-
             removeToast(
                 toast
             );
-
         },
-        5000
+        5000 
     );
-
 }
-
 
 function removeToast(toast) {
 
@@ -2618,42 +1514,23 @@ function removeToast(toast) {
         return;
     }
 
-
-    toast.classList.add(
-        "toast-removing"
-    );
-
+    toast.classList.add("toast-removing");
 
     setTimeout(
         () => {
-
             toast.remove();
-
         },
         200
     );
-
 }
 
-
-/* ============================================================
-   FORMATTERS
-============================================================ */
-
+/* FORMATTERS */
 function formatNumber(value) {
+    const number = Number(value);
 
-    const number =
-        Number(value);
-
-
-    if (
-        Number.isNaN(number)
-    ) {
-
+    if (Number.isNaN(number)) {
         return "0";
-
     }
-
 
     return new Intl.NumberFormat(
         undefined,
@@ -2664,39 +1541,21 @@ function formatNumber(value) {
 
 }
 
-
-/* ============================================================
-   TEXT HELPERS
-============================================================ */
-
-function setText(
-    id,
-    value
-) {
-
-    const element =
-        getElement(id);
-
+/* TEXT HELPERS */
+function setText(id, value) {
+    const element = getElement(id);
 
     if (element) {
-
-        element.textContent =
-            value;
-
+        element.textContent = value;
     }
-
 }
 
-
-/* ============================================================
-   SECURITY / HTML ESCAPING
-============================================================ */
-
+/* SECURITY / HTML ESCAPING */
 function escapeHTML(value) {
-
     return String(
         value ?? ""
     )
+
         .replace(
             /&/g,
             "&amp;"
@@ -2716,51 +1575,31 @@ function escapeHTML(value) {
         .replace(
             /'/g,
             "&#039;"
-        );
-
+        )
 }
-
 
 function escapeAttribute(value) {
-
     return escapeHTML(
-        value
+        value 
     );
-
 }
 
-
-/* ============================================================
-   REFRESH BUTTON
-============================================================ */
-
+/* REFRESH BUTTON */
 function initializeRefreshButton() {
-
-    const button =
-        getElement(
-            "refreshCategoriesButton"
-        );
-
+    const button = getElement("refreshCategoriesButton");
 
     if (!button) {
         return;
     }
 
-
     button.addEventListener(
         "click",
         loadCategories
     );
-
 }
 
-
-/* ============================================================
-   GLOBAL API
-============================================================ */
-
+/*GLOBAL API  */
 window.CategoryOperations = {
-
     loadCategories,
 
     getCategory,
@@ -2773,7 +1612,7 @@ window.CategoryOperations = {
 
     openCreateCategory,
 
-    openEditCategory,
+    openCreateCategory,
 
     openViewCategory,
 
@@ -2784,37 +1623,20 @@ window.CategoryOperations = {
     nextPage,
 
     previousPage,
-
-    showToast
-
+    
+    showToast 
 };
 
+/* Global function for HTML onclick handlers */
+window.loadCategories = loadCategories;
 
-/*
- * Global functions for HTML onclick handlers,
- * if required.
- */
+window.openEditCategory = openEditCategory;
 
-window.loadCategories =
-    loadCategories;
+window.openViewCategory = openViewCategory;
 
-window.openCreateCategory =
-    openCreateCategory;
+window.deleteCategory = deleteCategory;
 
-window.openEditCategory =
-    openEditCategory;
-
-window.openViewCategory =
-    openViewCategory;
-
-window.deleteCategory =
-    deleteCategory;
-
-
-/* ============================================================
-   INITIALIZATION
-============================================================ */
-
+/* INITIALIZATION */
 async function initializeCategories() {
 
     initializeCategoryEvents();
@@ -2823,23 +1645,15 @@ async function initializeCategories() {
 
     initializeRefreshButton();
 
-    await loadCategories();
-
+    await loadingCategories();
 }
 
-
-if (
-    document.readyState ===
-    "loading"
-) {
-
+if (document.readyState === "loading") {
     document.addEventListener(
         "DOMContentLoaded",
         initializeCategories
     );
-
 } else {
-
     initializeCategories();
-
 }
+
