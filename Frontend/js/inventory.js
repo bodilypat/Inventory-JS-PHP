@@ -1,477 +1,250 @@
 /**
- * ============================================================
- * INVENTORY MANAGEMENT SYSTEM
+ * INVENTORY MANAGEMENT SYSTEM 
  * Inventory Operations
- *
- * File:
- * frontend/js/inventory.js
- *
- * Expected backend:
- * backend/api/inventory.php
- *
- * Supported operations:
- *
+ * 
+ * File: Frontend/js/inventory.js 
+ * 
+ * Backend/api/inventory.php
+ * 
+ * Operations:
+ * 
  * GET    inventory.php
- * GET    inventory.php?id=1
- * POST   inventory.php
- * PUT    inventory.php?id=1
- * DELETE inventory.php?id=1
- *
- * No mock data is used.
- * ============================================================
- */
-
+ * GET    inventory.php?id=?
+ * POST   inventory.php 
+ * PUT    inventory.php?id=?
+ * DELETE inventory.php?id=1 
+ * 
+ * */
 "use strict";
 
-
-/* ============================================================
-   CONFIGURATION
-============================================================ */
-
+/* CONFIGURATION */
 const INVENTORY_API =
     "../../backend/api/inventory.php";
 
-
-/* ============================================================
-   APPLICATION STATE
-============================================================ */
-
+/* APPLICATION STATE */
 const InventoryState = {
-
     inventory: [],
-
     filteredInventory: [],
-
     currentInventoryId: null,
-
     currentPage: 1,
-
     perPage: 10,
-
     search: "",
-
     status: "",
-
     category: "",
-
     stockStatus: "",
-
     sortBy: "product_name",
-
     sortDirection: "asc",
-
-    isLoading: false
-
+    isLoading: false 
 };
 
-
-/* ============================================================
-   DOM HELPERS
-============================================================ */
-
+/* DOM HELPERS */
 function $(selector) {
     return document.querySelector(selector);
 }
 
-
 function $$(selector) {
-    return document.querySelectorAll(selector);
+    return document.querySelector(selector);
 }
-
 
 function getElement(id) {
-    return document.getElementById(id);
+    return document.getElementById(d);
 }
 
-
-/* ============================================================
-   API REQUEST
-============================================================ */
-
+/* API REQUEST */
 async function inventoryRequest(
-    url,
+    url, 
     options = {}
 ) {
-
     const config = {
-
-        credentials: "same-origin",
-
+        Credential: "same-origin",
         headers: {
             "Accept": "application/json"
         },
 
-        ...options
-
+        ...options 
     };
 
-
-    /*
-     * Convert JavaScript objects to JSON.
-     */
-    if (
-        config.body &&
-        typeof config.body === "object"
-    ) {
-
+    /* Convert JavaScript object to JSON. */
+    if (config.body && typeof config.body === "object") {
         config.headers = {
-
             ...config.headers,
-
-            "Content-Type":
-                "application/json"
-
+            "Content-Type": "application/json"
         };
 
-
-        config.body =
-            JSON.stringify(
-                config.body
-            );
-
+        config.body = JSON.stringify(config.body);
     }
 
-
-    const response =
-        await fetch(
-            url,
-            config
-        );
-
+    const response = await fetch(
+        url,
+        config 
+    );
 
     let data = null;
 
-
     try {
-
-        data =
-            await response.json();
-
-    } catch (error) {
-
+        data = await response.json();
+    } catch(error) {
         data = null;
-
     }
 
-
     if (!response.ok) {
-
         throw new Error(
             data?.message ||
             `Request failed with status ${response.status}`
         );
-
     }
 
-
-    if (
-        data &&
-        data.success === false
-    ) {
-
+    if (data && data.success === false) {
         throw new Error(
-            data.message ||
+            data.message || 
             "Inventory operation failed."
         );
-
     }
 
-
     return data;
-
 }
 
-
-/* ============================================================
-   RESPONSE NORMALIZATION
-============================================================ */
-
+/* REQUEST NORMALIZATION */
 function normalizeInventory(response) {
-
     if (!response) {
         return [];
     }
 
-
-    if (
-        Array.isArray(
-            response.data
-        )
-    ) {
-
+    if (Array.isArray(response.data)) {
         return response.data;
-
     }
-
-
-    if (
-        Array.isArray(
-            response.inventory
-        )
-    ) {
-
+    
+    if (Array.isArray(response.inventory)) {
         return response.inventory;
-
     }
 
-
-    if (
-        Array.isArray(
-            response.items
-        )
-    ) {
-
+    if (Array.isArray(response.items)) {
         return response.items;
-
     }
 
-
-    if (
-        Array.isArray(response)
-    ) {
-
+    if (Array.isArray(response)) {
         return response;
-
     }
-
 
     return [];
-
 }
 
-
-/* ============================================================
-   LOAD INVENTORY
-============================================================ */
-
+/* LOAD INVENTORY */
 async function loadInventory() {
-
     setLoading(true);
 
     showInventoryLoading();
 
+    try{
+        const response = await inventoryRequest(INVENTORY_API)
 
-    try {
+        InventoryState.inventory = normalizeInventory(Response);
 
-        const response =
-            await inventoryRequest(
-                INVENTORY_API
-            );
+        InventoryState.currentPage = 1;
 
-
-        InventoryState.inventory =
-            normalizeInventory(
-                response
-            );
-
-
-        InventoryState.currentPage =
-            1;
-
-
-        populateCategoryFilter(
-            InventoryState.inventory
-        );
-
+        populateCategoryFilter(InventoryState.inventory);
 
         applyInventoryFilters();
 
-        updateInventoryStatistics();
-
-
+        updateInventoryStatistic();
     } catch (error) {
-
         console.error(
-            "Unable to load inventory:",
+            "unable to load inventory:",
             error
         );
 
-
         showInventoryError(
-            error.message ||
+            error.message || 
             "Unable to load inventory."
         );
 
-
     } finally {
-
         setLoading(false);
-
     }
 
 }
 
-
-/* ============================================================
-   GET SINGLE INVENTORY RECORD
-============================================================ */
-
-async function getInventory(
-    inventoryId
-) {
-
+/* GET SINGLE INVENTORY RECORD */
+async function getInventory(inventoryId) {
     if (!inventoryId) {
-
-        throw new Error(
-            "Inventory ID is required."
-        );
-
+        throw new Error("Inventory ID is required.");
     }
 
+    const url = `${INVENTORY_API}?id=${encodeURIComponent(inventoryId)}`;
 
-    const url =
-        `${INVENTORY_API}?id=${encodeURIComponent(inventoryId)}`;
+    const response = await inventoryRequest(url);
 
-
-    const response =
-        await inventoryRequest(
-            url
-        );
-
-
-    if (
-        response?.data &&
-        !Array.isArray(
-            response.data
-        )
-    ) {
-
+    if (response?.data && !Array.isArray(response.data)) {
         return response.data;
-
     }
 
-
-    if (
-        response?.inventory &&
-        !Array.isArray(
-            response.inventory
-        )
-    ) {
-
+    if (response?.inventory && !Array.isArray(response.inventory)) {
         return response.inventory;
-
     }
-
 
     return response;
 
 }
+/* CREATE INVENTORY RECORD */
+async function createInventory(inventoryData) {
+    const data =  validateInventory(inventoryData);
 
-
-/* ============================================================
-   CREATE INVENTORY RECORD
-============================================================ */
-
-async function createInventory(
-    inventoryData
-) {
-
-    const data =
-        validateInventory(
-            inventoryData
-        );
-
-
-    const response =
-        await inventoryRequest(
-            INVENTORY_API,
-            {
-                method: "POST",
-                body: data
-            }
-        );
-
+    const response = await inventoryRequest(
+        INVENTORY_API,
+        {
+            method: "POST",
+            body: data 
+        }
+    );
 
     await loadInventory();
 
-
     return response;
-
 }
 
-
-/* ============================================================
-   UPDATE INVENTORY RECORD
-============================================================ */
-
+/* UPDATE INVENTORY RECORD */
 async function updateInventory(
     inventoryId,
-    inventoryData
+    inventoryData,
 ) {
-
     if (!inventoryId) {
-
-        throw new Error(
-            "Inventory ID is required."
-        );
-
+        throw new Error("Inventory ID is required.");
     }
 
+    const data = validateInventory(inventoryData);
 
-    const data =
-        validateInventory(
-            inventoryData
-        );
+    const url = `${INVENTORY_API}?ID=${encodeURIComponent(inventoryID)}`;
 
-
-    const url =
-        `${INVENTORY_API}?id=${encodeURIComponent(inventoryId)}`;
-
-
-    const response =
-        await inventoryRequest(
-            url,
-            {
-                method: "PUT",
-                body: data
-            }
-        );
-
+    const response = await inventoryRequest(
+        url,
+        {
+            method: "PUT",
+            body: data 
+        }
+    );
 
     await loadInventory();
-
 
     return response;
 
 }
 
-
-/* ============================================================
-   DELETE INVENTORY RECORD
-============================================================ */
-
-async function deleteInventory(
-    inventoryId
-) {
-
+/* DELETE INVENTORY RECORD */
+async function deleteInventory(inventoryId) {
     if (!inventoryId) {
-
-        throw new Error(
-            "Inventory ID is required."
-        );
-
+        throw new Error("Inventory ID is required.");
     }
 
-
-    const confirmed =
-        window.confirm(
-            "Are you sure you want to delete this inventory record?"
-        );
-
+    const confirmed = window.confirm("Are you sure you want to delete this inventory record.");
 
     if (!confirmed) {
         return false;
     }
 
-
     try {
-
         setLoading(true);
 
-
-        const url =
-            `${INVENTORY_API}?id=${encodeURIComponent(inventoryId)}`;
-
+        const url = `${INVENTORY_API}?id=${encodeURIComponent(inventoryId)}`;
 
         await inventoryRequest(
             url,
@@ -480,80 +253,47 @@ async function deleteInventory(
             }
         );
 
-
         await loadInventory();
-
 
         showToast(
             "Inventory record deleted successfully.",
-            "success"
+            "sucess"
         );
 
-
         return true;
-
-
     } catch (error) {
-
         console.error(
             "Unable to delete inventory:",
             error
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to delete inventory record.",
             "error"
         );
 
-
         return false;
-
-
     } finally {
-
         setLoading(false);
-
     }
-
 }
 
-
-/* ============================================================
-   STOCK ADJUSTMENT
-============================================================ */
-
+/* STOCK ADJUSTMENT */
 async function adjustStock(
     inventoryId,
     quantity,
     adjustmentType = "adjustment"
 ) {
-
     if (!inventoryId) {
-
-        throw new Error(
-            "Inventory ID is required."
-        );
-
+        throw new Error("Inventory ID is required.");
     }
 
+    const amount = Number(quantity);
 
-    const amount =
-        Number(quantity);
-
-
-    if (
-        !Number.isFinite(amount) ||
-        amount === 0
-    ) {
-
-        throw new Error(
-            "A valid non-zero quantity is required."
-        );
-
+    if (!Number.isFinite(amount) || amount === 0) {
+        throw new Error("A valid non-zero quantity is required.");
     }
-
 
     const allowedTypes = [
         "increase",
@@ -561,511 +301,269 @@ async function adjustStock(
         "adjustment"
     ];
 
-
-    if (
-        !allowedTypes.includes(
-            adjustmentType
-        )
-    ) {
-
-        throw new Error(
-            "Invalid stock adjustment type."
-        );
-
+    if (!allowedTypes.includes(adjustmentType)) {
+        throw new Error("Invalid stock adjustment type.");
     }
 
+    const url = `${INVENTORY_API}?id=${encodeURIComponent(inventoryId)}`;
 
-    const url =
-        `${INVENTORY_API}?id=${encodeURIComponent(inventoryId)}`;
-
-
-    const response =
-        await inventoryRequest(
-            url,
-            {
-                method: "PATCH",
-
-                body: {
-
-                    quantity: amount,
-
-                    adjustment_type:
-                        adjustmentType
-
-                }
-
+    const response = await inventoryRequest(
+        url,
+        {
+            method: "PATCH",
+            body: {
+                quantity: amount,
+                adjust_type: adjustmentType 
             }
-        );
-
+        }
+    );
 
     await loadInventory();
 
-
     return response;
-
 }
 
-
-/* ============================================================
-   VALIDATE INVENTORY
-============================================================ */
-
+/* VALIDATE INVENTORY */
 function validateInventory(data) {
 
-    if (
-        !data ||
-        typeof data !== "object"
-    ) {
-
-        throw new Error(
-            "Invalid inventory data."
-        );
-
+    if (!data || typeof data !== "object") {
+        throw new Error("Invalid inventory data.");
     }
 
-
-    const productId =
-        data.product_id ??
+    const productId = 
+        data.product_id ?? 
         data.productId;
 
-
-    if (
-        productId === undefined ||
-        productId === null ||
-        productId === ""
-    ) {
-
+    if (productId === undefined || productId === null || productId === "") {
         throw new Error(
             "Product is required."
         );
-
     }
 
+    const quantity = Number(
+        data.quantity ??
+        data.stock ?? 
+        data.current_stock ?? 
+        0 
+    );
 
-    const quantity =
-        Number(
-            data.quantity ??
-            data.stock ??
-            data.current_stock ??
-            0
-        );
+    const minimumStock = Number(
+        data.minimum_stock ??
+        data.min_stock ??
+        0 
+    );
 
-
-    const minimumStock =
-        Number(
-            data.minimum_stock ??
-            data.min_stock ??
-            0
-        );
-
-
-    const maximumStock =
-        data.maximum_stock ??
+    const maximumStock = 
+        data.maximum_stock ?? 
         data.max_stock;
 
-
-    if (
-        !Number.isFinite(quantity) ||
-        quantity < 0
-    ) {
-
-        throw new Error(
-            "Stock quantity must be a valid non-negative number."
-        );
-
+    if (!Number.isFinite(quantity) || quantity < 0)  {
+        throw new Error("Stock quantity must be a valid non-negative number.");
     }
 
-
-    if (
-        !Number.isFinite(minimumStock) ||
-        minimumStock < 0
-    ) {
-
-        throw new Error(
-            "Minimum stock must be a valid non-negative number."
-        );
-
+    if (!Number.isFinite(minimumStock) || minimumStock < 0)  {
+        throw new Error("Minimum stock must be a valid non-negative number.");
     }
 
+    if (maximumStock !== undefined && maximumStock !== null && maximumStock !== "") {
+        const max = Number(maximumStock);
 
-    if (
-        maximumStock !== undefined &&
-        maximumStock !== null &&
-        maximumStock !== ""
-    ) {
-
-        const max =
-            Number(
-                maximumStock
-            );
-
-
-        if (
-            !Number.isFinite(max) ||
-            max < minimumStock
-        ) {
-
-            throw new Error(
-                "Maximum stock must be greater than or equal to minimum stock."
-            );
-
+        if (!Number.isFinite(max) || max < minimumStock) {
+            throw new Error("Maximum stock must be greater than or equal to minimum stock.");
         }
-
     }
-
 
     return {
-
         ...data,
 
-        product_id:
+        product_id: 
             productId,
 
         quantity,
 
-        minimum_stock:
-            minimumStock
-
+        minimum_stock: 
+            minimumStock 
     };
-
 }
 
-
-/* ============================================================
-   APPLY FILTERS
-============================================================ */
-
+/* APPLY FILTERS */
 function applyInventoryFilters() {
 
-    let inventory =
-        [
-            ...InventoryState.inventory
-        ];
+    let inventory = [...InventoryState.inventory];
 
-
-    /*
-     * Search
-     */
-    const search =
-        InventoryState.search
-            .toLowerCase()
-            .trim();
-
+    /* Search */
+    const search = InventoryState.search
+        .toLowerCase()
+        .trim();
 
     if (search) {
+        inventory = inventory.filter(
+            item => {
+                const searchable = [
 
-        inventory =
-            inventory.filter(
-                item => {
+                    item.product_name,
 
-                    const searchable = [
+                    item.name,
 
-                        item.product_name,
+                    item.sku,
 
-                        item.name,
+                    item.barcode,
 
-                        item.sku,
+                    item.category_name,
 
-                        item.barcode,
+                    item.category
 
-                        item.category_name,
+                ]
+                    .filter(Boolean)
+                    .join(" ")
+                    .toLowerCase();
 
-                        item.category
-
-                    ]
-                        .filter(Boolean)
-                        .join(" ")
-                        .toLowerCase();
-
-
-                    return searchable.includes(
-                        search
-                    );
-
-                }
-            );
-
+                return searchable.includes(
+                    search
+                );
+            }
+        );
     }
 
+    /* Category */
+    if (InventoryState.category) {
+        inventory = inventory.filter(
+            item => {
+                const categoryId = String(
+                    item.category_id ?? 
+                    "" 
+                );
 
-    /*
-     * Category
-     */
-    if (
-        InventoryState.category
-    ) {
+                const categoryName = String(
+                    item.category_name ?? 
+                    item.category ?? 
+                    "" 
+                ); 
 
-        inventory =
-            inventory.filter(
-                item => {
-
-                    const categoryId =
-                        String(
-                            item.category_id ??
-                            ""
-                        );
-
-
-                    const categoryName =
-                        String(
-                            item.category_name ??
-                            item.category ??
-                            ""
-                        );
-
-
-                    return (
-                        categoryId ===
-                        String(
-                            InventoryState.category
-                        )
-                    ) ||
-                    (
-                        categoryName
-                            .toLowerCase() ===
-                        String(
-                            InventoryState.category
-                        )
-                            .toLowerCase()
-                    );
-
-                }
-            );
-
+                return (categoryId === String(InventoryState.category)) ||
+                (categoryName.toLowerCase() === String(InventoryState.category).toLowerCase());
+            }
+        );
     }
 
-
-    /*
-     * Stock status
-     */
-    if (
-        InventoryState.stockStatus
-    ) {
-
-        inventory =
-            inventory.filter(
-                item =>
-                    getStockStatus(
-                        item
-                    ) ===
-                    InventoryState.stockStatus
-            );
-
+    /* Stock status */
+    if (InventoryState.stockStatus) {
+        inventory = inventory.filter(
+            item => getStockStatus(item) === InventoryState.stockStatus
+        );
     }
 
-
-    /*
-     * General status
-     */
-    if (
-        InventoryState.status
-    ) {
-
-        inventory =
-            inventory.filter(
-                item =>
-                    getInventoryStatus(
-                        item
-                    ) ===
-                    InventoryState.status
-            );
-
+    /* General status */
+    if (InventoryState.status) {
+        inventory = inventory.filter(
+            item => getInventoryStatus(item) === InventoryState.status 
+        );
     }
 
+    /* Sort */
+    inventory.sort(compareInventory);
 
-    /*
-     * Sort
-     */
-    inventory.sort(
-        compareInventory
-    );
-
-
-    InventoryState.filteredInventory =
-        inventory;
-
+    InventoryState.filteredInventory = inventory;
 
     renderInventory();
-
 }
 
+/* SORT INVENTORY */
+function compareInventory(a, b) {
+    let valueA = getInventorySortValue(
+        a,
+        InventoryState.sortBy 
+    );
 
-/* ============================================================
-   SORT INVENTORY
-============================================================ */
+    let valueB = getInventorySortValue(
+        b,
+        InventoryState.sortBy 
+    );
 
-function compareInventory(
-    a,
-    b
-) {
-
-    let valueA =
-        getInventorySortValue(
-            a,
-            InventoryState.sortBy
-        );
-
-
-    let valueB =
-        getInventorySortValue(
-            b,
-            InventoryState.sortBy
-        );
-
-
-    if (
-        typeof valueA === "string"
-    ) {
-
-        valueA =
-            valueA.toLowerCase();
-
+    if (typeof valueA === "string") {
+        valueA = valueA.toLowerCase();
     }
 
-
-    if (
-        typeof valueB === "string"
-    ) {
-
-        valueB =
-            valueB.toLowerCase();
-
+    if (typeof valueB === "string") {
+        valueB = valueB.toLowerCase();
     }
-
-
-    if (valueA < valueB) {
-
-        return InventoryState.sortDirection ===
-            "asc"
-            ? -1
-            : 1;
-
-    }
-
 
     if (valueA > valueB) {
-
-        return InventoryState.sortDirection ===
-            "asc"
-            ? 1
-            : -1;
-
+        return InventoryState.sortDirection === "asc"
+            ? -1
+            : 1;
     }
 
+    if (valueA > valueB) {
+        return InventoryState.sortDirection === "asc" 
+            ? 1
+            : -1;
+    }
 
     return 0;
-
 }
-
 
 function getInventorySortValue(
     item,
     field
 ) {
-
     switch (field) {
-
         case "stock":
-
             return getQuantity(item);
 
-
         case "minimum_stock":
-
             return getMinimumStock(item);
 
-
         case "value":
-
             return (
-                getQuantity(item) *
-                getUnitCost(item)
+                getQuantity(item) * getUnitCost(item)
             );
 
-
         case "status":
-
             return getStockStatus(item);
-
 
         case "product_name":
 
         default:
-
-            return (
+            return(
                 item.product_name ??
                 item.name ??
                 ""
             );
-
     }
-
 }
 
-
-/* ============================================================
-   INVENTORY STATUS
-============================================================ */
-
-function getInventoryStatus(
-    item
-) {
-
-    const status =
-        String(
+/* INVENTORY STATUS */
+function getInventoryStatus(item) {
+    const status = String(
             item.status ??
             "active"
-        ).toLowerCase();
-
+    ).toLowerCase();
 
     return status === "inactive"
         ? "inactive"
         : "active";
-
 }
 
+function getStockStatus(item) {
+    const quantity = getQuantity(item);
 
-function getStockStatus(
-    item
-) {
+    const minimum = getMinimumStock(item);
 
-    const quantity =
-        getQuantity(item);
-
-
-    const minimum =
-        getMinimumStock(item);
-
-
-    if (
-        quantity <= 0
-    ) {
-
+    if (quantity <= 0) {
         return "out_of_stock";
-
     }
 
-
-    if (
-        quantity <= minimum
-    ) {
-
+    if (quantity <= minimum) {
         return "low_stock";
-
     }
-
 
     return "in_stock";
-
 }
 
-
-function getStockStatusLabel(
-    status
-) {
+function getStockStatusLabel(status) {
 
     switch (status) {
-
         case "out_of_stock":
             return "Out of Stock";
 
@@ -1075,20 +573,16 @@ function getStockStatusLabel(
         case "in_stock":
             return "In Stock";
 
-        default:
+        default: 
             return "Unknown";
 
     }
-
 }
 
-
-function getStockStatusClass(
-    status
-) {
-
+function getStockStatusClass(status) {
+    
     switch (status) {
-
+        
         case "out_of_stock":
             return "status-out-of-stock";
 
@@ -1100,1063 +594,593 @@ function getStockStatusClass(
 
         default:
             return "status-neutral";
-
     }
-
 }
 
-
-/* ============================================================
-   VALUE HELPERS
-============================================================ */
-
+/* VALUE HELPERS */
 function getQuantity(item) {
-
     return Number(
         item.quantity ??
         item.stock ??
         item.current_stock ??
         0
     );
-
 }
-
 
 function getMinimumStock(item) {
-
     return Number(
-        item.minimum_stock ??
-        item.min_stock ??
-        0
+        item.minimum_stock ?? 
+        item.min_stock ?? 
+        0 
     );
-
 }
-
 
 function getMaximumStock(item) {
-
-    const value =
-        item.maximum_stock ??
+    const value = 
+        item.maximum_stock ?? 
         item.max_stock;
 
-
-    if (
-        value === undefined ||
-        value === null ||
-        value === ""
-    ) {
-
+    if (value === undefined || value === null || value === "") {
         return null;
-
     }
 
-
     return Number(value);
-
 }
 
-
 function getUnitCost(item) {
-
     return Number(
-        item.unit_cost ??
-        item.cost_price ??
+        item.unit_cost ?? 
+        item.cost_price ?? 
         item.cost ??
         0
     );
-
 }
-
 
 function getInventoryValue(item) {
-
     return (
-        getQuantity(item) *
-        getUnitCost(item)
+        getQuantity(item) * getUnitCost(item)
     );
-
 }
 
-
-/* ============================================================
-   RENDER INVENTORY
-============================================================ */
-
+/* RENDER INVENTORY */
 function renderInventory() {
-
-    const tbody =
-        getElement(
-            "inventoryTableBody"
-        );
-
+    const tbody = getElement("inventoryTableBody");
 
     if (!tbody) {
         return;
     }
 
-
-    const inventory =
-        getPaginatedInventory();
-
+    const inventory = getPaginatedInventory();
 
     tbody.innerHTML = "";
 
-
-    if (
-        InventoryState.filteredInventory
-            .length === 0
-    ) {
-
-        tbody.innerHTML = `
-
+    if (InventoryState.filteredInventory.length === 0) {
+        tbody.innerHTML  = `
             <tr>
-
-                <td
-                    colspan="100"
-                    class="table-empty-state"
-                >
-
+                <td colspan="100" class="table-empty-state">
                     <div class="inventory-empty">
-
                         <div class="empty-icon">
                             📦
                         </div>
-
-                        <h3>
-                            No inventory records found
-                        </h3>
-
-                        <p>
-                            There are no inventory records
-                            matching your filters.
-                        </p>
-
+                        
+                        <h3>No inventory record found</h3>
+                        
+                        <p>There are no inventory records matching your filters.</p>
                     </div>
-
                 </td>
-
             </tr>
-
         `;
-
 
         updatePagination();
 
         return;
-
     }
-
 
     inventory.forEach(
         item => {
-
             tbody.appendChild(
-                createInventoryRow(
-                    item
-                )
+                createInventoryRow(item)
             );
-
         }
     );
 
-
     updatePagination();
-
 }
 
+/* CREATE INVENTORY TABLE ROW */
+function createInventoryRow(item) {
+    const tr = document.createElement("tr");
 
-/* ============================================================
-   CREATE INVENTORY TABLE ROW
-============================================================ */
-
-function createInventoryRow(
-    item
-) {
-
-    const tr =
-        document.createElement(
-            "tr"
-        );
-
-
-    const id =
-        item.id ??
+    const id = 
+        item.id ?? 
         item.inventory_id;
 
-
-    const productName =
+    const productName = 
         escapeHTML(
-            item.product_name ??
-            item.name ??
+            item.product_name ?? 
+            item.name ?? 
             "Unknown Product"
         );
 
-
-    const sku =
+    const sku = 
         escapeHTML(
-            item.sku ??
-            "—"
+            item.sku ?? 
+            "-"
         );
 
-
-    const category =
+    const category = 
         escapeHTML(
             item.category_name ??
-            item.category ??
+            item.category ?? 
             "Uncategorized"
         );
 
-
-    const quantity =
+    const quantity = 
         getQuantity(item);
-
 
     const minimum =
         getMinimumStock(item);
 
-
-    const status =
+    const status = 
         getStockStatus(item);
 
-
-    const inventoryValue =
+    const inventoryValue = 
         getInventoryValue(item);
 
-
-    const generalStatus =
-        getInventoryStatus(item);
-
-
     tr.innerHTML = `
-
         <td>
-
             <div class="inventory-product-cell">
-
                 <div class="inventory-product-icon">
                     📦
                 </div>
-
+                
                 <div>
-
-                    <strong>
-                        ${productName}
-                    </strong>
-
-                    <small>
-                        SKU: ${sku}
-                    </small>
-
+                    <strong>${productName}</strong>
+                
+                    <small>SKU: ${sku}</small>
                 </div>
-
             </div>
-
         </td>
 
+        <td>${category}</td>
 
         <td>
-            ${category}
+            <strong>${formatNumber(quantity)}</strong>
         </td>
 
+        <td>${formatNumber(minimum)}</td>
 
         <td>
-
-            <strong>
-                ${formatNumber(quantity)}
-            </strong>
-
-        </td>
-
-
-        <td>
-            ${formatNumber(minimum)}
-        </td>
-
-
-        <td>
-
-            <span
-                class="status-badge
-                ${getStockStatusClass(status)}"
-            >
+            <span class="status-badge ${getStockStatusClass(status)}">
                 ${getStockStatusLabel(status)}
             </span>
-
         </td>
 
-
         <td>
-
-            <strong>
-                ${formatCurrency(inventoryValue)}
-            </strong>
-
+            <strong>${formatCategory(inventoryValue)}</strong>
         </td>
 
-
         <td>
-
-            <span
-                class="status-badge
-                ${generalStatus === "active"
-                    ? "status-active"
-                    : "status-inactive"}"
+            <span class="status-badge ${generalStatus === "active" 
+                ? "status-active"
+                : "status-inactive"}"
             >
                 ${generalStatus === "active"
                     ? "Active"
                     : "Inactive"}
             </span>
-
         </td>
 
-
         <td>
-
             <div class="inventory-actions">
-
                 <button
                     type="button"
                     class="action-button view-inventory"
-                    data-id="${escapeAttribute(id)}"
+                    data-in="${escapeAttribute(id)}"
                     title="View inventory"
                 >
                     👁️
                 </button>
 
-
                 <button
                     type="button"
                     class="action-button adjust-inventory"
-                    data-id="${escapeAttribute(id)}"
+                    data-in="${escapeAttribute(id)}"
                     title="Adjust stock"
                 >
                     ↕️
                 </button>
 
-
                 <button
                     type="button"
                     class="action-button edit-inventory"
-                    data-id="${escapeAttribute(id)}"
+                    data-in="${escapeAttribute(id)}"
                     title="Edit inventory"
                 >
                     ✏️
                 </button>
 
-
                 <button
                     type="button"
                     class="action-button delete-inventory"
                     data-id="${escapeAttribute(id)}"
-                    title="Delete inventory"
+                    title="Delete inventor"
                 >
                     🗑️
                 </button>
-
             </div>
-
         </td>
-
     `;
-
-
     return tr;
-
 }
 
+/* PAGINATION */
+function getPaginationInventory() {
 
-/* ============================================================
-   PAGINATION
-============================================================ */
+    const start = (InventoryState.currentPage - 1) * InventoryState.perPage;
 
-function getPaginatedInventory() {
+    const end = start + InventoryState.perPage;
 
-    const start =
-        (
-            InventoryState.currentPage -
-            1
-        ) *
-        InventoryState.perPage;
-
-
-    const end =
-        start +
-        InventoryState.perPage;
-
-
-    return InventoryState
-        .filteredInventory
-        .slice(
-            start,
-            end
-        );
-
+    return InventoryState.filteredInventory.slice(
+        start,
+        end 
+    );
 }
-
 
 function updatePagination() {
+    
+    const total = InventoryState.filteredInventory.length;
 
-    const total =
-        InventoryState
-            .filteredInventory
-            .length;
+    const totalPages = Math.max(
+        1,
+        Math.ceil(
+            total / InventoryState.perPage
+        )
+    );
 
-
-    const totalPages =
-        Math.max(
-            1,
-            Math.ceil(
-                total /
-                InventoryState.perPage
-            )
-        );
-
-
-    if (
-        InventoryState.currentPage >
-        totalPages
-    ) {
-
-        InventoryState.currentPage =
-            totalPages;
-
+    if (InventoryState.currentPage > totalPages) {
+        InventoryState.currentPage = totalPages;
     }
-
 
     setText(
         "currentPage",
-        InventoryState.currentPage
+        InventoryState.currentPage 
     );
-
 
     setText(
         "totalPages",
         totalPages
     );
 
+    const previousButton = getElement(previousPage);
 
-    const previousButton =
-        getElement(
-            "previousPage"
-        );
-
-
-    const nextButton =
-        getElement(
-            "nextPage"
-        );
-
+    const nextButton = getElement("nextPage");
 
     if (previousButton) {
-
-        previousButton.disabled =
-            InventoryState.currentPage <= 1;
-
+        previousButton.disabled = InventoryState.currentPage <= 1;
     }
-
 
     if (nextButton) {
-
-        nextButton.disabled =
-            InventoryState.currentPage >=
-            totalPages;
-
+        nextButton.disabled.currentPage >= totalPages;
     }
 
-
-    const info =
-        getElement(
-            "paginationInfo"
-        );
-
+    const info = getElement("paginationInfo");
 
     if (!info) {
         return;
     }
 
-
     if (total === 0) {
-
-        info.textContent =
-            "No inventory records";
-
-        return;
-
+        info.textContent = "No inventory records";
+        return ;
     }
 
+    const start = (InventoryState.currentPage - 1) * InventoryState.perPage + 1;
 
-    const start =
-        (
-            InventoryState.currentPage -
-            1
-        ) *
-        InventoryState.perPage +
-        1;
+    const end = Math.min(
+        InventoryState.currentPage * InventoryState.perPage, 
+        total
+    );
 
-
-    const end =
-        Math.min(
-            InventoryState.currentPage *
-            InventoryState.perPage,
-            total
-        );
-
-
-    info.textContent =
-        `Showing ${start}-${end} of ${total}`;
-
+    info.textContent = `Showing ${start}-${end} of ${total}`;
 }
-
 
 function nextPage() {
+    
+    const totalPages = Math.max(
+        1,
+        Math.ceil(InventoryState.filteredInventory.length / InventoryState.perPage)
+    );
 
-    const totalPages =
-        Math.max(
-            1,
-            Math.ceil(
-                InventoryState
-                    .filteredInventory
-                    .length /
-                InventoryState.perPage
-            )
-        );
-
-
-    if (
-        InventoryState.currentPage <
-        totalPages
-    ) {
-
+    if (InventoryState.currentPage < totalPages) {
         InventoryState.currentPage++;
-
         renderInventory();
-
     }
-
 }
-
 
 function previousPage() {
 
-    if (
-        InventoryState.currentPage >
-        1
-    ) {
-
+    if (InventoryState.currentPage > 1) {
         InventoryState.currentPage--;
-
         renderInventory();
-
     }
 
 }
 
-
-/* ============================================================
-   INVENTORY STATISTICS
-============================================================ */
-
+/* INVENTORY STATISTICS */
 function updateInventoryStatistics() {
+    const inventory = InventoryState.inventory;
 
-    const inventory =
-        InventoryState.inventory;
+    const totalRecords = inventory.length;
 
+    const totalUnits = inventory.reduce(
+        (
+            total,
+            item
+        ) => {
+            return total + getQuantity(item);
+        },
+        0
+    );
 
-    const totalRecords =
-        inventory.length;
+    const lowStock = inventory.filter(
+            item => getStockStatus(item) === "low_stock"
+    ).length;
 
+    const outOfStock = inventory.filter(
+        item => getStockStatus(item) === "out_of_stock "
+    ).length;
 
-    const totalUnits =
-        inventory.reduce(
-            (
-                total,
-                item
-            ) => {
+    const inStock = inventory.filter(
+        item => getStockStatus(item) === "in_stock"
+    ).length;
 
-                return total +
-                    getQuantity(item);
-
-            },
-            0
-        );
-
-
-    const lowStock =
-        inventory.filter(
-            item =>
-                getStockStatus(item) ===
-                "low_stock"
-        ).length;
-
-
-    const outOfStock =
-        inventory.filter(
-            item =>
-                getStockStatus(item) ===
-                "out_of_stock"
-        ).length;
-
-
-    const inStock =
-        inventory.filter(
-            item =>
-                getStockStatus(item) ===
-                "in_stock"
-        ).length;
-
-
-    const totalValue =
-        inventory.reduce(
-            (
-                total,
-                item
-            ) => {
-
-                return total +
-                    getInventoryValue(item);
-
-            },
-            0
-        );
-
+    const totalValue = inventory.reduce(
+        (
+            total,
+            item 
+        ) => {
+            return total + getInventoryValue(item);
+        },
+        0 
+    );
 
     setText(
         "totalInventoryItems",
         formatNumber(totalRecords)
     );
 
-
     setText(
         "totalStockUnits",
         formatNumber(totalUnits)
     );
-
 
     setText(
         "lowStockItems",
         formatNumber(lowStock)
     );
 
-
     setText(
         "outOfStockItems",
         formatNumber(outOfStock)
     );
 
-
-    setText(
-        "inStockItems",
-        formatNumber(inStock)
-    );
-
-
     setText(
         "totalInventoryValue",
-        formatCurrency(totalValue)
+        formatCurrent(totalValue)
     );
-
 }
 
-
-/* ============================================================
-   CATEGORY FILTER
-============================================================ */
-
-function populateCategoryFilter(
-    inventory
-) {
-
-    const select =
-        getElement(
-            "inventoryCategoryFilter"
-        );
-
+/* CATEGORY FILTER */
+function populateCategoryFilter(inventory) {
+    const select = getElement("inventoryCategoryFilter");
 
     if (!select) {
         return;
     }
 
+    const existingValue = select.value;
 
-    const existingValue =
-        select.value;
-
-
-    const categories =
-        new Map();
-
+    const categories = new Map();
 
     inventory.forEach(
         item => {
-
-            const id =
-                item.category_id ??
+            const id = 
+                item.category_id ?? 
                 item.category;
 
-
-            const name =
-                item.category_name ??
+            const name = 
+                item.category_name ?? 
                 item.category;
 
-
-            if (
-                id !== undefined &&
-                id !== null &&
-                name
-            ) {
-
+            if (id !== undefined && id !== null && name) {
                 categories.set(
                     String(id),
                     String(name)
                 );
-
             }
-
         }
     );
 
-
     select.innerHTML = `
-
         <option value="">
             All Categories
         </option>
-
     `;
 
-
-    Array.from(
-        categories.entries()
-    )
-        .sort(
-            (
-                a,
-                b
-            ) =>
-                a[1].localeCompare(
-                    b[1]
-                )
+    Array.from(categories.entries()).sort(
+        (
+            a,
+            b 
+        ) => a[1].localeCompare(
+            b[1]
         )
-        .forEach(
-            (
-                [id, name]
-            ) => {
+    ).forEach(
+        (
+            [id, name]
+        ) => {
+            const option = document.createElement("option");
 
-                const option =
-                    document.createElement(
-                        "option"
-                    );
+            option.value = id;
 
+            option.textContent = name;
 
-                option.value =
-                    id;
-
-
-                option.textContent =
-                    name;
-
-
-                select.appendChild(
-                    option
-                );
-
-            }
-        );
-
-
-    if (
-        categories.has(
-            existingValue
-        )
-    ) {
-
-        select.value =
-            existingValue;
-
-    }
-
-}
-
-
-/* ============================================================
-   FORM DATA
-============================================================ */
-
-function getInventoryFormData() {
-
-    const form =
-        getElement(
-            "inventoryForm"
-        );
-
-
-    if (!form) {
-
-        throw new Error(
-            "Inventory form was not found."
-        );
-
-    }
-
-
-    const formData =
-        new FormData(form);
-
-
-    return Object.fromEntries(
-        formData.entries()
+            select.appendChild(option);
+        }
     );
 
+    if (categories.has(existingValue)) {
+        select.value = existingValue;
+    }
 }
 
+/* FORM DATA */
+function getInventoryFormData() {
+    const form = getElement("inventoryForm");
 
-/* ============================================================
-   SUBMIT INVENTORY FORM
-============================================================ */
+    if (!form) {
+        throw new Error("Inventory form was not found.");
+    }
 
-async function handleInventorySubmit(
-    event
-) {
+    const formData = new FormData(form);
 
+    return Object.fromEntries(formData.entries());
+
+
+
+/* SUBMIT INVENTORY FORM */}
+async function handleInventorySubmit(event) {
     event.preventDefault();
 
+    const form = event.currentTarget;
 
-    const form =
-        event.currentTarget;
-
-
-    const submitButton =
-        form.querySelector(
-            "[type='submit']"
-        );
-
+    const submitButton = form.querySelector("[type='submit']");
 
     try {
-
-        const data =
-            getInventoryFormData();
-
+        const data = getInventoryFormData();
 
         if (submitButton) {
+            submitButton.disabled = true;
 
-            submitButton.disabled =
-                true;
+            submitButton.dataset.originalText = submitButton.textContent;
 
-
-            submitButton.dataset.originalText =
-                submitButton.textContent;
-
-
-            submitButton.textContent =
-                InventoryState.currentInventoryId
-                    ? "Updating..."
-                    : "Saving...";
-
+            submitButton.textContent = InventoryStateState.currentInventoryId
+                ? "Updating..."
+                : "Saving...";
         }
 
-
-        if (
-            InventoryState.currentInventoryId
-        ) {
-
+        if (InventoryState.currentInventoryId) {
             await updateInventory(
                 InventoryState.currentInventoryId,
-                data
+                data 
             );
-
 
             showToast(
                 "Inventory updated successfully.",
                 "success"
             );
-
         } else {
-
-            await createInventory(
-                data
-            );
-
+            await createInventory(data);
 
             showToast(
                 "Inventory record created successfully.",
                 "success"
-            );
-
+            )
         }
-
-
-        InventoryState.currentInventoryId =
-            null;
-
+        
+        InventoryState.currentInventoryId = null;
 
         form.reset();
-
-
+        
         closeInventoryModal();
-
-
     } catch (error) {
-
         console.error(
             "Inventory save error:",
-            error
+            error 
         );
-
 
         showToast(
-            error.message ||
-            "Unable to save inventory.",
+            error.message || "Unable to save inventory.",
             "error"
         );
-
-
     } finally {
 
         if (submitButton) {
+            submitButton.disabled = false;
 
-            submitButton.disabled =
-                false;
-
-
-            submitButton.textContent =
-                submitButton.dataset.originalText ||
-                "Save Inventory";
-
+            submitButton.textContent = submitButton.dataset.originalText || "Save Inventory";
         }
-
     }
-
 }
 
-
-/* ============================================================
-   OPEN CREATE MODAL
-============================================================ */
-
+/* OPEN CREATE MODAL */
 function openCreateInventory() {
+    InventoryState.currentInventoryId = null;
 
-    InventoryState.currentInventoryId =
-        null;
-
-
-    const form =
-        getElement(
-            "inventoryForm"
-        );
-
+    const form = getElement("inventoryForm");
 
     if (form) {
         form.reset();
     }
 
-
     setText(
-        "inventoryModalTitle",
-        "Add Inventory"
+        "inventoryModalFilter",
+        "Add inventory"
     );
 
-
     openInventoryModal();
-
 }
 
-
-/* ============================================================
-   OPEN EDIT MODAL
-============================================================ */
-
-async function openEditInventory(
-    inventoryId
-) {
-
+/* OPEN EDIT MODEL */
+async function openEditInventory(inventoryId) {
     try {
-
-        InventoryState.currentInventoryId =
-            inventoryId;
-
+        InventoryState.currentInventoryId = inventoryId;
 
         setText(
             "inventoryModalTitle",
             "Edit Inventory"
         );
 
-
         openInventoryModal();
 
+        setInventoryFormLoading(true);
 
-        setInventoryFormLoading(
-            true
-        );
+        const inventory = await getInventory(inventoryId);
 
-
-        const inventory =
-            await getInventory(
-                inventoryId
-            );
-
-
-        populateInventoryForm(
-            inventory
-        );
-
-
+        populateInventoryForm(inventory);
     } catch (error) {
-
         console.error(
             "Unable to load inventory:",
             error
         );
-
-
+        
         showToast(
-            error.message ||
-            "Unable to load inventory.",
-            "error"
+            error.message || "Unable to load inventory.",
+            error
         );
-
 
         closeInventoryModal();
-
-
     } finally {
-
         setInventoryFormLoading(
-            false
+            false 
         );
-
     }
-
 }
 
+/* POPULATE INVENTORY FORM */
+function populateInventoryForm(item) {
+    const form = getElement("inventoryForm");
 
-/* ============================================================
-   POPULATE INVENTORY FORM
-============================================================ */
-
-function populateInventoryForm(
-    item
-) {
-
-    const form =
-        getElement(
-            "inventoryForm"
-        );
-
-
-    if (
-        !form ||
-        !item
-    ) {
+    if (!form || !item) {
         return;
     }
-
 
     setFormValue(
         form,
         "product_id",
-        item.product_id ??
+        item.product_id ?? 
         ""
     );
-
 
     setFormValue(
         form,
@@ -2164,13 +1188,11 @@ function populateInventoryForm(
         getQuantity(item)
     );
 
-
     setFormValue(
         form,
         "minimum_stock",
         getMinimumStock(item)
     );
-
 
     setFormValue(
         form,
@@ -2178,354 +1200,208 @@ function populateInventoryForm(
         getMaximumStock(item) ?? ""
     );
 
-
-    setFormValue(
-        form,
-        "location",
-        item.location ??
-        item.storage_location ??
-        ""
-    );
-
-
     setFormValue(
         form,
         "status",
         getInventoryStatus(item)
     );
 
+    steFormValue(
+        form,
+        "status",
+        getInventoryStatus(item)
+    );
 
     setFormValue(
         form,
         "notes",
-        item.notes ??
-        ""
+        item_notes ??
+        "" 
     );
-
 }
 
-
-/* ============================================================
-   SET FORM VALUE
-============================================================ */
-
+/* SET FORM VALUE */
 function setFormValue(
     form,
     fieldName,
-    value
+    value 
 ) {
-
-    const field =
-        form.elements[fieldName];
-
+    const field = form.elements[fieldName];
 
     if (field) {
-
-        field.value =
-            value;
-
+        field.value = value;
     }
-
 }
 
-
-/* ============================================================
-   VIEW INVENTORY
-============================================================ */
-
-async function openViewInventory(
-    inventoryId
-) {
-
+/* VIEW INVENTORY */
+async function openViewInventory(inventoryId) {
     try {
+        const item = await getInventory(inventoryId);
 
-        const item =
-            await getInventory(
-                inventoryId
-            );
-
-
-        showInventoryDetails(
-            item
-        );
-
+        showInventoryDetails(item);
 
     } catch (error) {
-
         console.error(
-            "Unable to load inventory details:",
+            "Unable to load inventory details.",
             error
         );
 
-
         showToast(
-            error.message ||
-            "Unable to load inventory details.",
+            error.message || "Unable to load inventory details.",
             "error"
-        );
-
+        )
     }
-
 }
 
-
-/* ============================================================
-   SHOW INVENTORY DETAILS
-============================================================ */
-
-function showInventoryDetails(
-    item
-) {
-
-    const modal =
-        getElement(
-            "inventoryDetailsModal"
-        );
-
+/* SHOW INVENTORY DETAILS */
+function showInventoryDetails(item) {
+    const modal = getElement("inventoryDetailsModal");
 
     if (!modal) {
-
         openEditInventory(
             item.id ??
             item.inventory_id
         );
 
-
         return;
-
     }
-
 
     setText(
         "inventoryDetailsProduct",
-        item.product_name ??
+        item.product_name ?? 
         item.name ??
-        "—"
+        "-"
     );
-
 
     setText(
         "inventoryDetailsSku",
         item.sku ??
-        "—"
+        "-"
     );
-
 
     setText(
         "inventoryDetailsCategory",
         item.category_name ??
         item.category ??
-        "—"
+        "-"
     );
-
 
     setText(
         "inventoryDetailsStock",
-        formatNumber(
-            getQuantity(item)
-        )
+        formatNumber(getQuantity(item))
     );
-
 
     setText(
         "inventoryDetailsMinimum",
-        formatNumber(
-            getMinimumStock(item)
-        )
+        formatNumber(getMinimumStock(item))
     );
-
 
     setText(
         "inventoryDetailsValue",
-        formatCurrency(
-            getInventoryValue(item)
-        )
+        formatCurrent(getInventoryValue(item))
     );
-
 
     setText(
         "inventoryDetailsStatus",
-        getStockStatusLabel(
-            getStockStatus(item)
-        )
+        getStockStatusLabel(getStockStatus(item))
     );
-
 
     setText(
         "inventoryDetailsLocation",
-        item.location ??
-        item.storage_location ??
-        "—"
+        item.location ?? 
+        item.storage_location ?? 
+        "-"
     );
-
 
     setText(
         "inventoryDetailsNotes",
-        item.notes ??
+        item.notes ?? 
         "No notes available."
     );
 
+    modal.classList.add("active");
 
-    modal.classList.add(
-        "active"
-    );
-
-
-    document.body.classList.add(
-        "modal-open"
-    );
-
+    document.body.classList.add("modal-open")
 }
 
+/* STOCK ADJUST MODAL */
+async function openStockAdjustment(inventoryId) {
 
-/* ============================================================
-   STOCK ADJUSTMENT MODAL
-============================================================ */
-
-async function openStockAdjustment(
-    inventoryId
-) {
-
-    const item =
-        InventoryState.inventory.find(
-            record =>
-                String(
+    const item = InventoryState.inventory.find(
+        record => String(
                     record.id ??
                     record.inventory_id
-                ) ===
-                String(inventoryId)
-        );
-
+        ) === String(inventoryId)
+    );
 
     if (!item) {
-
+        
         showToast(
             "Inventory record not found.",
-            "error"
+            "error;"
         );
-
 
         return;
-
     }
 
+    InventoryState.currentInventoryId = inventoryId;
 
-    InventoryState.currentInventoryId =
-        inventoryId;
-
-
-    const modal =
-        getElement(
-            "stockAdjustmentModal"
-        );
-
+    const modal = getElement("stockAdjustmentModal");
 
     if (!modal) {
-
-        /*
-         * Fallback to edit modal if a dedicated
-         * stock adjustment modal is not present.
-         */
-        await openEditInventory(
-            inventoryId
-        );
-
+        
+        /* Fallback to edit modal if a dedicated, stock adjustment modal is not present.  */
+        await openInventory(inventoryId);
 
         return;
-
     }
-
 
     setText(
         "adjustmentProductName",
-        item.product_name ??
-        item.name ??
+        item.product_name ?? 
+        item.name ?? 
         "Unknown Product"
     );
 
-
     setText(
         "adjustmentCurrentStock",
-        formatNumber(
-            getQuantity(item)
-        )
+        formatNumber(getQuantity(item))
     );
 
+    const form = getElement("stockAdjustmentForm");
 
-    const form =
-        getElement(
-            "stockAdjustmentForm"
-        );
-
-
-    if (form) {
+    if (form ) {
         form.reset();
     }
 
+    modal.classList.add("active");
 
-    modal.classList.add(
-        "active"
-    );
-
-
-    document.body.classList.add(
-        "modal-open"
-    );
+    document.body.classList.add("modal-open");
 
 }
 
-
-/* ============================================================
-   SUBMIT STOCK ADJUSTMENT
-============================================================ */
-
-async function handleStockAdjustmentSubmit(
-    event
-) {
-
+/* SUBMIT STOCK ADJUSTMENT */
+async function handleStockAdjustmentSubmit(event) {
     event.preventDefault();
 
+    const form = event.currentTarget;
 
-    const form =
-        event.currentTarget;
+    const formData = new FormData(form);
 
+    const quantity = Number(
+        formData.get("quantity")
+    );
 
-    const formData =
-        new FormData(form);
-
-
-    const quantity =
-        Number(
-            formData.get(
-                "quantity"
-            )
-        );
-
-
-    const adjustmentType =
-        String(
-            formData.get(
-                "adjustment_type"
-            ) ||
-            "adjustment"
-        );
-
+    const adjustmentType = String(
+        formData.get("adjustment_type") ||  "adjustment"
+    );
 
     try {
-
-        const button =
-            form.querySelector(
-                "[type='submit']"
-            );
-
+        const button = form.querySelector("[type='submit']");
 
         if (button) {
-
-            button.disabled =
-                true;
-
+            button.disabled = true;
         }
-
 
         await adjustStock(
             InventoryState.currentInventoryId,
@@ -2533,989 +1409,518 @@ async function handleStockAdjustmentSubmit(
             adjustmentType
         );
 
-
         showToast(
             "Stock adjusted successfully.",
             "success"
         );
 
-
         closeStockAdjustmentModal();
 
-
     } catch (error) {
-
         console.error(
             "Stock adjustment error:",
             error
         );
 
-
         showToast(
-            error.message ||
-            "Unable to adjust stock.",
+            error.message || "Unable to adjust stock.",
             "error"
         );
 
-
     } finally {
-
-        const button =
-            form.querySelector(
-                "[type='submit']"
-            );
-
+        
+        const button = form.querySelector("[type='submit']");
 
         if (button) {
-
-            button.disabled =
-                false;
-
+            button.disabled = false;
         }
-
     }
-
 }
 
-
-/* ============================================================
-   MODALS
-============================================================ */
-
+/* MODALS */
 function openInventoryModal() {
 
-    const modal =
-        getElement(
-            "inventoryModal"
-        );
-
+    const modal = getElement("inventoryModal");
 
     if (!modal) {
         return;
     }
 
+    modal.classList.add("active");
 
-    modal.classList.add(
-        "active"
-    );
-
-
-    document.body.classList.add(
-        "modal-open"
-    );
+    document.body.classList.add("modal-open");
 
 }
-
 
 function closeInventoryModal() {
-
-    const modal =
-        getElement(
-            "inventoryModal"
-        );
-
+    const modal = getElement("inventoryModal");
 
     if (modal) {
-
-        modal.classList.remove(
-            "active"
-        );
-
+        modal.classList.remove("active");
     }
 
-
-    document.body.classList.remove(
-        "modal-open"
-    );
+    document.body.classList.remove("modal-open");
 
 }
-
 
 function closeInventoryDetailsModal() {
-
-    const modal =
-        getElement(
-            "inventoryDetailsModal"
-        );
-
+    const modal = getElement("inventoryDetailsModal");
 
     if (modal) {
-
-        modal.classList.remove(
-            "active"
-        );
-
+        modal.classList.remove("active");
     }
 
-
-    document.body.classList.remove(
-        "modal-open"
-    );
-
+    document.body.classList.remove("modal-open");
 }
-
 
 function closeStockAdjustmentModal() {
-
-    const modal =
-        getElement(
-            "stockAdjustmentModal"
-        );
-
+    const modal = getElement("stockAdjustmentModal");
 
     if (modal) {
-
-        modal.classList.remove(
-            "active"
-        );
-
+        modal.classList.remove("active");
     }
 
-
-    document.body.classList.remove(
-        "modal-open"
-    );
-
+    document.body.classList.remove("modal-open");
 }
 
-
-function setInventoryFormLoading(
-    isLoading
-) {
-
-    const form =
-        getElement(
-            "inventoryForm"
-        );
-
+function setInventoryFormLoading(isLoading) {
+    const form = getElement("inventoryForm");
 
     if (!form) {
         return;
     }
-
 
     form.classList.toggle(
         "is-loading",
         isLoading
     );
 
-
-    Array.from(
-        form.elements
-    ).forEach(
+    Array.from(form.element).forEach(
         element => {
-
-            element.disabled =
-                isLoading;
-
+            element.disabled = isLoading; 
         }
     );
-
 }
 
-
-/* ============================================================
-   TABLE ACTIONS
-============================================================ */
-
-async function handleInventoryTableAction(
-    event
-) {
-
-    const button =
-        event.target.closest(
-            "button[data-id]"
-        );
-
+/* TABLE ACTIONS */
+async function handleInventoryTableAction(event) {
+    const button = event.target.closest("button[data-id]");
 
     if (!button) {
         return;
     }
 
-
-    const inventoryId =
-        button.dataset.id;
-
+    const inventoryId = button.dataset.id;
 
     if (!inventoryId) {
         return;
     }
 
+    if (button.classList.contains("view-inventory")) {
+        await openViewInventory(inventoryId);
+        return;
+    }
 
-    if (
-        button.classList.contains(
-            "view-inventory"
-        )
-    ) {
-
-        await openViewInventory(
-            inventoryId
-        );
-
+    if (button.classList.contains("adjust-inventory")) {
+        await openStockAdjustment(inventoryId);
 
         return;
-
     }
 
-
-    if (
-        button.classList.contains(
-            "adjust-inventory"
-        )
-    ) {
-
-        await openStockAdjustment(
-            inventoryId
-        );
-
+    if (button.classList.contains("edit-inventory")) {
+        await openEditInventory(inventoryId);
 
         return;
-
     }
 
-
-    if (
-        button.classList.contains(
-            "edit-inventory"
-        )
-    ) {
-
-        await openEditInventory(
-            inventoryId
-        );
-
-
-        return;
-
+    if (button.classList.contains("delete-inventory")) {
+        await deleteInventory(inventoryId);
     }
-
-
-    if (
-        button.classList.contains(
-            "delete-inventory"
-        )
-    ) {
-
-        await deleteInventory(
-            inventoryId
-        );
-
-    }
-
 }
 
 
-/* ============================================================
-   EVENT INITIALIZATION
-============================================================ */
-
+/* EVENT INITIALIZATION */
 function initializeInventoryEvents() {
-
-    /*
-     * Inventory form.
-     */
-    const form =
-        getElement(
-            "inventoryForm"
-        );
-
+    /* Inventory form. */
+    const form = getElement("inventoryForm");
 
     if (form) {
-
         form.addEventListener(
             "submit",
             handleInventorySubmit
         );
-
     }
 
-
-    /*
-     * Stock adjustment form.
-     */
-    const adjustmentForm =
-        getElement(
-            "stockAdjustmentForm"
-        );
-
+    /* Stock adjustment form. */
+    const adjustmentForm = getElement("stockAdjustForm");
 
     if (adjustmentForm) {
-
         adjustmentForm.addEventListener(
             "submit",
-            handleStockAdjustmentSubmit
+            handleStockAdjustmentSubmit 
         );
-
     }
 
-
-    /*
-     * Add inventory.
-     */
-    $$(
-        "[data-action='add-inventory'], #addInventoryButton"
-    ).forEach(
+    /* Add inventory. */
+    $$("[data-action='add-inventory'], #addInventoryButton").forEach(
         button => {
-
             button.addEventListener(
                 "click",
-                openCreateInventory
+                openCreateInventory 
             );
-
         }
     );
 
-
-    /*
-     * Search.
-     */
-    const search =
-        getElement(
-            "inventorySearch"
-        );
-
+    /* Search */
+    const search = getElement("inventorySearch");
 
     if (search) {
-
         search.addEventListener(
-            "input",
+            "submit",
             function () {
+                InventoryState.search = this.value;
 
-                InventoryState.search =
-                    this.value;
-
-
-                InventoryState.currentPage =
-                    1;
-
+                InventoryState.currentPage = 1;
 
                 applyInventoryFilters();
-
             }
         );
-
     }
 
-
-    /*
-     * Category filter.
-     */
-    const categoryFilter =
-        getElement(
-            "inventoryCategoryFilter"
-        );
-
+    /* Category filter. */
+    const categoryFilter = getElement("inventoryCategoryFilter");
 
     if (categoryFilter) {
-
         categoryFilter.addEventListener(
             "change",
             function () {
 
-                InventoryState.category =
-                    this.value;
+                InventoryState.category = this.value;
 
-
-                InventoryState.currentPage =
-                    1;
-
+                InventoryState.currentPage = 1;
 
                 applyInventoryFilters();
-
             }
         );
-
     }
 
-
-    /*
-     * Stock status filter.
-     */
-    const stockFilter =
-        getElement(
-            "inventoryStockStatusFilter"
-        );
-
+    /* Stock status filters. */
+    const stockFilter = getElement("inventoryStockStatusFilter");
 
     if (stockFilter) {
-
         stockFilter.addEventListener(
             "change",
             function () {
+                InventoryState.stockStatus = this.value;
 
-                InventoryState.stockStatus =
-                    this.value;
-
-
-                InventoryState.currentPage =
-                    1;
-
+                InventoryState.currentPage = 1;
 
                 applyInventoryFilters();
-
             }
         );
-
     }
 
-
-    /*
-     * General status filter.
-     */
-    const statusFilter =
-        getElement(
-            "inventoryStatusFilter"
-        );
-
+    /* General status filter. */
+    const statusFilter = getElement("inventoryStatusFilter");
 
     if (statusFilter) {
-
         statusFilter.addEventListener(
             "change",
             function () {
 
-                InventoryState.status =
-                    this.value;
+                InventoryState.status = this.value;
 
-
-                InventoryState.currentPage =
-                    1;
-
+                InventoryState.status = 1;
 
                 applyInventoryFilters();
-
             }
         );
-
     }
 
-
-    /*
-     * Page size.
-     */
-    const perPage =
-        getElement(
-            "perPage"
-        );
-
+    /* Page size. */
+    const perPage = getElement("perPage");
 
     if (perPage) {
-
         perPage.addEventListener(
             "change",
             function () {
+                InventoryState.perPage = Number(this.value) || 10;
 
-                InventoryState.perPage =
-                    Number(
-                        this.value
-                    ) || 10;
-
-
-                InventoryState.currentPage =
-                    1;
-
+                InventoryState.currentPage = 1;
 
                 renderInventory();
-
             }
         );
-
     }
 
-
-    /*
-     * Pagination.
-     */
-    const previous =
-        getElement(
-            "previousPage"
-        );
-
+    /* Pagination. */
+    const previous = getElement("previousPage");
 
     if (previous) {
-
         previous.addEventListener(
             "click",
-            previousPage
+            previousPage 
         );
-
     }
 
-
-    const next =
-        getElement(
-            "nextPage"
-        );
-
+    const next = getElement("nextPage");
 
     if (next) {
-
         next.addEventListener(
             "click",
-            nextPage
+            nextPage 
         );
-
     }
 
-
-    /*
-     * Table actions.
-     */
-    const table =
-        getElement(
-            "inventoryTableBody"
-        );
-
+    /* Table actions. */
+    const table = getElement("inventoryTableBody");
 
     if (table) {
-
         table.addEventListener(
             "click",
-            handleInventoryTableAction
+            handleInventoryTableAction 
         );
-
     }
 
-
-    /*
-     * Refresh.
-     */
-    const refresh =
-        getElement(
-            "refreshInventoryButton"
-        );
-
+    /* Refresh. */
+    const refresh = getElement("refreshInventoryButton");
 
     if (refresh) {
-
         refresh.addEventListener(
             "click",
             loadInventory
         );
-
     }
 
-
-    /*
-     * Close modals.
-     */
-    $$(
-        "[data-close-inventory-modal]"
-    ).forEach(
+    /* Close modals. */
+    $$("[data-close-inventory-model]").forEach(
         button => {
-
             button.addEventListener(
                 "click",
                 closeInventoryModal
             );
-
         }
     );
 
-
-    $$(
-        "[data-close-inventory-details]"
-    ).forEach(
+    $$("[data-close-inventory-details]").forEach(
         button => {
-
             button.addEventListener(
                 "click",
                 closeInventoryDetailsModal
             );
-
         }
     );
 
-
-    $$(
-        "[data-close-stock-adjustment]"
-    ).forEach(
+    $$("[data-close-stock-adjustment]").forEach(
         button => {
-
             button.addEventListener(
                 "click",
                 closeStockAdjustmentModal
             );
-
         }
     );
 
-
-    /*
-     * Close modal by clicking backdrop.
-     */
+    /* Close modal by clicking backdrop. */
     $$(".modal").forEach(
         modal => {
-
             modal.addEventListener(
                 "click",
                 function (event) {
-
-                    if (
-                        event.target !==
-                        modal
-                    ) {
+                    if (event.target !== modal) {
                         return;
                     }
 
+                    modal.classList.remove("active");
 
-                    modal.classList.remove(
-                        "active"
-                    );
-
-
-                    document.body.classList.remove(
-                        "modal-open"
-                    );
-
+                    document.body.classList.remove("modal-open");
                 }
             );
-
         }
     );
 
-
-    /*
-     * Escape key.
-     */
+    /* Escape key. */
     document.addEventListener(
         "keydown",
         function (event) {
 
-            if (
-                event.key !==
-                "Escape"
-            ) {
+            if (event.key !== "Escape") {
                 return;
             }
-
 
             closeInventoryModal();
 
             closeInventoryDetailsModal();
 
             closeStockAdjustmentModal();
-
         }
     );
-
 }
 
-
-/* ============================================================
-   SORTING
-============================================================ */
-
+/* STORTING */
 function initializeInventorySorting() {
-
-    $$(
-        "[data-sort-inventory]"
-    ).forEach(
+    $$("[data-sort-inventory]").forEach(
         header => {
-
             header.addEventListener(
                 "click",
                 function () {
 
-                    sortInventory(
-                        this.dataset.sortInventory
-                    );
-
+                    sortInventory(this.dataset.sortInventory);
                 }
             );
-
         }
     );
-
 }
-
 
 function sortInventory(field) {
 
-    if (
-        InventoryState.sortBy ===
-        field
-    ) {
-
-        InventoryState.sortDirection =
-            InventoryState.sortDirection ===
-            "asc"
+    if (InventoryState.sortBy === field) {
+        InventoryState.sortDirection === 
+            "asc" 
                 ? "desc"
                 : "asc";
-
     } else {
+        InventoryState.sortBy = field;
 
-        InventoryState.sortBy =
-            field;
-
-        InventoryState.sortDirection =
-            "asc";
-
+        InventoryState.sortDirection = "asc";
     }
 
-
     applyInventoryFilters();
-
 }
 
-
-/* ============================================================
-   LOADING UI
-============================================================ */
-
-function setLoading(
-    isLoading
-) {
-
-    InventoryState.isLoading =
-        isLoading;
-
+/* LOADING UI */
+function setLoading(isLoading) {
+    InventoryState.isLoading = isLoading;
 
     document.body.classList.toggle(
         "inventory-loading",
-        isLoading
+        isLoading 
     );
 
-
-    const refresh =
-        getElement(
-            "refreshInventoryButton"
-        );
-
+    const refresh = getElement("refreshInventoryButton");
 
     if (refresh) {
-
-        refresh.disabled =
-            isLoading;
-
+        refresh.disabled = isLoading;
     }
-
 }
 
-
 function showInventoryLoading() {
-
-    const tbody =
-        getElement(
-            "inventoryTableBody"
-        );
-
+    const tbody = getElement("inventoryTableBody");
 
     if (!tbody) {
         return;
     }
 
-
     tbody.innerHTML = `
-
         <tr>
-
-            <td
-                colspan="100"
-                class="table-loading-state"
-            >
-
+            <td colspan="100" class="table-loading-state">
                 <div class="loading-spinner">
                     <span></span>
                 </div>
-
-                <p>
-                    Loading inventory...
-                </p>
-
+                
+                <p>Loading inventory...</p>
             </td>
-
         </tr>
-
     `;
-
 }
 
-
-/* ============================================================
-   ERROR UI
-============================================================ */
-
-function showInventoryError(
-    message
-) {
-
-    const tbody =
-        getElement(
-            "inventoryTableBody"
-        );
-
+/* ERROR UI */
+function showInventoryError(message) {
+    const tbody = getElement("inventoryTableBody");
 
     if (!tbody) {
         return;
     }
 
-
     tbody.innerHTML = `
-
         <tr>
-
-            <td
-                colspan="100"
-                class="table-error-state"
-            >
-
+            <td colspan="100" class="table-error-state">
                 <div class="error-icon">
                     ⚠️
                 </div>
 
-                <h3>
-                    Unable to load inventory
-                </h3>
-
-                <p>
-                    ${escapeHTML(message)}
-                </p>
-
-                <button
+                <h3>Unable to load inventory</h3>
+                
+                <p>${escapeHTML(message)}</p>
+                
+                <button 
                     type="button"
                     class="btn btn-primary"
                     id="retryInventoryButton"
                 >
                     Try Again
                 </button>
-
             </td>
-
         </tr>
-
     `;
 
-
-    const retry =
-        getElement(
-            "retryInventoryButton"
-        );
-
+    const retry = getElement("retryInventoryButton");
 
     if (retry) {
-
         retry.addEventListener(
             "click",
             loadInventory
         );
-
     }
-
 }
 
-
-/* ============================================================
-   TOAST NOTIFICATIONS
-============================================================ */
-
+/* TOAST NOTIFICATIONS */
 function showToast(
     message,
     type = "info"
 ) {
-
-    let container =
-        getElement(
-            "toastContainer"
-        );
-
+    let container = getElement("toastContainer");
 
     if (!container) {
+        
+        container = document.createElement("div");
 
-        container =
-            document.createElement(
-                "div"
-            );
+        container.id = "toastContainer";
 
+        container.classList = "toast-container";
 
-        container.id =
-            "toastContainer";
-
-
-        container.className =
-            "toast-container";
-
-
-        document.body.appendChild(
-            container
-        );
+        document.body.appendChild(container);
 
     }
 
+    const toast = document.createElement("div");
 
-    const toast =
-        document.createElement(
-            "div"
-        );
+    toast.className = `toast toast-${type}`;
 
-
-    toast.className =
-        `toast toast-${type}`;
-
-
-    const icon =
+    const icon = 
         type === "success"
-            ? "✓"
-            : type === "error"
-                ? "!"
-                : "i";
-
+            ? "!"
+            : "i";
 
     toast.innerHTML = `
-
-        <span class="toast-icon">
-            ${icon}
-        </span>
-
-        <span class="toast-message">
-            ${escapeHTML(message)}
-        </span>
-
-        <button
+        <span class="toast-icon">${icon}</span>
+        
+        <span class="toast-message">${escapeHTML(message)}</span>
+        
+        <button 
             type="button"
             class="toast-close"
-            aria-label="Close notification"
+            aria-label="close notification"
         >
             ×
         </button>
-
     `;
 
-
-    container.appendChild(
-        toast
-    );
-
-
-    const close =
-        toast.querySelector(
-            ".toast-close"
-        );
-
+    container.appendChild(toast);
 
     if (close) {
-
         close.addEventListener(
             "click",
             () => removeToast(toast)
         );
-
     }
-
 
     setTimeout(
         () => {
-
-            removeToast(
-                toast
-            );
-
+            removeToast(toast);
         },
         5000
-    );
-
+    )
 }
-
 
 function removeToast(toast) {
 
@@ -3523,42 +1928,23 @@ function removeToast(toast) {
         return;
     }
 
-
-    toast.classList.add(
-        "toast-removing"
-    );
-
+    toast.classList.add("toast-removing");
 
     setTimeout(
         () => {
-
-            toast.remove();
-
+            toast.remove(); 
         },
-        200
+        200 
     );
-
 }
 
-
-/* ============================================================
-   FORMATTERS
-============================================================ */
-
+/* FORMATTERS */
 function formatNumber(value) {
+    const number = Number(value);
 
-    const number =
-        Number(value);
-
-
-    if (
-        !Number.isFinite(number)
-    ) {
-
+    if (!Number.isFinite(number)) {
         return "0";
-
     }
-
 
     return new Intl.NumberFormat(
         undefined,
@@ -3566,24 +1952,14 @@ function formatNumber(value) {
             maximumFractionDigits: 2
         }
     ).format(number);
-
 }
 
+function formatCurrent(value) {
+    const number = Number(value);
 
-function formatCurrency(value) {
-
-    const number =
-        Number(value);
-
-
-    if (
-        !Number.isFinite(number)
-    ) {
-
+    if (!number.isFinite(number)) {
         return "$0.00";
-
     }
-
 
     return new Intl.NumberFormat(
         undefined,
@@ -3592,165 +1968,103 @@ function formatCurrency(value) {
             currency: "USD"
         }
     ).format(number);
-
 }
 
-
-/* ============================================================
-   TEXT HELPERS
-============================================================ */
-
+/* TEXT HELPERS */
 function setText(
     id,
-    value
+    value 
 ) {
-
-    const element =
-        getElement(id);
-
+    const element = getElement(id);
 
     if (element) {
-
-        element.textContent =
-            value;
-
+        element.textContent = value;
     }
-
 }
 
-
-/* ============================================================
-   HTML ESCAPING
-============================================================ */
-
+/* HTML ESCAPING */
 function escapeHTML(value) {
 
     return String(
         value ?? ""
     )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
 
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;" 
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 }
-
 
 function escapeAttribute(value) {
 
     return escapeHTML(
         value
     );
-
 }
 
-
-/* ============================================================
-   GLOBAL API
-============================================================ */
-
-window.InventoryOperations = {
+/* GLOBAL API */
+window.InventoryOPerations = {
 
     loadInventory,
-
     getInventory,
-
     createInventory,
-
     updateInventory,
-
     deleteInventory,
-
     adjustStock,
-
     openCreateInventory,
-
     openEditInventory,
-
     openViewInventory,
-
     openStockAdjustment,
-
     applyInventoryFilters,
-
     sortInventory,
-
     nextPage,
-
     previousPage,
-
-    showToast
+    showToast,
 
 };
 
+/* Operational global functions for HTML onclick handlers. */
+window.loadInventory = loadInventory;
 
-/*
- * Optional global functions for
- * HTML onclick handlers.
- */
+window.openCreateInventory = openEditInventory;
 
-window.loadInventory =
-    loadInventory;
+window.openEditInventory = openEditInventory;
 
-window.openCreateInventory =
-    openCreateInventory;
+window.openViewInventory = openViewInventory;
 
-window.openEditInventory =
-    openEditInventory;
+window.openStockAdjustment = openStockAdjustment;
 
-window.openViewInventory =
-    openViewInventory;
+window.deleteInventory = deleteInventory;
 
-window.openStockAdjustment =
-    openStockAdjustment;
-
-window.deleteInventory =
-    deleteInventory;
-
-
-/* ============================================================
-   INITIALIZATION
-============================================================ */
-
+/* INITIALIZATION */
 async function initializeInventory() {
-
     initializeInventoryEvents();
-
     initializeInventorySorting();
-
     await loadInventory();
-
 }
 
-
-if (
-    document.readyState ===
-    "loading"
-) {
-
+if (document.readyState === "loading") {
     document.addEventListener(
         "DOMContentLoaded",
         initializeInventory
     );
-
 } else {
-
     initializeInventory();
-
 }
+
