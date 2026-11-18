@@ -1,101 +1,71 @@
-/**
- * ============================================================
- * INVENTORY MANAGEMENT SYSTEM
- * Purchase Operations
- *
- * File:
- * frontend/js/purchases.js
- *
- * Expected API:
- * frontend -> ../backend/api/purchases.php
- *
- * No mock data is used.
- * ============================================================
- */
+t/**
+ *  INVENTORY MANAGEMENT SYSTEM
+ *  Purchase Operations
+ * 
+ * File:Frontend/js/purchases.js
+ * 
+ * REST API:
+ * Backend/api/purchases.php
+ * 
+ **/
 
 "use strict";
 
-
-/* ============================================================
-   CONFIGURATION
-============================================================ */
-
+/* CONFIGURATION */
 const PURCHASES_API = "../backend/api/purchases.php";
 
 const PURCHASES_PER_PAGE = 10;
 
-
-/* ============================================================
-   STATE
-============================================================ */
-
+/* STATE */
 const purchaseState = {
     purchases: [],
     filteredPurchases: [],
 
     currentPage: 1,
-    perPage: PURCHASES_PER_PAGE,
+    perPage:PURCHASES_PER_PAGE,
 
     search: "",
     status: "",
     supplier: "",
 
-    sortField: "purchase_date",
+    sortFiled: "purchase_date",
     sortDirection: "desc",
 
     editingId: null,
 
-    loading: false
+    loading: false 
 };
 
-
-/* ============================================================
-   DOM HELPERS
-============================================================ */
-
+/* DOM HELPERS */
 function getElement(id) {
     return document.getElementById(id);
 }
-
 
 function query(selector, parent = document) {
     return parent.querySelector(selector);
 }
 
-
 function queryAll(selector, parent = document) {
     return Array.from(parent.querySelectorAll(selector));
 }
 
-
-/* ============================================================
-   API HELPER
-============================================================ */
-
+/* API HELPER */
 async function apiRequest(url, options = {}) {
-
     const config = {
         method: "GET",
         credentials: "same-origin",
         headers: {
             Accept: "application/json"
         },
-        ...options
+        ...options 
     };
 
-
-    if (
-        config.body &&
-        typeof config.body !== "string"
-    ) {
+    if (config.body && typeof config.body !== "string") {
         config.headers["Content-Type"] = "application/json";
-
         config.body = JSON.stringify(config.body);
     }
-
-
+    
     const response = await fetch(url, config);
-
 
     let result;
 
@@ -107,441 +77,275 @@ async function apiRequest(url, options = {}) {
         );
     }
 
-
     if (!response.ok) {
-
         throw new Error(
-            result?.message ||
-            result?.error ||
+            result?.message || 
+            result?.error || 
             `Request failed with status ${response.status}.`
         );
     }
 
-
-    if (
-        result &&
-        result.success === false
-    ) {
+    if (result && result.success == false) {
         throw new Error(
-            result.message ||
-            result.error ||
+            result.message || 
+            result.error || 
             "The operation could not be completed."
         );
     }
 
-
     return result;
 }
 
-
-/* ============================================================
-   INITIALIZATION
-============================================================ */
-
+/* INITIALIZATION */
 document.addEventListener("DOMContentLoaded", () => {
-
     initializePurchases();
-
 });
 
-
 function initializePurchases() {
-
     bindEvents();
-
     loadSuppliers();
-
     loadPurchases();
-
 }
 
-
-/* ============================================================
-   EVENT BINDINGS
-============================================================ */
-
+/* EVENT BINDINGS */
 function bindEvents() {
-
-    const searchInput =
-        getElement("purchaseSearch") ||
-        getElement("purchasesSearch");
-
+    const searchInput = getElement("purchaseSearch") || getElement("purchaseSearch");
 
     if (searchInput) {
-
         searchInput.addEventListener(
             "input",
             debounce(() => {
 
-                purchaseState.search =
-                    searchInput.value.trim();
+                purchaseState.search = searchInput.ariaValueMax.trim();
 
                 purchaseState.currentPage = 1;
 
                 applyFiltersAndRender();
-
             }, 300)
         );
-
     }
 
-
-    const statusFilter =
-        getElement("purchaseStatusFilter") ||
-        getElement("statusFilter");
-
+    const statusFilter = getElement("purchaseStatusFilter") ||  getElement("statusFilter");
 
     if (statusFilter) {
-
         statusFilter.addEventListener(
             "change",
             () => {
 
-                purchaseState.status =
-                    statusFilter.value;
+                purchaseState.status = statusFilter.ariaValueMax;
 
                 purchaseState.currentPage = 1;
 
                 applyFiltersAndRender();
-
             }
         );
-
     }
 
-
-    const supplierFilter =
-        getElement("purchaseSupplierFilter") ||
-        getElement("supplierFilter");
-
+    const supplierFilter = getElement("purchaseSupplierFilter") || getElement("supplierFilter");
 
     if (supplierFilter) {
-
         supplierFilter.addEventListener(
             "change",
             () => {
-
-                purchaseState.supplier =
-                    supplierFilter.value;
+                purchaseState.supplier = supplierFilter.value;
 
                 purchaseState.currentPage = 1;
 
                 applyFiltersAndRender();
-
             }
         );
-
     }
 
-
-    const perPage =
-        getElement("perPage") ||
-        getElement("purchasePerPage");
-
+    const perPage = getElement("perPage") || getElement("purchasePerPage");
 
     if (perPage) {
-
         perPage.addEventListener(
             "change",
             () => {
 
-                purchaseState.perPage =
-                    Number(perPage.value) ||
-                    PURCHASES_PER_PAGE;
+                purchaseState.perPage = Number(perPage.value) || PURCHASES_PER_PAGE;
 
                 purchaseState.currentPage = 1;
 
                 applyFiltersAndRender();
-
             }
         );
-
     }
 
-
-    const refreshButton =
-        getElement("refreshPurchasesButton") ||
-        getElement("refreshPurchaseButton");
-
+    const refreshButton = getElement("refreshPurchasesButton") || getElement("refreshPurchaseButton");
 
     if (refreshButton) {
-
         refreshButton.addEventListener(
             "click",
             () => loadPurchases(true)
         );
-
     }
 
-
-    const addButton =
-        getElement("addPurchaseButton") ||
-        getElement("addPurchase");
-
+    const addButton = getElement("addPurchaseButton") || getElement("addPurchase");
 
     if (addButton) {
-
         addButton.addEventListener(
             "click",
-            () => openPurchaseModal()
+            () => openPurchaseModal() 
         );
-
     }
 
-
-    const purchaseForm =
-        getElement("purchaseForm");
-
+    const purchaseForm = getElement("purchaseForm");
 
     if (purchaseForm) {
-
         purchaseForm.addEventListener(
             "submit",
-            handlePurchaseSubmit
+            handlePurchaseSubmit 
         );
-
     }
 
-
-    const paymentForm =
-        getElement("paymentForm");
-
+    const paymentForm = getElement("paymentForm");
 
     if (paymentForm) {
-
         paymentForm.addEventListener(
             "submit",
             handlePaymentSubmit
         );
-
     }
 
-
-    const closeButtons =
-        queryAll("[data-close-purchase-modal]");
-
-
-    closeButtons.forEach(button => {
-
-        button.addEventListener(
-            "click",
-            closePurchaseModal
-        );
-
+    const closeButton = queryAll("[data-close-purchase-modal]");
+    
+    closeButton.forEach(button => {
+        "click",
+        closePurchaseModal
     });
 
-
-    const closeDetailsButtons =
-        queryAll("[data-close-purchase-details]");
-
+    const closeDetailsButtons = queryAll("[data-close-purchase-details]");
 
     closeDetailsButtons.forEach(button => {
-
         button.addEventListener(
             "click",
-            closePurchaseDetails
+            closePurchaseDetails 
         );
-
     });
 
-
-    const closePaymentButtons =
-        queryAll("[data-close-payment-modal]");
-
+    const closePaymentButtons = queryAll("[data-close-payment-modal");
 
     closePaymentButtons.forEach(button => {
-
         button.addEventListener(
             "click",
-            closePaymentModal
+            closePaymentModal 
         );
-
     });
 
-
-    const previousButton =
-        getElement("previousPage") ||
-        getElement("previousPurchasePage");
-
+    const previousButton = getElement("previousPage") || getElement("previousPurchasePage");
 
     if (previousButton) {
-
         previousButton.addEventListener(
             "click",
             () => {
 
                 if (purchaseState.currentPage > 1) {
-
                     purchaseState.currentPage--;
-
                     renderPurchases();
-
                 }
-
             }
         );
-
     }
 
-
-    const nextButton =
-        getElement("nextPage") ||
-        getElement("nextPurchasePage");
-
+    const nextButton = getElement("nextPage") || getElement("nextPurchasePage");
 
     if (nextButton) {
-
         nextButton.addEventListener(
             "click",
             () => {
 
-                const totalPages =
-                    getTotalPages();
+                const totalPages = getTotalPages();
 
-                if (
-                    purchaseState.currentPage <
-                    totalPages
-                ) {
-
+                if (purchaseState.currentPage < totalPages) {
                     purchaseState.currentPage++;
 
                     renderPurchases();
-
                 }
-
             }
         );
-
     }
 
+    queryAll("[data-sort-purchase]").forEach(header => {
 
-    queryAll("[data-sort-purchase]")
-        .forEach(header => {
+        header.addEventListener(
+            "click",
+            () => {
+                const field = header.dataset.sortPurchase;
 
-            header.addEventListener(
-                "click",
-                () => {
+                sortPurchases(field);
+            }
+        );
+    });
 
-                    const field =
-                        header.dataset.sortPurchase;
-
-                    sortPurchases(field);
-
-                }
-            );
-
-        });
-
-
-    /*
-     * Delegated actions for dynamically
-     * generated purchase rows.
-     */
-
-    const tableBody =
-        getElement("purchasesTableBody") ||
-        getElement("purchaseTableBody");
-
+    /* Delegated actions for dynamically, generated purchase rows. */
+    const tableBody = getElement("purchasesTableBody") || getElement("purchaseTableBody");
 
     if (tableBody) {
-
         tableBody.addEventListener(
             "click",
-            handleTableAction
+            handleTableAction 
         );
-
     }
 
-
-    /*
-     * Close modals when clicking outside.
-     */
-
+    /* Close modals when clicking outside. */
     queryAll(".modal").forEach(modal => {
 
         modal.addEventListener(
             "click",
             event => {
 
-                if (
-                    event.target === modal
-                ) {
-
+                if (event.target === modal) {
                     closeModal(modal);
-
                 }
-
             }
         );
-
     });
 
-
-    /*
-     * Escape key.
-     */
-
+    /* Escape key. */
     document.addEventListener(
         "keydown",
         event => {
-
+            
             if (event.key !== "Escape") {
                 return;
             }
-
+            
             closeAllModals();
-
         }
     );
-
 }
 
-
-/* ============================================================
-   LOAD PURCHASES
-============================================================ */
-
+/* LOAD PURCHASES */
 async function loadPurchases(showNotification = false) {
 
     if (purchaseState.loading) {
         return;
     }
 
-
     purchaseState.loading = true;
-
+        
     setLoadingState(true);
 
-
     try {
+        const result = await apiRequest(PURCHASES_API);
 
-        const result =
-            await apiRequest(PURCHASES_API);
-
-
-        purchaseState.purchases =
-            normalizePurchaseResponse(result);
-
+        purchaseState.purchases = normalizePurchaseResponse(result);
 
         applyFiltersAndRender();
 
-
         if (showNotification) {
-
             showToast(
                 "Purchases refreshed successfully.",
                 "success"
             );
-
         }
-
     } catch (error) {
-
+        
         console.error(
             "Unable to load purchases:",
-            error
+            error 
         );
-
 
         purchaseState.purchases = [];
 
@@ -550,245 +354,152 @@ async function loadPurchases(showNotification = false) {
         renderPurchases();
 
         showToast(
-            error.message ||
-            "Unable to load purchases.",
+            error.message || "Unable to load purchases.",
             "error"
         );
-
     } finally {
 
         purchaseState.loading = false;
 
         setLoadingState(false);
-
     }
-
 }
 
-
-/* ============================================================
-   NORMALIZE API RESPONSE
-============================================================ */
-
+/* NORMALIZE API RESPONSE */
 function normalizePurchaseResponse(result) {
 
     if (Array.isArray(result)) {
         return result;
     }
 
-
-    if (
-        Array.isArray(result?.data)
-    ) {
+    if (Array.isArray(result?.data)) {
         return result.data;
     }
 
-
-    if (
-        Array.isArray(result?.purchases)
-    ) {
+    if (Array.isArray(result?.purchases)) {
         return result.purchases;
     }
 
-
-    if (
-        Array.isArray(result?.items)
-    ) {
+    if (Array.isArray(result?.items)) {
         return result.items;
     }
 
-
-    if (
-        Array.isArray(result?.results)
-    ) {
+    if (Array.isArray(result?.results)) {
         return result.results;
     }
 
-
     return [];
-
 }
 
-
-/* ============================================================
-   FILTERING
-============================================================ */
-
+/* FILTERING */
 function applyFiltersAndRender() {
-
     const search =
-        purchaseState.search
+        purchaseState.search 
             .toLowerCase()
             .trim();
+    purchaseState.filteredPurchases = purchaseState.purchases.filter(
+        purchase => {
+            
+            const searchableText = [
+                purchase.id,
+                purchase.purchase_id,
+                purchase.purchase_number,
+                purchase.reference,
+                purchase.invoice_number,
+                purchase.supplier_name,
+                purchase.supplier,
+                purchase.product_name,
+                purchase.notes 
+            ]
+                .filter(value =>
+                    value !== undefined && value !== null 
+                )
+                .join(" ")
+                .toLowerCase();
 
+            const matchesSearch = !search || searchableText.includes(search);
 
-    purchaseState.filteredPurchases =
-        purchaseState.purchases.filter(
-            purchase => {
+            const purchaseStatus = normalizeStatus(purchase.status);
 
-                const searchableText = [
-                    purchase.id,
-                    purchase.purchase_id,
-                    purchase.purchase_number,
-                    purchase.reference,
-                    purchase.invoice_number,
-                    purchase.supplier_name,
-                    purchase.supplier,
-                    purchase.product_name,
-                    purchase.notes
-                ]
-                    .filter(value =>
-                        value !== undefined &&
-                        value !== null
-                    )
-                    .join(" ")
-                    .toLowerCase();
+            const matchesStatus = !purchaseState.status || purchaseStatus === normalizeStatus(
+                purchaseState.status 
+            ); 
 
-
-                const matchesSearch =
-                    !search ||
-                    searchableText.includes(search);
-
-
-                const purchaseStatus =
-                    normalizeStatus(
-                        purchase.status
-                    );
-
-
-                const matchesStatus =
-                    !purchaseState.status ||
-                    purchaseStatus ===
-                    normalizeStatus(
-                        purchaseState.status
-                    );
-
-
-                const supplierId =
-                    String(
-                        purchase.supplier_id ??
-                        purchase.supplierId ??
-                        ""
-                    );
-
-
-                const matchesSupplier =
-                    !purchaseState.supplier ||
-                    supplierId ===
-                    String(
-                        purchaseState.supplier
-                    );
-
-
-                return (
-                    matchesSearch &&
-                    matchesStatus &&
-                    matchesSupplier
+            const supplierId = 
+                String(
+                    purchase.supplier_id ??
+                    purchase.supplierId ??
+                    "" 
                 );
 
-            }
-        );
+            const matchesSupplier = !purchaseState.supplier || supplierId === String(
+                purchaseState.supplier
+            ); 
 
-
-    sortPurchaseCollection(
-        purchaseState.filteredPurchases
+            return (
+                matchesSearch &&
+                matchesStatus && 
+                matchesSupplier 
+            );
+        }
     );
 
+    sortPurchaseCollection(
+        purchaseState.filteredPurchases 
+    );
 
-    const totalPages =
-        getTotalPages();
+    const totalPages = getTotalPages();
 
-
-    if (
-        purchaseState.currentPage >
-        totalPages
-    ) {
-
-        purchaseState.currentPage =
-            Math.max(totalPages, 1);
-
+    if (purchaseState.currentPage > totalPages) {
+        purchaseState.currentPage = Math.max(totalPages, 1);
     }
 
-
     renderPurchases();
-
 }
 
-
-/* ============================================================
-   SORTING
-============================================================ */
-
+/* SORTING */
 function sortPurchases(field) {
 
-    if (
-        purchaseState.sortField === field
-    ) {
-
-        purchaseState.sortDirection =
-            purchaseState.sortDirection === "asc"
-                ? "desc"
-                : "asc";
-
+    if (purchaseState.sortField === field) {
+        purchaseState.sortDirection = purchaseState.sortDirection === "asc"
+            ? "desc"       
+            : "asc";
     } else {
-
         purchaseState.sortField = field;
 
         purchaseState.sortDirection = "asc";
-
+        
     }
-
 
     sortPurchaseCollection(
         purchaseState.filteredPurchases
     );
 
-
     renderPurchases();
-
 }
 
-
 function sortPurchaseCollection(collection) {
+    const field = purchaseState.sortFiled;
 
-    const field =
-        purchaseState.sortField;
-
-
-    const direction =
-        purchaseState.sortDirection === "asc"
-            ? 1
-            : -1;
-
+    const direction = purchaseState.sortDirection === "asc"
+        ? 1
+        : -1;
 
     collection.sort(
         (a, b) => {
+            const first = getPurchaseSortValue(
+                a,
+                field 
+            );
 
-            const first =
-                getPurchaseSortValue(
-                    a,
-                    field
-                );
+            const second = getPurchaseSortValue(
+                b,
+                field 
+            );
 
-
-            const second =
-                getPurchaseSortValue(
-                    b,
-                    field
-                );
-
-
-            if (
-                typeof first === "number" &&
-                typeof second === "number"
-            ) {
-
-                return (
-                    first - second
-                ) * direction;
-
+            if (typeof first === "number" && typeof second === "number") {
+                return (first - second) * direction;
             }
-
 
             return String(first)
                 .localeCompare(
@@ -799,18 +510,14 @@ function sortPurchaseCollection(collection) {
                         sensitivity: "base"
                     }
                 ) * direction;
-
         }
-    );
-
+    )
 }
-
 
 function getPurchaseSortValue(
     purchase,
     field
 ) {
-
     switch (field) {
 
         case "purchase_number":
@@ -821,140 +528,98 @@ function getPurchaseSortValue(
                 ""
             );
 
-
         case "supplier_name":
             return (
-                purchase.supplier_name ??
-                purchase.supplier ??
+                purchase.supplier_name ?? 
+                purchase.supplier ?? 
                 ""
             );
-
 
         case "purchase_date":
             return (
                 parseDate(
                     purchase.purchase_date ??
                     purchase.date ??
-                    purchase.created_at
+                    purchase.created_at 
                 )?.getTime() || 0
             );
-
-
+            
         case "total":
             return getPurchaseTotal(
-                purchase
+                purchase 
             );
 
+        case "due":
+            return getPaidAmount(
+                purchase 
+            );
 
         case "paid":
             return getPaidAmount(
-                purchase
+                purchase 
             );
-
 
         case "due":
             return getDueAmount(
-                purchase
+                purchase 
             );
-
 
         case "status":
             return normalizeStatus(
-                purchase.status
+                purchase.status 
             );
-
 
         default:
             return (
-                purchase[field] ??
-                ""
-            );
-
+                purchase[field] ?? 
+                "" 
+            ); 
     }
-
 }
 
+/* RENDER PURCHASE */
+function renderPurchase() {
 
-/* ============================================================
-   RENDER PURCHASES
-============================================================ */
-
-function renderPurchases() {
-
-    const tableBody =
-        getElement("purchasesTableBody") ||
-        getElement("purchaseTableBody");
-
+    const tableBody = getElement("purchasesTableBody") || getElement("purchaseTableBody");
 
     if (!tableBody) {
         return;
     }
 
-
-    const total =
-        purchaseState.filteredPurchases.length;
-
+    const total = purchaseState.filteredPurchases.length;
 
     if (!total) {
-
         tableBody.innerHTML = `
             <tr>
-                <td
-                    colspan="9"
-                    class="table-empty-state"
-                >
+                <td colspan="9" class="table-empty-state">
                     <div class="empty-icon">
                         🛒
                     </div>
-
-                    <h3>
-                        No purchases found
-                    </h3>
-
-                    <p>
-                        No purchase records match the
-                        current filters.
-                    </p>
+                    
+                    <h3>No purchases found</h3>
+                    
+                    <p>No purchase records match the current filters.</p>
                 </td>
             </tr>
         `;
-
 
         updatePagination();
 
         updatePurchaseStatistics();
 
         return;
-
     }
+    
+    const start = (purchaseState.currentPage - 1) * purchaseState.perPage;
 
+    const end = start + purchaseState.perPage;
 
-    const start =
-        (
-            purchaseState.currentPage - 1
-        ) * purchaseState.perPage;
+    const purchases = purchaseState.filteredPurchases.slice(start, end);
 
-
-    const end =
-        start +
-        purchaseState.perPage;
-
-
-    const purchases =
-        purchaseState.filteredPurchases
-            .slice(start, end);
-
-
-    tableBody.innerHTML =
-        purchases
-            .map(
-                purchase =>
-                    renderPurchaseRow(
-                        purchase
-                    )
-            )
-            .join("");
-
+    tableBody.innerHTML = 
+        purchases.map(
+            purchase => renderPurchaseRow(purchase)
+        ).join("");
 
     updatePagination();
 
@@ -962,197 +627,114 @@ function renderPurchases() {
 
 }
 
-
-/* ============================================================
-   PURCHASE ROW
-============================================================ */
-
+/* PURCHASE ROW */
 function renderPurchaseRow(purchase) {
 
-    const id =
-        getPurchaseId(purchase);
+    const id = getPurchaseId(purchase);
 
+    const purchaseNumber = purchase.purchase_number ?? purchase.purchaseNumber ?? `#${id}`;
 
-    const purchaseNumber =
-        purchase.purchase_number ??
-        purchase.purchaseNumber ??
-        `#${id}`;
+    const supplier = purchase.supplier_name ?? purchase.supplier ?? "-";
 
+    const date = formatDate(purchase.purchase_date ?? purchase.date ?? purchase.created_at);
 
-    const supplier =
-        purchase.supplier_name ??
-        purchase.supplier ??
-        "—";
+    const total = getPurchaseTotal(purchase);
 
+    const paid = getPaidAmount(purchase);
 
-    const date =
-        formatDate(
-            purchase.purchase_date ??
-            purchase.date ??
-            purchase.created_at
-        );
+    const due = getDueAmount(purchase);
 
+    const status = normalizeStatus(purchase.status || "pending");
 
-    const total =
-        getPurchaseTotal(
-            purchase
-        );
-
-
-    const paid =
-        getPaidAmount(
-            purchase
-        );
-
-
-    const due =
-        getDueAmount(
-            purchase
-        );
-
-
-    const status =
-        normalizeStatus(
-            purchase.status ||
-            "pending"
-        );
-
-
-    const paymentStatus =
-        normalizeStatus(
-            purchase.payment_status ||
-            (
-                due <= 0
-                    ? "paid"
-                    : paid > 0
-                        ? "partial"
-                        : "unpaid"
-            )
-        );
-
+    const paymentStatus = normalizeStatus(
+        purchase.payment_status || 
+        (
+            due <= 0 
+                ? "paid"
+                : paid > 0 
+                    ? "partial"
+                    : "unpaid"
+        )
+    );
 
     return `
-        <tr
-            data-purchase-id="${escapeHtml(id)}"
-        >
-
+        <tr data-purchase-id="${escapeHtml(id)}>
             <td>
-
                 <div class="purchase-number-cell">
-
                     <strong>
-                        ${escapeHtml(
-                            purchaseNumber
-                        )}
+                        ${escapeHtml(purchaseNumber)}
                     </strong>
-
+                    
                     ${
                         purchase.invoice_number
                             ? `
                                 <small>
-                                    Invoice:
-                                    ${escapeHtml(
-                                        purchase.invoice_number
-                                    )}
+                                    Invoice: ${escapeHtml(purchase.invoice_number)}
                                 </small>
-                              `
+                            `
                             : ""
                     }
-
                 </div>
-
             </td>
+            
+            <td>${escapeHtml(supplier)}</td>
 
+            <td>${escapeHtml(date)}</td>
+
+            <td>${escapeHtml(toal)}</td>
+
+            <td>${escapeHtml(paid)}</td>
 
             <td>
-                ${escapeHtml(supplier)}
-            </td>
-
-
-            <td>
-                ${escapeHtml(date)}
-            </td>
-
-
-            <td>
-                ${formatCurrency(total)}
-            </td>
-
-
-            <td>
-                ${formatCurrency(paid)}
-            </td>
-
-
-            <td>
-                <span
-                    class="
-                        purchase-due
-                        ${
-                            due > 0
-                                ? "has-due"
-                                : "paid-due"
-                        }
-                    "
+                <span class="purchase-due 
+                    ${
+                        due > 0 
+                            ? "has-due"
+                            : "paid-due"
+                        
+                    }"
                 >
-                    ${formatCurrency(due)}
+                    ${formatCurrent(due)}
                 </span>
             </td>
 
-
             <td>
-
-                <span
-                    class="
-                        status-badge
-                        ${getStatusClass(status)}
-                    "
+                <span class="purchase-due
+                    ${
+                        due > 0
+                            ? "has-due"
+                            : "paid-due"
+                    }"
                 >
-                    ${escapeHtml(
-                        formatStatus(status)
-                    )}
+                    ${formatCurrent(due)}
                 </span>
-
             </td>
 
-
             <td>
-
-                <span
-                    class="
-                        status-badge
-                        ${getPaymentStatusClass(
-                            paymentStatus
-                        )}
-                    "
-                >
-                    ${escapeHtml(
-                        formatStatus(
-                            paymentStatus
-                        )
-                    )}
+                <span class="status-badge ${getStatusClass(status)}">
+                    ${escapeHtml(formatStatus(status))}
                 </span>
-
             </td>
 
+            <td>
+                <span class="status-badge ${getPaymentStatusClass(paymentStatus)}">
+                    ${escapeHtml(formatStatus(paymentStatus))}
+                </span>
+            </td>
 
             <td>
-
                 <div class="purchase-actions">
-
-                    <button
+                    <button 
                         type="button"
-                        class="action-button"
-                        data-action="view"
+                        class-action="view"
                         data-id="${escapeHtml(id)}"
                         title="View purchase"
-                        aria-label="View purchase"
+                        aria-label="Edit purchase"
                     >
                         👁
                     </button>
 
-
-                    <button
+                    <button 
                         type="button"
                         class="action-button"
                         data-action="edit"
@@ -1160,72 +742,51 @@ function renderPurchaseRow(purchase) {
                         title="Edit purchase"
                         aria-label="Edit purchase"
                     >
-                        ✏
+                         ✏
                     </button>
-
 
                     <button
                         type="button"
                         class="action-button"
-                        data-action="payment"
+                        data-action ="payment"
                         data-id="${escapeHtml(id)}"
                         title="Record payment"
                         aria-label="Record payment"
                     >
-                        💳
+                         💳
                     </button>
-
 
                     <button
                         type="button"
                         class="action-button delete-purchase"
                         data-action="delete"
-                        data-id="${escapeHtml(id)}"
+                        data-in="${escapeHtml(id)}"
                         title="Delete purchase"
                         aria-label="Delete purchase"
                     >
-                        🗑
+                         🗑
                     </button>
-
                 </div>
-
             </td>
-
         </tr>
     `;
-
 }
 
-
-/* ============================================================
-   TABLE ACTIONS
-============================================================ */
-
+/* TABLE ACTIONS */
 async function handleTableAction(event) {
-
-    const button =
-        event.target.closest(
-            "[data-action]"
-        );
-
+    const button = event.target.closest("[data-action]");
 
     if (!button) {
         return;
     }
 
+    const action =button.dataset.action;
 
-    const action =
-        button.dataset.action;
-
-
-    const id =
-        button.dataset.id;
-
+    const id = button.dataset.id;
 
     if (!id) {
         return;
     }
-
 
     switch (action) {
 
@@ -1233,117 +794,71 @@ async function handleTableAction(event) {
             viewPurchase(id);
             break;
 
-
         case "edit":
             editPurchase(id);
             break;
 
-
         case "payment":
             openPaymentModal(id);
             break;
-
 
         case "delete":
             await deletePurchase(id);
             break;
 
     }
-
 }
 
-
-/* ============================================================
-   CREATE / UPDATE PURCHASE
-============================================================ */
-
+/* CREATE / UPDATE PURCHASE */
 async function handlePurchaseSubmit(event) {
-
     event.preventDefault();
 
-
-    const form =
-        event.currentTarget;
-
+    const form = event.currentTarget;
 
     if (!form.checkValidity()) {
-
         form.reportValidity();
-
         return;
-
     }
 
+    const formData = new FormData(form);
 
-    const formData =
-        new FormData(form);
+    const data = Object.fromEntries(formData.entries());
 
+    const items = collectPurchaseItems();
 
-    const data =
-        Object.fromEntries(
-            formData.entries()
-        );
-
-
-    const items =
-        collectPurchaseItems();
-
-
-    if (
-        items.length &&
-        !validatePurchaseItems(items)
-    ) {
-
+    if (items.length && !validatePurchaseItems(items)) {
         return;
-
     }
 
+    const isEditing = Boolean(purchaseState.editingId);
 
-    if (items.length) {
-        data.items = items;
-    }
-
-
-    const isEditing =
-        Boolean(
+    const url = isEditing
+        ? `${PURCHASES_API}?id=${encodeURIComponent(
             purchaseState.editingId
-        );
-
-
-    const url =
-        isEditing
-            ? `${PURCHASES_API}?id=${encodeURIComponent(
-                purchaseState.editingId
-            )}`
-            : PURCHASES_API;
-
+        )}`
+        : PURCHASES_API;
 
     try {
-
         setFormSubmitting(
             form,
             true
         );
 
+        const result = await apiRequest(
+            url,
+            {
+                method: isEditing
+                    ? "PUT"
+                    : "POST",
 
-        const result =
-            await apiRequest(
-                url,
-                {
-                    method:
-                        isEditing
-                            ? "PUT"
-                            : "POST",
-
-                    body: data
-                }
-            );
-
+                body: data 
+            }
+        );
 
         closePurchaseModal();
 
         showToast(
-            result?.message ||
+            result?.message || 
             (
                 isEditing
                     ? "Purchase updated successfully."
@@ -1352,107 +867,71 @@ async function handlePurchaseSubmit(event) {
             "success"
         );
 
-
         purchaseState.editingId = null;
 
         await loadPurchases();
 
     } catch (error) {
-
         console.error(
             "Purchase save failed:",
-            error
+            error 
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to save purchase.",
             "error"
         );
-
     } finally {
-
         setFormSubmitting(
             form,
-            false
+            false,
         );
-
     }
-
 }
 
-
-/* ============================================================
-   PURCHASE ITEMS
-============================================================ */
-
+/* PURCHASE ITEMS */
 function collectPurchaseItems() {
 
-    const rows =
-        queryAll(
-            "[data-purchase-item]"
-        );
-
+    const rows = queryAll("[data-purchase-item");
 
     if (!rows.length) {
         return [];
     }
 
-
-    return rows
-        .map(row => {
-
-            const product =
-                query(
-                    '[name="product_id"]',
-                    row
-                );
-
-
-            const quantity =
-                query(
-                    '[name="quantity"]',
-                    row
-                );
-
-
-            const unitPrice =
-                query(
-                    '[name="unit_price"]',
-                    row
-                );
-
-
-            return {
-
-                product_id:
-                    product?.value || null,
-
-                quantity:
-                    Number(
-                        quantity?.value || 0
-                    ),
-
-                unit_price:
-                    Number(
-                        unitPrice?.value || 0
-                    )
-
-            };
-
-        })
-        .filter(item =>
-            item.product_id ||
-            item.quantity ||
-            item.unit_price
+    return rows.map(row => {
+        
+        const product = query(
+            '[name="product_id"]',
+            row 
         );
 
+        const quantity = query(
+            '[name="quantity"]',
+            row 
+        );
+
+        const unitPrice = query(
+            '[name="unit_price"]',
+            row 
+        );
+
+        return {
+            product_id: product?.value || null,
+
+            quantity: Number(quantity?.value || 0),
+
+            unit_price: Number(unitPrice?.value || 0)
+        };
+    })
+    .filter(item => 
+        item.product_id || 
+        item.quantity || 
+        item.unit_price 
+    );
 }
 
-
 function validatePurchaseItems(items) {
-
     for (const item of items) {
 
         if (!item.product_id) {
@@ -1463,60 +942,34 @@ function validatePurchaseItems(items) {
             );
 
             return false;
-
         }
 
-
-        if (
-            !Number.isFinite(
-                item.quantity
-            ) ||
-            item.quantity <= 0
-        ) {
-
+        if (!Number.isFinite(item.quantity) || item.quantity <= 0) {
+            
             showToast(
                 "Purchase quantity must be greater than zero.",
                 "error"
             );
 
             return false;
-
         }
 
-
-        if (
-            !Number.isFinite(
-                item.unit_price
-            ) ||
-            item.unit_price < 0
-        ) {
-
+        if (!Number.isFinite(item.unit_price) || item.unit_price < 0) {
+            
             showToast(
                 "Unit price cannot be negative.",
                 "error"
             );
 
             return false;
-
         }
-
     }
-
-
     return true;
-
 }
 
-
-/* ============================================================
-   EDIT PURCHASE
-============================================================ */
-
+/* EDIT PURCHASE */
 function editPurchase(id) {
-
-    const purchase =
-        findPurchase(id);
-
+    const purchase = findPurchase(id);
 
     if (!purchase) {
 
@@ -1526,21 +979,15 @@ function editPurchase(id) {
         );
 
         return;
-
     }
-
 
     purchaseState.editingId = id;
 
-
-    const form =
-        getElement("purchaseForm");
-
+    const form = getElement("purchaseForm");
 
     if (!form) {
         return;
     }
-
 
     setFormValue(
         form,
@@ -1550,199 +997,122 @@ function editPurchase(id) {
         ""
     );
 
-
-    setFormValue(
-        form,
-        "purchase_number",
-        purchase.purchase_number ??
-        purchase.purchaseNumber ??
-        ""
-    );
-
-
-    setFormValue(
-        form,
-        "invoice_number",
-        purchase.invoice_number ??
-        ""
-    );
-
-
     setFormValue(
         form,
         "purchase_date",
         toInputDate(
-            purchase.purchase_date ??
-            purchase.date
+            purchase.purchase_date ?? 
+            purchase.date 
         )
     );
-
 
     setFormValue(
         form,
         "status",
-        purchase.status ??
+        purchase.status ?? 
         "pending"
     );
-
 
     setFormValue(
         form,
         "payment_status",
-        purchase.payment_status ??
-        "unpaid"
+        purchase.payment_status ?? 
+        "uppaid"
     );
-
 
     setFormValue(
         form,
         "notes",
-        purchase.notes ??
-        ""
+        purchase.notes ?? 
+        "" 
     );
 
-
-    /*
-     * Populate optional item rows
-     * when purchase items are included
-     * in the API response.
-     */
-
-    if (
-        Array.isArray(
-            purchase.items
-        )
-    ) {
-
-        populatePurchaseItems(
-            purchase.items
-        );
-
+    /* Populate optional item rows, API response. */
+    if (Array.isArray(purchase.items)) {
+        populatePurchaseItems(purchase.items);
     }
-
 
     setModalTitle(
         "purchaseModal",
         "Edit Purchase"
     );
 
-
-    openModal(
-        "purchaseModal"
-    );
+    openModal("purchaseModal");
 
 }
 
-
-/* ============================================================
-   CREATE PURCHASE
-============================================================ */
-
+/* CREATE PURCHASE */
 function openPurchaseModal() {
-
     purchaseState.editingId = null;
 
-
-    const form =
-        getElement("purchaseForm");
-
+    const form = getElement("purchaseForm");
 
     if (form) {
-
-        form.reset();
-
+        form.requestFullscreen();
         clearPurchaseItems();
-
     }
-
-
+    
     setModalTitle(
         "purchaseModal",
         "Add Purchase"
     );
 
-
-    openModal(
-        "purchaseModal"
-    );
+    openModal("purchaseModal");
 
 }
 
-
-/* ============================================================
-   VIEW PURCHASE
-============================================================ */
-
+/* VIEW PURCHASE */
 function viewPurchase(id) {
-
-    const purchase =
-        findPurchase(id);
-
+    const purchase = findPurchase(id);
 
     if (!purchase) {
-
         showToast(
             "Purchase record was not found.",
             "error"
         );
-
         return;
-
     }
-
-
+    
     setText(
         "purchaseDetailsNumber",
-        purchase.purchase_number ??
+        purchase.purchase_number ?? 
         purchase.purchaseNumber ??
         `#${id}`
     );
 
-
     setText(
         "purchaseDetailsSupplier",
-        purchase.supplier_name ??
+        purchase.supplier_name ?? 
         purchase.supplier ??
-        "—"
+        "-"
     );
-
 
     setText(
         "purchaseDetailsDate",
         formatDate(
-            purchase.purchase_date ??
+            purchase.purchase_date ?? 
             purchase.date ??
-            purchase.created_at
+            purchase.created_at 
         )
     );
-
 
     setText(
         "purchaseDetailsInvoice",
-        purchase.invoice_number ||
-        "—"
+        purchase.invoice_number || 
+        "-"
     );
-
 
     setText(
         "purchaseDetailsTotal",
-        formatCurrency(
-            getPurchaseTotal(
-                purchase
-            )
+        formatCurrent(
+            getPurchaseTotal(purchase)
         )
     );
-
 
     setText(
         "purchaseDetailsPaid",
-        formatCurrency(
-            getPaidAmount(
-                purchase
-            )
-        )
+        formatCurrent(getPaidAmount(purchase))
     );
-
 
     setText(
         "purchaseDetailsDue",
@@ -1753,85 +1123,65 @@ function viewPurchase(id) {
         )
     );
 
-
     setText(
         "purchaseDetailsStatus",
         formatStatus(
-            purchase.status ||
+            purchase.status || 
             "pending"
         )
     );
 
-
     setText(
         "purchaseDetailsPaymentStatus",
         formatStatus(
-            purchase.payment_status ||
+            purchase.payment_status || 
             "unpaid"
         )
     );
 
-
     setText(
         "purchaseDetailsNotes",
-        purchase.notes ||
+        purchase.notes || 
         "No notes available."
     );
 
-
     renderPurchaseDetailsItems(
-        purchase.items
+        purchase.items 
     );
-
 
     openModal(
         "purchaseDetailsModal"
     );
-
 }
 
-
-/* ============================================================
-   DELETE PURCHASE
-============================================================ */
-
+/* DELETE PURCHASE */
 async function deletePurchase(id) {
-
-    const purchase =
-        findPurchase(id);
-
+    const purchase = findPurchase(id);
 
     if (!purchase) {
 
-        showToast(
+        showText(
             "Purchase record was not found.",
             "error"
         );
 
         return;
-
     }
 
-
-    const purchaseNumber =
-        purchase.purchase_number ??
+    const purchaseNumber = 
+        purchase.purchase_number ?? 
         purchase.purchaseNumber ??
         `#${id}`;
 
-
-    const confirmed =
-        window.confirm(
-            `Delete purchase ${purchaseNumber}? This action cannot be undone.`
-        );
-
+    const confirmed = window.confirm(
+        `Delete purchase ${purchaseNumber}? This action cannot be undone.`
+    );
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         await apiRequest(
             `${PURCHASES_API}?id=${encodeURIComponent(id)}`,
             {
@@ -1839,43 +1189,31 @@ async function deletePurchase(id) {
             }
         );
 
-
         showToast(
             "Purchase deleted successfully.",
             "success"
         );
 
-
         await loadPurchases();
 
     } catch (error) {
-
+        
         console.error(
-            "Purchase deletion failed:",
-            error
+            "purchase deletion failed:",
+            error 
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to delete purchase.",
             "error"
         );
-
     }
-
 }
 
-
-/* ============================================================
-   PAYMENT
-============================================================ */
-
+/* PAYMENT */
 function openPaymentModal(id) {
-
-    const purchase =
-        findPurchase(id);
-
+    const purchase = findPurchase(id);
 
     if (!purchase) {
 
@@ -1885,138 +1223,85 @@ function openPaymentModal(id) {
         );
 
         return;
-
     }
-
 
     setData(
         "paymentPurchaseId",
-        id
+        id 
     );
-
 
     setText(
         "paymentPurchaseNumber",
-        purchase.purchase_number ??
+        purchase.purchase_number ?? 
         purchase.purchaseNumber ??
         `#${id}`
     );
 
-
     setText(
         "paymentPurchaseTotal",
         formatCurrency(
-            getPurchaseTotal(
-                purchase
-            )
+            getPurchaseTotal(purchase)
         )
     );
-
 
     setText(
         "paymentPurchasePaid",
         formatCurrency(
-            getPaidAmount(
-                purchase
-            )
+            getPaidAmount(purchase)
         )
     );
-
 
     setText(
         "paymentPurchaseDue",
         formatCurrency(
-            getDueAmount(
-                purchase
-            )
+            getDueAmount(purchase)
         )
     );
 
-
-    const amountInput =
-        getElement(
-            "paymentAmount"
-        );
-
+    const amountInput = getElement("paymentAmount");
 
     if (amountInput) {
 
-        amountInput.value =
-            getDueAmount(
-                purchase
-            ) > 0
-                ? getDueAmount(
-                    purchase
-                ).toFixed(2)
-                : "";
+        amountInput.VALUE = getDueAmount(purchase) > 0
+            ? getDueAmount(purchase).toFixed(2)
+            : "";
 
     }
 
-
-    const form =
-        getElement("paymentForm");
-
+    const form = getElement("paymentForm");
 
     if (form) {
-
-        const purchaseIdInput =
-            query(
-                '[name="purchase_id"]',
-                form
-            );
-
+        const purchaseIdInput = query(
+            '[name="purchase_id"]',
+            form
+        );
 
         if (purchaseIdInput) {
-
-            purchaseIdInput.value =
-                id;
-
+            purchaseIdInput.value = id;
         }
-
     }
 
-
-    openModal(
-        "paymentModal"
-    );
+    openModal("paymentModal");
 
 }
 
-
 async function handlePaymentSubmit(event) {
-
     event.preventDefault();
 
-
-    const form =
-        event.currentTarget;
-
+    const form = event.currentTarget;
 
     if (!form.checkValidity()) {
 
         form.reportValidity();
 
         return;
-
     }
 
+    const formData = new FormData(form);
 
-    const formData =
-        new FormData(form);
+    const data = Object.fromEntries(formData.entries());
 
-
-    const data =
-        Object.fromEntries(
-            formData.entries()
-        );
-
-
-    const purchaseId =
-        data.purchase_id ||
-        getData(
-            "paymentPurchaseId"
-        );
-
+    const purchaseId = data.purchase_id || getData("paymentPurchaseId");
 
     if (!purchaseId) {
 
@@ -2026,144 +1311,88 @@ async function handlePaymentSubmit(event) {
         );
 
         return;
-
     }
 
+    data.amount = Number(data.amount);
 
-    data.amount =
-        Number(
-            data.amount
-        );
-
-
-    if (
-        !Number.isFinite(
-            data.amount
-        ) ||
-        data.amount <= 0
-    ) {
-
+    if (!Number.isFinite(data.amount) || data.amount <= 0) {
         showToast(
             "Payment amount must be greater than zero.",
             "error"
         );
 
         return;
-
     }
 
-
     try {
-
         setFormSubmitting(
             form,
             true
         );
 
-
-        const result =
-            await apiRequest(
-                `${PURCHASES_API}/payment`,
-                {
-                    method: "POST",
-                    body: {
-                        ...data,
-                        purchase_id:
-                            purchaseId
-                    }
+        const result = await apiRequest(
+            `${PURCHASES_API}/payment`,
+            {
+                method: "POST",
+                body: {
+                    ...data,
+                    purchase_id: purchaseId
                 }
-            );
-
+            }
+        );
 
         closePaymentModal();
 
-
         showToast(
-            result?.message ||
+            result?.message || 
             "Payment recorded successfully.",
             "success"
         );
 
-
         await loadPurchases();
 
     } catch (error) {
-
         console.error(
             "Payment failed:",
             error
         );
 
-
         showToast(
-            error.message ||
+            error.message || 
             "Unable to record payment.",
             "error"
         );
 
     } finally {
-
+        
         setFormSubmitting(
             form,
-            false
-        );
+            false 
+        ); 
 
     }
-
 }
 
-
-/* ============================================================
-   SUPPLIERS
-============================================================ */
-
+/* SUPPLIERS */
 async function loadSuppliers() {
+    const supplierSelect = getElement("purchaseSupplierFilter") || getElement("supplierFilter");
 
-    const supplierSelect =
-        getElement(
-            "purchaseSupplierFilter"
-        ) ||
-        getElement(
-            "supplierFilter"
-        );
+    const formSupplierSelect = getElement("purchaseSupplier");
 
-
-    const formSupplierSelect =
-        getElement(
-            "purchaseSupplier"
-        );
-
-
-    if (
-        !supplierSelect &&
-        !formSupplierSelect
-    ) {
-
+    if (!supplierSelect && !formSupplierSelect) {
         return;
-
     }
 
-
     try {
+        const result = await apiRequest("../backend/api/suppliers.php");
 
-        const result =
-            await apiRequest(
-                "../backend/api/suppliers.php"
-            );
-
-
-        const suppliers =
-            normalizeSupplierResponse(
-                result
-            );
-
+        const suppliers = normalizeSupplierResponse(result);
 
         populateSupplierSelect(
             supplierSelect,
             suppliers,
-            "All Suppliers"
+            "All suppliers"
         );
-
 
         populateSupplierSelect(
             formSupplierSelect,
@@ -2172,16 +1401,12 @@ async function loadSuppliers() {
         );
 
     } catch (error) {
-
         console.error(
             "Unable to load suppliers:",
-            error
+            error 
         );
-
     }
-
 }
-
 
 function normalizeSupplierResponse(result) {
 
@@ -2189,137 +1414,73 @@ function normalizeSupplierResponse(result) {
         return result;
     }
 
-
-    if (
-        Array.isArray(result?.data)
-    ) {
+    if (Array.isArray(result?.data)){
         return result.data;
     }
 
-
-    if (
-        Array.isArray(result?.suppliers)
-    ) {
+    if (Array.isArray(result?.suppliers)) {
         return result.suppliers;
     }
 
-
-    if (
-        Array.isArray(result?.items)
-    ) {
+    if (Array.isArray(result?.item)) {
         return result.items;
     }
 
-
     return [];
-
 }
-
 
 function populateSupplierSelect(
     select,
     suppliers,
     firstOption
 ) {
-
     if (!select) {
         return;
     }
 
-
-    const currentValue =
-        select.value;
-
+    const currentValue = select.value;
 
     select.innerHTML = "";
 
+    const defaultOption = document.createElement("option");
 
-    const defaultOption =
-        document.createElement("option");
-
-
-    defaultOption.value = "";
-
-    defaultOption.textContent =
-        firstOption;
-
-
-    select.appendChild(
-        defaultOption
-    );
-
+    select.appendChild(defaultOption);
 
     suppliers.forEach(
         supplier => {
 
-            const option =
-                document.createElement(
-                    "option"
-                );
+            const option = document.createElement("option");
 
+            const id = supplier.id ?? supplier.supplier_id;
 
-            const id =
-                supplier.id ??
-                supplier.supplier_id;
-
-
-            const name =
-                supplier.name ??
-                supplier.supplier_name ??
+            const name = 
+                supplier.name ?? 
+                supplier.supplier_name ?? 
                 supplier.company_name ??
                 `Supplier #${id}`;
 
+            option.value = id ?? "";
 
-            option.value =
-                id ?? "";
+            option.textContent = name;
 
-
-            option.textContent =
-                name;
-
-
-            select.appendChild(
-                option
-            );
-
+            select.appendChild(option);
         }
     );
 
-
-    if (
-        currentValue
-    ) {
-
-        select.value =
-            currentValue;
-
+    if (currentValue) {
+        select.value = currentValue;
     }
-
 }
 
-
-/* ============================================================
-   PURCHASE DETAILS ITEMS
-============================================================ */
-
+/* PURCHASE DETAILS ITEMS */
 function renderPurchaseDetailsItems(items) {
-
-    const container =
-        getElement(
-            "purchaseDetailsItems"
-        );
-
+    const container = getElement("purchaseDetailsItems");
 
     if (!container) {
         return;
     }
 
-
-    if (
-        !Array.isArray(items) ||
-        !items.length
-    ) {
-
+    if (!Array.isArray(items) || !items.length) {
         container.innerHTML = `
             <div class="details-empty">
                 No purchase item details available.
@@ -2327,206 +1488,130 @@ function renderPurchaseDetailsItems(items) {
         `;
 
         return;
-
     }
 
+    container.innerHTML = items.map(item => {
 
-    container.innerHTML =
-        items.map(item => {
+        const product = 
+            item.product_name ??
+            item.product ??
+            `Product #${
+                item.product_id ?? "-"
+            }`;
 
-            const product =
-                item.product_name ??
-                item.product ??
-                `Product #${
-                    item.product_id ?? "—"
-                }`;
+        const quantity = Number(item.quantity || 0);
 
-
-            const quantity =
-                Number(
-                    item.quantity || 0
-                );
-
-
-            const unitPrice =
-                Number(
-                    item.unit_price ||
-                    item.price ||
-                    0
-                );
-
-
-            const subtotal =
-                Number(
-                    item.subtotal
-                );
-
-
-            const calculatedSubtotal =
-                Number.isFinite(
-                    subtotal
-                )
-                    ? subtotal
-                    : quantity * unitPrice;
-
-
-            return `
-                <div class="purchase-detail-item">
-
-                    <div>
-                        <strong>
-                            ${escapeHtml(product)}
-                        </strong>
-
-                        ${
-                            item.sku
-                                ? `
-                                    <small>
-                                        SKU:
-                                        ${escapeHtml(
-                                            item.sku
-                                        )}
-                                    </small>
-                                  `
-                                : ""
-                        }
-                    </div>
-
-                    <span>
-                        ${quantity}
-                        ×
-                        ${formatCurrency(
-                            unitPrice
-                        )}
-                    </span>
-
-                    <strong>
-                        ${formatCurrency(
-                            calculatedSubtotal
-                        )}
-                    </strong>
-
-                </div>
-            `;
-
-        }).join("");
-
-}
-
-
-/* ============================================================
-   PURCHASE ITEM FORM HELPERS
-============================================================ */
-
-function populatePurchaseItems(items) {
-
-    const container =
-        getElement(
-            "purchaseItems"
+        const unitPrice = Number(
+            item.unit_price || 
+            item.price ||
+            0 
         );
 
+        const subtotal = Number(
+            item.subtotal 
+        );
+
+        const calculatedSubtotal = Number.isFinite(subtotal)
+            ? subtotal
+            : quantity * unitPrice;
+
+        return `
+            <div class="purchase-detail-item">
+                <div>
+                    <strong>${escapeHtml(product)}</strong>
+                    
+                    ${item.sku 
+                            ? `
+                                <small>
+                                    SKU: ${escapeHtml(item.sku)}
+                                </small>
+                            `
+                            : ""
+                    }
+                </div>
+
+                <span>
+                    ${quantity}
+                    ×
+                    ${formatCurrency(unitPrice)}
+                </span>
+
+                <strong>
+                    ${formatCurrency(calculatedSubtotal)}
+                </strong>
+
+            </div>            
+        `;
+    }).join(" ");
+}
+
+/* PURCHASE ITEM FORM HELPERS */
+function populatePurchaseItems(items) {
+    const container = getElement("purchaseItems");
 
     if (!container) {
         return;
     }
-
 
     container.innerHTML = "";
 
-
     items.forEach(item => {
-
         addPurchaseItemRow(
-            item
+            item 
         );
-
     });
-
 }
 
-
 function addPurchaseItemRow(item = {}) {
-
-    const container =
-        getElement(
-            "purchaseItems"
-        );
-
+    const container = getElement("purchaseItem");
 
     if (!container) {
         return;
     }
 
+    const row = document.createElement("div");
 
-    const row =
-        document.createElement("div");
+    row.className = "purchase-item-row";
 
-
-    row.className =
-        "purchase-item-row";
-
-
-    row.dataset.purchaseItem =
-        "true";
-
+    row.dataset.purchaseItem = "true";
 
     row.innerHTML = `
         <div class="form-group">
-
-            <label>
-                Product
-            </label>
-
+            <label>Product</label>
+            
             <select name="product_id">
-                <option value="">
-                    Select product
-                </option>
+                <option value="">Select product</option>
             </select>
-
         </div>
-
-
+        
         <div class="form-group">
-
-            <label>
-                Quantity
-            </label>
-
-            <input
+            <label>Quantity</label>
+            
+            <input 
                 type="number"
                 name="quantity"
                 min="1"
                 step="1"
                 value="${escapeHtml(
                     item.quantity ??
-                    ""
+                    "" 
                 )}"
             >
-
         </div>
-
-
+        
         <div class="form-group">
-
-            <label>
-                Unit Price
-            </label>
-
-            <input
+            <label>Unit Price</label>
+            
+            <input 
                 type="number"
                 name="unit_price"
                 min="0"
                 step="0.01"
-                value="${escapeHtml(
-                    item.unit_price ??
-                    ""
-                )}"
+                value="${escapeHtml(item.unit_price ?? "" )}" 
             >
-
         </div>
-
-
-        <button
+        
+        <button 
             type="button"
             class="action-button delete-purchase-item"
             data-remove-purchase-item
@@ -2536,62 +1621,38 @@ function addPurchaseItemRow(item = {}) {
         </button>
     `;
 
+    container.appendChild(row);
 
-    container.appendChild(
-        row
+    const removeButton = query(
+        "[data-remove-purchase-item]",
+        row 
     );
 
-
-    const removeButton =
-        query(
-            "[data-remove-purchase-item]",
-            row
-        );
-
-
     if (removeButton) {
-
         removeButton.addEventListener(
             "click",
             () => row.remove()
         );
-
     }
 
-
-    /*
-     * Product options can be loaded by
-     * the products operation module.
-     *
-     * If products are available globally,
-     * populate the select.
-     */
-
-    populateProductSelectIfAvailable(
+    /* Product operation module. */
+    populatePurchaseSelectIfAvailable(
         query(
-            '[name="product_id"]',
-            row
+            '[name="product-id"]',
+            row 
         ),
-        item.product_id
+        item.product_id 
     );
 
 }
 
-
 function clearPurchaseItems() {
-
-    const container =
-        getElement(
-            "purchaseItems"
-        );
-
+    const container = getElement("purchaseItems");
 
     if (container) {
         container.innerHTML = "";
     }
-
 }
-
 
 function populateProductSelectIfAvailable(
     select,
@@ -2602,401 +1663,232 @@ function populateProductSelectIfAvailable(
         return;
     }
 
-
-    /*
-     * Supports products loaded by
-     * products.js when exposed globally.
-     */
-
-    const products =
-        Array.isArray(
-            window.inventoryProducts
-        )
-            ? window.inventoryProducts
-            : [];
-
+    /* Supports products loaded when exposed globally. */
+    const products = Array.isArray(window.inventoryProducts)
+        ? window.inventoryProducts
+        : [];
 
     if (!products.length) {
         return;
     }
 
-
     select.innerHTML = `
         <option value="">
-            Select product
+            Select product 
         </option>
     `;
 
-
     products.forEach(product => {
 
-        const option =
-            document.createElement(
-                "option"
-            );
+        const option = document.createElement(option);
 
+        option.value = product.id ?? product.product_id ?? "";
 
-        option.value =
-            product.id ??
-            product.product_id ??
-            "";
+        option.textContent = product.name ?? product.product_name ?? `Product #${option.value}`;
 
-
-        option.textContent =
-            product.name ??
-            product.product_name ??
-            `Product #${option.value}`;
-
-
-        select.appendChild(
-            option
-        );
+        select.appendChild(option);
 
     });
 
-
     if (selectedId !== null) {
-
-        select.value =
-            selectedId;
-
+        select.value = selectedId;
     }
-
 }
 
-
-/* ============================================================
-   STATISTICS
-============================================================ */
-
+/* STATISTICS */
 function updatePurchaseStatistics() {
+    const purchases = purchaseState.filteredPurchases;
 
-    const purchases =
-        purchaseState.filteredPurchases;
+    const totalPurchases = purchases.length;
 
-
-    const totalPurchases =
-        purchases.length;
-
-
-    const totalAmount =
-        purchases.reduce(
-            (sum, purchase) =>
-                sum +
-                getPurchaseTotal(
-                    purchase
-                ),
+    const totalAmount = purchases.reduce(
+        (sum, purchase) => 
+            sum + 
+            getPurchaseTotal(purchase),
             0
-        );
+    );
 
+    const totalPaid = purchases.reduce(
+        (sum, purchase) => 
+            sum +
+            getPaidAmount(purchase),
+        0
+    );
 
-    const totalPaid =
-        purchases.reduce(
-            (sum, purchase) =>
-                sum +
-                getPaidAmount(
-                    purchase
-                ),
-            0
-        );
+    const totalDue = purchases.reduce(
+        (sum, purchase) => 
+            sum + 
+            getDueAmount(purchase),
+        0 
+    );
 
+    const pending = purchases.filter(
+        purchase => 
+        [
+            "pending",
+            "draft",
+            "ordered"
+        ].includes(
+            normalizeStatus(purchase.status)
+        )
+    ).length;
 
-    const totalDue =
-        purchases.reduce(
-            (sum, purchase) =>
-                sum +
-                getDueAmount(
-                    purchase
-                ),
-            0
-        );
-
-
-    const pending =
-        purchases.filter(
-            purchase =>
-                [
-                    "pending",
-                    "draft",
-                    "ordered"
-                ].includes(
-                    normalizeStatus(
-                        purchase.status
-                    )
-                )
-        ).length;
-
-
-    const completed =
-        purchases.filter(
-            purchase =>
-                [
-                    "completed",
-                    "received",
-                    "approved"
-                ].includes(
-                    normalizeStatus(
-                        purchase.status
-                    )
-                )
-        ).length;
-
+    const completed = purchases.filter(
+        purchase => 
+        [
+            "completed",
+            "received",
+            "approved"
+        ].includes(
+            normalizeStatus(purchase.status)
+        )
+    ).length;
 
     setNumber(
         "totalPurchases",
-        totalPurchases
+        totalPurchases 
     );
-
 
     setNumber(
         "pendingPurchases",
-        pending
+        pending 
     );
-
 
     setNumber(
-        "completedPurchases",
-        completed
+        "completedPurchases", 
+        completed 
     );
-
 
     setCurrency(
         "totalPurchaseAmount",
         totalAmount
     );
 
-
     setCurrency(
         "totalPaidAmount",
-        totalPaid
+        totalPaid 
     );
-
 
     setCurrency(
         "totalDueAmount",
-        totalDue
-    );
+        totalDue 
+    )
 
 }
 
-
-/* ============================================================
-   PAGINATION
-============================================================ */
-
+/* PAGINATION */
 function getTotalPages() {
-
     return Math.max(
         1,
         Math.ceil(
-            purchaseState.filteredPurchases.length /
-            purchaseState.perPage
+            purchaseState.filteredPurchases.length / purchaseState.perPage 
         )
     );
-
 }
-
 
 function updatePagination() {
+    const total = purchaseState.filteredPurchases.length;
 
-    const total =
-        purchaseState.filteredPurchases.length;
+    const totalPage = getTotalPages();
 
-
-    const totalPages =
-        getTotalPages();
-
-
-    const start =
-        total === 0
-            ? 0
+    const start = 
+        total === 0 
+            ? 0 
             : (
                 (
-                    purchaseState.currentPage -
-                    1
-                ) *
-                purchaseState.perPage
-            ) + 1;
+                    purchaseState.currentPage - 1 
+                ) * purchaseState.perPage 
+            ) + 1; 
+    
+    const end = Math.min(
+        purchaseState.currentPage * purchaseState.perPage,
+        total 
+    );
 
-
-    const end =
-        Math.min(
-            purchaseState.currentPage *
-            purchaseState.perPage,
-            total
-        );
-
-
-    const info =
-        getElement("paginationInfo") ||
-        getElement("purchasePaginationInfo");
-
+    const info = getElement("paginationInfo") || getElement("purchasePaginationInfo");
 
     if (info) {
-
-        info.textContent =
-            total
-                ? `Showing ${start}-${end} of ${total} purchases`
-                : "No purchases found";
+        info.textContent = total 
+            ? `Showing ${start}-${end} of ${total} purchases`
+            : "No purchases found";
 
     }
 
-
-    const currentPage =
-        getElement("currentPage") ||
-        getElement("purchaseCurrentPage");
-
+    const currentPage = getElement("currentPage") || getElement("purchaseCurrentPage");
 
     if (currentPage) {
-
-        currentPage.textContent =
-            purchaseState.currentPage;
-
+        currentPage.textContent = purchaseState.currentPage;
     }
 
-
-    const totalPagesElement =
-        getElement("totalPages") ||
-        getElement("purchaseTotalPages");
-
+    const totalPagesElement = getElement("totalPages") || getElement("purchaseTotalPages");
 
     if (totalPagesElement) {
-
-        totalPagesElement.textContent =
-            totalPages;
-
+        totalPagesElement.textContent = totalPages;
     }
 
-
-    const previous =
-        getElement("previousPage") ||
-        getElement("previousPurchasePage");
-
-
-    const next =
-        getElement("nextPage") ||
-        getElement("nextPurchasePage");
-
+    const previous = getElement("nextPage") || getElement("nextPurchasePage");
 
     if (previous) {
-
-        previous.disabled =
-            purchaseState.currentPage <= 1;
-
+        previous.disabled = purchaseState.currentPage <= 1;
     }
-
 
     if (next) {
-
-        next.disabled =
-            purchaseState.currentPage >=
-            totalPages;
-
+        next.disabled = purchaseState.currentPage >= totalPages;
     }
-
 }
 
-
-/* ============================================================
-   LOADING STATE
-============================================================ */
-
+/* LOADING STATE */
 function setLoadingState(isLoading) {
+    const tableBody = getElement("purchaseTableBody") || getElement("purchaseTableBody");
 
-    const tableBody =
-        getElement("purchasesTableBody") ||
-        getElement("purchaseTableBody");
-
-
-    if (
-        isLoading &&
-        tableBody
-    ) {
-
+    if (isLoading && tableBody) {
         tableBody.innerHTML = `
             <tr>
-                <td
-                    colspan="9"
-                    class="table-loading-state"
-                >
+                <td colspan="9" class="table-loading-state">
                     <div class="loading-spinner">
                         <span></span>
                     </div>
 
-                    <p>
-                        Loading purchases...
-                    </p>
+                    <p>Loading purchases...</p>
                 </td>
             </tr>
         `;
-
     }
 
-
-    const refreshButton =
-        getElement("refreshPurchasesButton") ||
-        getElement("refreshPurchaseButton");
-
+    const refreshButton = getElement("refreshPurchasesButton") || getElement("refreshPurchaseButton");
 
     if (refreshButton) {
-
-        refreshButton.disabled =
-            isLoading;
-
+        refreshButton.disabled = isLoading;
     }
-
 }
 
-
-/* ============================================================
-   MODALS
-============================================================ */
-
+/* MODALS */
 function openModal(id) {
-
-    const modal =
-        getElement(id);
-
+    const modal = getElement(id);
 
     if (!modal) {
         return;
     }
 
-
-    modal.classList.add(
-        "active"
-    );
-
+    modal.classList.add("active");
 
     modal.setAttribute(
         "aria-hidden",
         "false"
     );
 
-
-    document.body.classList.add(
-        "modal-open"
+    const focusable = query(
+        "input, select, textarea, button",
+        modal 
     );
 
-
-    const focusable =
-        query(
-            "input, select, textarea, button",
-            modal
-        );
-
-
     if (focusable) {
-
         setTimeout(
             () => focusable.focus(),
-            50
+            50 
         );
-
     }
-
 }
-
 
 function closeModal(modal) {
 
@@ -3004,452 +1896,264 @@ function closeModal(modal) {
         return;
     }
 
-
-    modal.classList.remove(
-        "active"
-    );
-
+    modal.classList.remove("active");
 
     modal.setAttribute(
         "aria-hidden",
         "true"
     );
 
-
-    if (
-        !query(
-            ".modal.active"
-        )
-    ) {
-
-        document.body.classList.remove(
-            "modal-open"
-        );
-
+    if (!query(".modal.active")) {
+        document.body.classList.remove("modal-open");
     }
-
 }
-
 
 function closeAllModals() {
-
-    queryAll(
-        ".modal.active"
-    ).forEach(
-        closeModal
-    );
-
+    queryAll(".modal.active").forEach(closeModal);
 }
 
-
 function closePurchaseModal() {
-
     closeModal(
-        getElement(
-            "purchaseModal"
-        )
+        getElement("purchaseModal")
     );
 
     purchaseState.editingId = null;
-
 }
-
 
 function closePurchaseDetails() {
-
     closeModal(
-        getElement(
-            "purchaseDetailsModal"
-        )
+        getElement("purchaseDetailsModal")
     );
-
 }
-
 
 function closePaymentModal() {
-
     closeModal(
-        getElement(
-            "paymentModal"
-        )
+        getElement("paymentModal")
     );
-
 }
-
 
 function setModalTitle(
     modalId,
-    title
+    title 
 ) {
-
-    const modal =
-        getElement(modalId);
-
+    const modal = getElement(modalId);
 
     if (!modal) {
         return;
     }
 
-
-    const titleElement =
-        query(
-            "h2",
-            modal
-        );
-
+    const titleElement = query(
+        "h2",
+        modal 
+    );
 
     if (titleElement) {
-
-        titleElement.textContent =
-            title;
-
+        titleElement.textContent = title;
     }
-
 }
 
-
-/* ============================================================
-   FORM HELPERS
-============================================================ */
-
+/* FORM HELPERS */
 function setFormValue(
     form,
     name,
     value
 ) {
-
-    const field =
-        query(
-            `[name="${name}"]`,
-            form
-        );
-
+    const field = query(
+        `[name="${name}"]`,
+        form 
+    );
 
     if (field) {
-
-        field.value =
-            value ?? "";
-
+        field.value = value ?? "";
     }
-
 }
-
 
 function setFormSubmitting(
     form,
-    submitting
+    submitting 
 ) {
-
-    const submitButton =
-        query(
-            '[type="submit"]',
-            form
-        );
-
+    const submitButton = query(
+        '[type="submit"]',
+        form 
+    );
 
     if (!submitButton) {
         return;
     }
 
-
     if (!submitButton.dataset.originalText) {
-
-        submitButton.dataset.originalText =
-            submitButton.textContent;
-
+        submitButton.dataset.originalText = submitButton.textContent;
     }
 
+    submitButton.disabled = submitting;
 
-    submitButton.disabled =
-        submitting;
-
-
-    submitButton.textContent =
-        submitting
-            ? "Saving..."
-            : submitButton.dataset.originalText;
-
+    submitButton.textContent = submitting
+        ? "Saving..."
+        : submitButton.dataset.originalText;
 }
 
-
-/* ============================================================
-   PURCHASE HELPERS
-============================================================ */
-
+/* PURCHASE HELPERS */
 function findPurchase(id) {
-
     return purchaseState.purchases.find(
-        purchase =>
-            String(
-                getPurchaseId(
-                    purchase
-                )
-            ) === String(id)
+        purchase => String(
+            getPurchaseId(purchase)
+        ) === String(id)
     );
-
 }
-
 
 function getPurchaseId(purchase) {
-
     return (
-        purchase.id ??
+        purchase.id ?? 
         purchase.purchase_id ??
-        purchase.purchaseId
+        purchase.purchaseId 
     );
-
 }
-
 
 function getPurchaseTotal(purchase) {
+    const value = Number(
+        purchase.total ??
+        purchase.total_amount ?? 
+        purchase.grand_total ?? 
+        purchase.amount ?? 
+        purchase.purchase_total ??
+        0 
+    );
 
-    const value =
-        Number(
-            purchase.total ??
-            purchase.total_amount ??
-            purchase.grand_total ??
-            purchase.amount ??
-            purchase.purchase_total ??
-            0
-        );
-
-
-    if (
-        Number.isFinite(value)
-    ) {
-
+    if (Number.isFinite(value)) {
         return value;
-
     }
 
-
-    if (
-        Array.isArray(
-            purchase.items
-        )
-    ) {
-
+    if (Array.isArray(purchase.items)) {
         return purchase.items.reduce(
             (sum, item) => {
+                const quantity = Number(item.quantity || 0);
 
-                const quantity =
-                    Number(
-                        item.quantity || 0
+                const price = Number(
+                        item.unit_price ?? item.price ?? 0
                     );
 
-
-                const price =
-                    Number(
-                        item.unit_price ??
-                        item.price ??
-                        0
-                    );
-
-
-                return sum +
-                    quantity *
-                    price;
-
+                return sum + quantity * price;
             },
-            0
+            0 
         );
-
     }
-
 
     return 0;
-
 }
-
 
 function getPaidAmount(purchase) {
-
     return Number(
-        purchase.paid_amount ??
-        purchase.paid ??
-        purchase.amount_paid ??
-        0
+        purchase.paid_amount ?? 
+        purchase.paid ?? 
+        purchase.amount_paid ?? 
+        0 
     ) || 0;
-
 }
 
-
 function getDueAmount(purchase) {
+    const explicitDue = purchase.due_amount ?? purchase.due ?? purchase.balance_due;
 
-    const explicitDue =
-        purchase.due_amount ??
-        purchase.due ??
-        purchase.balance_due;
-
-
-    if (
-        explicitDue !== undefined &&
-        explicitDue !== null
-    ) {
-
-        return Number(
-            explicitDue
-        ) || 0;
-
+    if (explicitDue !== undefined && explicitDue != null) {
+        return Number(explicitDue) || 0;
     }
-
 
     return Math.max(
         0,
-        getPurchaseTotal(
-            purchase
-        ) -
-        getPaidAmount(
-            purchase
-        )
+        getPurchaseTotal(purchase) - getPaidAmount(purchase)
     );
-
 }
 
-
 function normalizeStatus(status) {
-
-    return String(
-        status ??
-        ""
-    )
+    return String(status ?? "")
         .trim()
         .toLowerCase()
         .replace(/\s+/g, "_")
         .replace(/-/g, "_");
-
 }
 
-
-function formatStatus(status) {
-
-    const value =
-        normalizeStatus(status);
-
+function formatStatus(status){
+    const value = normalizeStatus(status);
 
     if (!value) {
         return "Unknown";
     }
 
-
     return value
         .split("_")
         .map(
-            word =>
-                word.charAt(0).toUpperCase() +
-                word.slice(1)
+            word.charAt(0).toUpperCase() + word.slice(1) 
         )
         .join(" ");
-
 }
-
 
 function getStatusClass(status) {
 
-    switch (
-        normalizeStatus(status)
-    ) {
-
+    switch (normalizeStatus(status)) {
+        
         case "completed":
         case "received":
         case "approved":
         case "paid":
             return "status-active";
 
-
         case "pending":
         case "ordered":
         case "processing":
             return "status-low-stock";
 
-
         case "cancelled":
-        case "canceled":
+        case "cancelled":
         case "rejected":
             return "status-out-of-stock";
-
-
+        
         case "draft":
             return "status-neutral";
 
-
         default:
             return "status-neutral";
-
     }
-
 }
 
-
 function getPaymentStatusClass(status) {
-
-    switch (
-        normalizeStatus(status)
-    ) {
-
+    
+    switch(normalizeStatus(status)) {
         case "paid":
             return "status-active";
 
-
         case "partial":
-        case "partially_paid":
+        case "partially-paid":
             return "status-low-stock";
-
 
         case "unpaid":
         case "overdue":
             return "status-out-of-stock";
 
-
         default:
             return "status-neutral";
-
     }
-
 }
 
-
-/* ============================================================
-   DATE / CURRENCY
-============================================================ */
-
+/* DATE / CURRENCY */
 function parseDate(value) {
-
     if (!value) {
         return null;
     }
 
+    const date = new Date(value)
 
-    const date =
-        new Date(value);
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
+    if (Number.isNaN(date.getTime())) {
         return null;
-
     }
-
 
     return date;
-
 }
 
-
 function formatDate(value) {
-
-    const date =
-        parseDate(value);
-
+    const data = parseDate(value);
 
     if (!date) {
-        return "—";
+        return "-";
     }
-
 
     return new Intl.DateTimeFormat(
         undefined,
@@ -3459,47 +2163,27 @@ function formatDate(value) {
             day: "numeric"
         }
     ).format(date);
-
 }
 
-
 function toInputDate(value) {
-
-    const date =
-        parseDate(value);
-
+    const date = parseDate(value);
 
     if (!date) {
         return "";
     }
 
+    const year = date.getFullYear();
 
-    const year =
-        date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
 
-
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(2, "0");
-
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(2, "0");
-
+    const day = String(date.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
 
 }
 
-
 function formatCurrency(value) {
-
-    const amount =
-        Number(value) || 0;
-
+    const amount = Number(value) || 0;
 
     return new Intl.NumberFormat(
         undefined,
@@ -3509,188 +2193,93 @@ function formatCurrency(value) {
             minimumFractionDigits: 2
         }
     ).format(amount);
-
 }
 
-
-/* ============================================================
-   DOM VALUE HELPERS
-============================================================ */
-
+/* DOM VALUE HELPERS */
 function setText(id, value) {
-
-    const element =
-        getElement(id);
-
+    const element = getElement(id);
 
     if (element) {
-
-        element.textContent =
-            value ?? "";
-
+        element.textContent = value ?? "";
     }
-
 }
-
 
 function setNumber(id, value) {
-
-    const element =
-        getElement(id);
-
+    const element = getElement(id);
 
     if (element) {
-
-        element.textContent =
-            Number(value || 0)
-                .toLocaleString();
-
+        element.textContent = Number(value || 0).toLocaleString();
     }
-
 }
-
 
 function setCurrency(id, value) {
-
-    const element =
-        getElement(id);
-
+    const element = getElement(id);
 
     if (element) {
-
-        element.textContent =
-            formatCurrency(value);
-
+        element.textContent = formatCurrency(value);
     }
-
 }
-
 
 function setData(
     id,
     value
 ) {
-
-    const element =
-        getElement(id);
-
+    const element = getElement(id);
 
     if (element) {
-
-        element.dataset.value =
-            value ?? "";
-
+        element.dataset.value = value ?? "";
     }
-
 }
-
 
 function getData(id) {
+    const element = getElement(id);
 
-    const element =
-        getElement(id);
-
-
-    return element?.dataset?.value ||
-        null;
-
+    return element?.dataset?.value || null;
 }
 
-
-/* ============================================================
-   SECURITY
-============================================================ */
-
+/* SECURITY */
 function escapeHtml(value) {
-
-    if (
-        value === undefined ||
-        value === null
-    ) {
-
+    if (value === undefined || value === null) {
         return "";
-
     }
 
-
     return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
-
-/* ============================================================
-   TOAST
-============================================================ */
-
+/* TOAST */
 function showToast(
     message,
     type = "info"
 ) {
-
-    const container =
-        getElement(
-            "toastContainer"
-        );
-
+    const container = getElement("toastContainer");
 
     if (!container) {
-
         window.alert(message);
 
         return;
-
     }
 
+    const toast = document.createElement("div");
 
-    const toast =
-        document.createElement(
-            "div"
-        );
+    toast.className = `toast toast-${type}`;
 
-
-    toast.className =
-        `toast toast-${type}`;
-
-
-    const icon =
+    const icon = 
         type === "success"
             ? "✓"
-            : type === "error"
-                ? "!"
-                : "i";
-
+            : "i"
 
     toast.innerHTML = `
-        <span class="toast-icon">
-            ${icon}
-        </span>
-
-        <span class="toast-message">
-            ${escapeHtml(message)}
-        </span>
-
+        <span class="toast-icon">${icon}</span>
+        
+        <span class="toast-message">${escapeHtml(message)}</span>
+        
         <button
-            type="button"
+            type="button" 
             class="toast-close"
             aria-label="Close notification"
         >
@@ -3698,99 +2287,64 @@ function showToast(
         </button>
     `;
 
-
-    const closeButton =
-        query(
-            ".toast-close",
-            toast
-        );
-
+    const closeButton = query(
+        ".toast-close",
+        toast 
+    );
 
     if (closeButton) {
-
         closeButton.addEventListener(
             "click",
             () => removeToast(toast)
         );
-
     }
 
-
-    container.appendChild(
-        toast
-    );
-
+    container.appendChild(toast);
 
     setTimeout(
         () => removeToast(toast),
-        4500
+        4500 
     );
-
 }
 
-
 function removeToast(toast) {
-
     if (!toast) {
         return;
     }
 
-
-    toast.classList.add(
-        "toast-removing"
-    );
-
+    toast.classList.add("toast-removing");
 
     setTimeout(
         () => toast.remove(),
-        200
+        200 
     );
-
 }
 
-
-/* ============================================================
-   DEBOUNCE
-============================================================ */
-
+/* DEBOUNCE */
 function debounce(
     callback,
     delay
 ) {
-
     let timeout;
 
-
     return function (...args) {
+        clearTimeout(timeout);
 
-        clearTimeout(
-            timeout
-        );
-
-
-        timeout =
-            setTimeout(
-                () => callback.apply(
-                    this,
-                    args
-                ),
-                delay
-            );
-
+        timeout = setTimeout(
+            () => callback.apply(
+                this, 
+                args 
+            ),
+            delay 
+        ); 
     };
-
 }
 
-
-/* ============================================================
-   PUBLIC API
-============================================================ */
-
+/* pUBLIC API */
 window.InventoryPurchases = {
-
     load: loadPurchases,
 
-    refresh: () =>
+    refresh: () => 
         loadPurchases(true),
 
     add: openPurchaseModal,
@@ -3806,5 +2360,5 @@ window.InventoryPurchases = {
     getState: () => ({
         ...purchaseState
     })
-
 };
+
